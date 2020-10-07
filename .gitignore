@@ -1,0 +1,38 @@
+# BUILD
+/build
+/bin
+/obj
+/**/bin
+/**/obj
+/**/node_modules
+
+# IDE 
+*.user
+/.vscode
+/.vs
+/**/.vscode
+/**/.vs
+# !.vscode/settings.json
+
+/design
+
+# EXCLUDE 
+# /folder/excel
+# /folder/**/shared
+# /folder/**/wwwroot/css
+# /folder/**/wwwroot/js/*bundle.js
+# /folder/**/.gitignore
+# /folder/**/*Home.razor
+
+# EXCLUDE EXCEPT 
+  /browser/IgBlazorSamples.Client/Pages/** 
+! /browser/IgBlazorSamples.Client/Pages/_Home.razor 
+ 
+ 
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
