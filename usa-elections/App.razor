@@ -1,0 +1,15 @@
+@inject NavigationManager NavManager
+
+<Infragistics.Samples.Pages.ElectionResultsView />
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("App OnInitializedAsync");
+        Console.WriteLine("App " + NavManager.BaseUri);
+        Console.WriteLine("App " + NavManager.Uri);
+        
+        await Task.Delay(1);
+    }
+}

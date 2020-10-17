@@ -15,6 +15,7 @@
 # !.vscode/settings.json
 
 /design
+/usa-elections-proto
 
 # EXCLUDE 
 # /folder/excel
@@ -25,8 +26,8 @@
 # /folder/**/*Home.razor
 
 # EXCLUDE EXCEPT 
-  /browser/IgBlazorSamples.Client/Pages/** 
-! /browser/IgBlazorSamples.Client/Pages/_Home.razor 
+#   /browser/IgBlazorSamples.Client/Pages/** 
+# ! /browser/IgBlazorSamples.Client/Pages/_Home.razor 
  
  
 
