@@ -57,7 +57,7 @@ namespace Infragistics.Samples
             StateLocations = new Dictionary<string, StateLocation>();
 
             Console.WriteLine("Locations loading... ");
-            var locationCSV = await Http.GetStringAsync("/config/state-locations.csv");
+            var locationCSV = await Http.GetStringAsync("config/state-locations.csv");
             //Console.WriteLine(locationCSV);
             Console.WriteLine("Locations loading... done ");
 
@@ -105,7 +105,7 @@ namespace Infragistics.Samples
         public async Task LoadElections()
         {
             Console.WriteLine("Elections loading... ");
-            var elections = await Http.GetFromJsonAsync<List<Election>>("/data/elections-2016.json");
+            var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2016.json");
             //var elections = await Http.GetFromJsonAsync<Elections[]>("/data/elections-2008-2012.json");
             //var elections = await Http.GetFromJsonAsync<Elections[]>("/data/elections.json");
             Console.WriteLine("Elections loading... done");
