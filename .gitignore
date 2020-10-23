@@ -14,6 +14,7 @@
 /**/.vs
 # !.vscode/settings.json
 
+/**/publish/
 /usa-elections/design
 /usa-elections/**/*Copy*.*
 /usa-elections-proto
