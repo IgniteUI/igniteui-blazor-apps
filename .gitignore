@@ -14,7 +14,8 @@
 /**/.vs
 # !.vscode/settings.json
 
-/design
+/usa-elections/design
+/usa-elections/**/*Copy*.*
 /usa-elections-proto
 
 # EXCLUDE 
