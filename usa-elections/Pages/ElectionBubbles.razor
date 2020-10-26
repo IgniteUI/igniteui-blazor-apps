@@ -1,0 +1,109 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Rendering
+@using IgniteUI.Blazor.Controls
+
+@inject HttpClient Http
+@inject IIgniteUIBlazor IgniteUIBlazor;
+@inject Infragistics.Samples.ElectionService ElectionService
+
+<div class="igContainer" style="height: 100%">
+     
+        @if (ResultsByStates != null)
+        {
+         <GeographicMap Height="100%" Width="100%" Zoomable="true"
+                           @ref="BubbleMapRef" 
+                           BackgroundContent="@null">
+                <GeographicSymbolSeries Name="bubbles"
+                    DataSource="@ResultsByStates"
+                    LatitudeMemberPath ="StateLocationY"
+                    LongitudeMemberPath="StateLocationX"
+                    ShowDefaultTooltip="true" 
+                    MarkerTemplateScript="onTemplateBubble">
+                </GeographicSymbolSeries> 
+
+         </GeographicMap>
+        }
+              
+</div>
+
+@code {
+
+    private bool IsBubbleMapReady = false;
+    private GeographicMap BubbleMap;
+    public GeographicMap BubbleMapRef
+    {
+        get { return BubbleMap; }
+        set { BubbleMap = value; this.OnChanged("BubbleMap"); }
+    }
+
+    private List<ResultsByState> _ResultsByStates;
+    [Parameter]
+    public List<ResultsByState> ResultsByStates
+    {
+        get { return _ResultsByStates; }
+        set { _ResultsByStates = value; this.OnChanged("ResultsByStates"); }
+    }
+
+    private void OnChanged(string prop)
+    {
+        Console.WriteLine("ElectionBubbles OnChanged... " + prop);
+
+        if (this.BubbleMap != null && IsBubbleMapReady && this.ResultsByStates != null)
+        {
+            //await Task.Delay(10);
+            Console.WriteLine("ElectionBubbles OnChanged... " + this.ResultsByStates.Count);
+
+            //await this.ShapeMap.ActualSeries[0].RenderSeriesAsync(false);
+        }
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("ElectionBubbles OnInitialized");
+
+        DataChartInteractivityModule.Register(IgniteUIBlazor);
+        GeographicMapModule.Register(IgniteUIBlazor);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("ElectionBubbles OnInitializedAsync");
+
+        await Task.Delay(1);
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Console.WriteLine("ElectionBubbles Rendering...");
+            IsBubbleMapReady = true;
+            OnChanged("Rendering");
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    public void Zoom()
+    {
+        Console.WriteLine("Zoom ZoomAsync");
+
+        var bubbleBounds = new Rect(-6, -6, 10, 10);
+        this.BubbleMap.UpdateWorldRect(bubbleBounds);
+    }
+
+    public async Task ZoomAsync()
+    {
+        Console.WriteLine("ElectionBubbles ZoomAsync");
+
+        var bubbleBounds = new Rect(-6, -6, 10, 10);
+
+        //this.BubbleMap.ZoomToGeographic(bubbleBounds);
+        await this.BubbleMap.UpdateWorldRectAsync(bubbleBounds);
+        //await Task.Delay(1);
+    }
+
+
+}

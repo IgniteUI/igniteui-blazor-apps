@@ -35,6 +35,46 @@ namespace Infragistics.Samples
 
         public List<Election> Elections { get; set; }
 
+        public static Dictionary<string, string> PartyColors { get; set; }
+
+        static ElectionService()
+        {
+            PartyColors = new Dictionary<string, string>();
+            PartyColors.Add("Democrat",             "#008DFF");
+            PartyColors.Add("Democrat-Leaning",     "#4BADFC");
+            PartyColors.Add("Republican",           "#FF0808");
+            PartyColors.Add("Republican-Leaning",   "#F47575");
+            PartyColors.Add("NationalRepublican", "#8E5EE9"); // 1832
+            PartyColors.Add("DemocraticRepublican_1", "#8E5EE9"); //1824
+            PartyColors.Add("DemocraticRepublican_2", "#8E5EE9"); // 1824
+            PartyColors.Add("DemocraticRepublican_3", "#8E5EE9"); // 1824
+            PartyColors.Add("DemocraticRepublican_4", "#8E5EE9"); // 1824
+           
+            PartyColors.Add("Libertarian",          "#F7AC22");
+            PartyColors.Add("Green",               "#0CDE23");
+            PartyColors.Add("Independent",          "#8E5EE9");
+            PartyColors.Add("Other",                "#C6C6C6");
+            //TODO set colors
+            PartyColors.Add("Reform", "#8E5EE9");
+            PartyColors.Add("AmericanInd", "#8E5EE9"); // 1968
+            PartyColors.Add("StatesRights", "#8E5EE9"); // 1948
+            PartyColors.Add("Progressive", "#8E5EE9"); // 1948
+            PartyColors.Add("Socialist", "#8E5EE9"); // 1932
+            PartyColors.Add("Populist", "#8E5EE9"); // 1892
+            PartyColors.Add("Prohibition", "#8E5EE9"); // 1892
+            PartyColors.Add("Greenback", "#0CDE23"); // 1880
+            PartyColors.Add("SouthernDemocrat", "#8E5EE9"); // 1860
+            PartyColors.Add("ConstitutionalUnion", "#8E5EE9"); // 1860
+            PartyColors.Add("WhigAmerican", "#8E5EE9"); // 1856
+            PartyColors.Add("Whig", "#8E5EE9"); // 1852
+            PartyColors.Add("FreeSoil", "#8E5EE9"); // 1852
+            PartyColors.Add("Liberty", "#8E5EE9"); // 1844
+            PartyColors.Add("AntiMasonic", "#8E5EE9"); // 1832
+
+            PartyColors.Add("Federalist_1", "#8E5EE9"); // 1804
+            PartyColors.Add("Federalist_2", "#8E5EE9"); // 1804
+        }
+
         private bool _IsLoading = true;
         public bool IsLoading
         {
@@ -59,7 +99,7 @@ namespace Infragistics.Samples
             Console.WriteLine("Locations loading... ");
             var locationCSV = await Http.GetStringAsync("config/state-locations.csv");
             //Console.WriteLine(locationCSV);
-            Console.WriteLine("Locations loading... done ");
+            //Console.WriteLine("Locations loading... done ");
 
             Console.WriteLine("Locations parsing... ");
             var locationRows = locationCSV.Split('\n');
@@ -98,7 +138,7 @@ namespace Infragistics.Samples
 
             }
 
-            Console.WriteLine("Locations parsing... done ");
+            //Console.WriteLine("Locations parsing... done ");
             await Task.Delay(1);
         }
 
@@ -108,7 +148,7 @@ namespace Infragistics.Samples
             var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2016.json");
             //var elections = await Http.GetFromJsonAsync<Elections[]>("/data/elections-2008-2012.json");
             //var elections = await Http.GetFromJsonAsync<Elections[]>("/data/elections.json");
-            Console.WriteLine("Elections loading... done");
+            //Console.WriteLine("Elections loading... done");
 
             await Parse(elections);
         }
@@ -120,10 +160,8 @@ namespace Infragistics.Samples
             foreach (var election in elections)
             {
                 //Console.WriteLine("Elections parsing... " + election.Year + " Elections");
-                //var electionYear = election.Year;
                 var electionStats = "Elections " + election.Year + ": ";
-                //var electionStats = electionName;
-                 
+                  
                 var candidates = election.Candidates;
                 if (candidates != null)
                 {
@@ -131,11 +169,12 @@ namespace Infragistics.Samples
                     //Console.WriteLine(electionName + candidates.Length + " Candidates");
                     for (int i = 0; i < candidates.Count; i++)                     
                     {
-                        candidates[i].ID = i;                       
+                        candidates[i].ID = i;
+                        var names = candidates[i].Name.Split(" ");
+                        candidates[i].NameAndParty = names[1] + " (" + candidates[i].Party + ")";
                     }
-                }
-                //var allVotes = 0;
-                //var allElectors = 0;
+                } 
+
                 var states = election.States;
                 if (states != null)
                 {
@@ -194,56 +233,7 @@ namespace Infragistics.Samples
                         }
 
                         ResultsByState results = new ResultsByState(state.R);
-                        #region ResultsByState
-                        //if (state.R.Length == 1)
-                        //{
-                        //    state.R[0].Candidate = candidates[0];
-                        //    results = new ResultsByState(state.R[0]);
-                        //}
-                        //else if (state.R.Length == 2)
-                        //{
-                        //    state.R[0].Candidate = candidates[0];
-                        //    state.R[1].Candidate = candidates[1];
-                        //    results = new ResultsByState(state.R[0], state.R[1]);
-                        //}
-                        //else if (state.R.Length == 3)
-                        //{
-                        //    state.R[0].Candidate = candidates[0];
-                        //    state.R[1].Candidate = candidates[1];
-                        //    state.R[2].Candidate = candidates[2];
-                        //    results = new ResultsByState(state.R[0], state.R[1], state.R[2]);
-                        //}
-                        //else if (state.R.Length == 4)
-                        //{
-                        //    state.R[0].Candidate = candidates[0];
-                        //    state.R[1].Candidate = candidates[1];
-                        //    state.R[2].Candidate = candidates[2];
-                        //    state.R[3].Candidate = candidates[3];
-                        //    results = new ResultsByState(state.R[0], state.R[1], state.R[2], state.R[3]);
-                        //}
-                        //else if (state.R.Length == 5)
-                        //{
-                        //    state.R[0].Candidate = candidates[0];
-                        //    state.R[1].Candidate = candidates[1];
-                        //    state.R[2].Candidate = candidates[2];
-                        //    state.R[3].Candidate = candidates[3];
-                        //    state.R[4].Candidate = candidates[4];
-                        //    results = new ResultsByState(state.R[0], state.R[1], state.R[2], state.R[3], state.R[4]);
-                        //}
-                        //else if (state.R.Length == 6)
-                        //{
-                        //    state.R[0].Candidate = candidates[0];
-                        //    state.R[1].Candidate = candidates[1];
-                        //    state.R[2].Candidate = candidates[2];
-                        //    state.R[3].Candidate = candidates[3];
-                        //    state.R[4].Candidate = candidates[4];
-                        //    state.R[5].Candidate = candidates[5];
-                        //    results = new ResultsByState(state.R[0], state.R[1], state.R[2], state.R[3], state.R[4], state.R[5]);
-                        //    //results.C1 = state.R[0];
-                        //    //results.C2 = state.R[1];
-                        //}
-                        #endregion
-
+                        
                         if (results != null)
                         {
                             results.StateSymbol = state.S;
@@ -273,14 +263,19 @@ namespace Infragistics.Samples
                     electionStats += election.TotalVotes + " Votes, ";
                     //Console.WriteLine(electionName + election.Summary.PopularVotes + " Popular Votes");
                     //Console.WriteLine(electionName + election.Summary.ElectoralVotes + " Electoral Votes");
-
-
+                    
                     Console.WriteLine(electionStats);
                     //electionStats += "\n";
                     for (int i = 0; i < candidates.Count; i++)
                     {
-                        candidates[i].TotalVotesPercent    = candidates[i].TotalVotes * 100.0 / election.TotalVotes;
+                        candidates[i].TotalVotesPercent = candidates[i].TotalVotes * 100.0 / election.TotalVotes;
+                        candidates[i].TotalVotesPercent = Math.Round(candidates[i].TotalVotesPercent * 10) / 10;
+
+                        candidates[i].TotalVotesMilions = candidates[i].TotalVotes / 1000000.0;
+                        candidates[i].TotalVotesMilions = Math.Round(candidates[i].TotalVotesMilions * 10) / 10;
+
                         candidates[i].TotalElectorsPercent = candidates[i].TotalElectors * 100.0 / election.TotalElectors;
+                        candidates[i].TotalElectorsPercent = Math.Round(candidates[i].TotalElectorsPercent * 10) / 10;
 
                         //Console.WriteLine(candidates[i].TotalVotesPercent + " " + candidates[i].Name + " " + candidates[i].TotalVotes);
                     }
@@ -296,34 +291,20 @@ namespace Infragistics.Samples
                     election.ResultsByCandidates = (from item in election.ResultsByCandidates orderby 
                                                     item.SortIndex ascending, item.CandidateName descending select item).ToList();
 
-                    //candidates = candidates.SortBy("V", IgniteUI.Blazor.Controls.ListSortDirection.Descending);
-                    //foreach (var item in election.ResultsByCandidates)
-                    //{
-                    //    for (int i = 0; i < candidates.Count; i++)
-                    //    { 
-                    //        if (item.Candidate.ID == candidates[i].ID)
-                    //        {
-                    //            //item.VotesTotalPercentage    = candidates[i].TotalVotesPercent;
-                    //            //item.ElectorsTotalPercentage = candidates[i].TotalElectorsPercent;
-                    //            item.SortIndex = i;
-                    //            item.CandidateSort = (i+1) + ". " + item.CandidateName;
-                    //            break;
-                    //        }
-                    //    }
-                    //}
+                
                 }
 
-                //election.ResultsByCandidate = 
-                //    (from item in election.ResultsByCandidate
-                //    orderby item.E descending, item.State descending, item.V descending
-                //     select item).ToList();
+                Candidate electionWinner = null;
+                Candidate electionRunnerUp = null;
 
+
+                election.Populate();
 
             }
 
             this.Elections = elections;
 
-            Console.WriteLine("Elections parsing... done");
+            //Console.WriteLine("Elections parsing... done");
             OnLoaded();
             await Task.Delay(1);
         }

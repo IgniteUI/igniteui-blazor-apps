@@ -1,0 +1,331 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Rendering
+@using IgniteUI.Blazor.Controls
+
+@inject HttpClient Http
+@inject IIgniteUIBlazor IgniteUIBlazor;
+@inject Infragistics.Samples.ElectionService ElectionService
+
+<div class="igContainer" style="height: 140px">
+     
+        @if (Election != null)
+        {
+        <BulletGraph Height="80px" Width="100%"
+                     @ref="GagueRef"
+            TransitionDuration="1000"
+            MinimumValue=0
+            MaximumValue=@MaximumValue
+            Value=@Value
+            Interval=@Interval
+            LabelInterval=@LabelInterval
+            LabelExtent=@LabelExtent
+            ValueBrush=@ValueBrush
+            ValueInnerExtent=@ValueInnerExtent
+            ValueOuterExtent=@ValueOuterExtent
+            TargetValueBrush=@TargetValueBrush
+            TargetValueBreadth=@TargetValueBreadth
+            TargetValue=@TargetValue
+
+            MinorTickCount=@MinorTickCount
+            MinorTickEndExtent=@MinorTickEndExtent
+            MinorTickStartExtent=@MinorTickStartExtent
+            MinorTickStrokeThickness=@MinorTickStrokeThickness
+            TickStartExtent=@TickStartExtent
+            TickEndExtent=@TickEndExtent
+            TickStrokeThickness=@TickStrokeThickness
+            ScaleBackgroundThickness=@ScaleBackgroundThickness
+            ScaleBackgroundBrush=@ScaleBackgroundBrush
+            ScaleBackgroundOutline=@ScaleBackgroundOutline
+            ScaleStartExtent=@ScaleStartExtent
+            ScaleEndExtent=@ScaleEndExtent
+            BackingBrush=@BackingBrush
+            BackingOutline=@BackingOutline
+            BackingStrokeThickness=@BackingStrokeThickness>
+        
+            @*@for (int i = 0; i < this.GaugeRanges.Count; i++)
+            {
+                GaugeRangeInfo info = this.GaugeRanges[i];
+                <LinearGraphRange Name=info.Name
+                                  StartValue=info.StartValue
+                                  EndValue=info.EndValue
+                                  InnerStartExtent=info.InnerStartExtent
+                                  InnerEndExtent=info.InnerEndExtent
+                                  OuterStartExtent=info.OuterStartExtent
+                                  OuterEndExtent=info.OuterEndExtent
+                                  Brush="@info.Brush"
+                                  Outline="@info.Outline">
+                 </LinearGraphRange>
+            }*@
+        </BulletGraph>
+
+        }
+              
+</div>
+
+@code {
+
+
+    private double MinimumValue;
+    private double MaximumValue;
+    private double Value;
+    private double Interval;
+
+    private double LabelInterval;
+    private double LabelExtent;
+
+    private double ValueInnerExtent;
+    private double ValueOuterExtent;
+    private string ValueBrush;
+
+    private string TargetValueBrush;
+    private double TargetValueBreadth;
+    private double TargetValue;
+
+    private double MinorTickCount;
+    private double MinorTickEndExtent;
+    private double MinorTickStartExtent;
+    private double MinorTickStrokeThickness;
+    private double TickStartExtent;
+    private double TickEndExtent;
+    private double TickStrokeThickness;
+
+    private double ScaleBackgroundThickness;
+    private string ScaleBackgroundBrush;
+    private string ScaleBackgroundOutline;
+    private double ScaleStartExtent;
+    private double ScaleEndExtent;
+
+    private string BackingBrush;
+    private string BackingOutline;
+    private double BackingStrokeThickness;
+
+    private List<GaugeRangeInfo> GaugeRanges;
+    //private BulletGraph Gauge;
+
+    private BulletGraph Gauge;
+    public BulletGraph GagueRef
+    {
+        get { return Gauge; }
+        set { Gauge = value; this.OnElectionChanged(); }
+    }
+
+    private Election _Election;
+    [Parameter]
+    public Election Election
+    {
+        get { return _Election; }
+        set { _Election = value; this.OnElectionChanged(); }
+    }
+
+    private void OnElectionChanged()
+    {
+        Console.WriteLine("ElectionGuage updating... ");
+        //
+        if (this.Gauge != null && this.Election != null)
+        {
+            Console.WriteLine("ElectionGuage updating... " + this.Election.Year);
+
+            var max = this.Election.TotalElectors;
+            var mid = Math.Round(max / 2.0 / 10) * 10;
+            var interval = mid / 3;
+            Console.WriteLine("ElectionGuage updating... Electors " + mid + " out of " + max);
+
+            this.MaximumValue = max;
+            this.TargetValue = mid;
+            this.LabelInterval = interval;
+            this.Interval = interval;
+            //this.Value = this.Election.Candidates[0].TotalElectors;
+
+            //var electors = new List<int>(); 
+
+            var partyColors = ElectionService.PartyColors;
+
+            var previousValue = 0;
+            var currentValue = 0;
+
+            //var ranges = new List<GaugeRangeInfo>();
+            var ranges = new List<LinearGraphRange>();
+            this.Gauge.Ranges.Clear();
+
+            //Candidate electionWinner = null;
+            //Candidate electionRunnerup = null;
+
+            //if (this.Election.Candidates[0].TotalElectors >
+            //    this.Election.Candidates[1].TotalElectors)
+            //{
+            //    electionWinner = this.Election.Candidates[0];
+            //    electionRunnerup = this.Election.Candidates[1];
+            //}
+            //else
+            //{
+            //    electionRunnerup = this.Election.Candidates[0];
+            //    electionWinner = this.Election.Candidates[1];
+            //}
+
+            //var otherCandidates = new List<Candidate>();
+            //for (int i = 2; i < this.Election.Candidates.Count; i++)
+            //{
+            //    var candidate = this.Election.Candidates[i];
+            //    if (candidate.Name == "Gary Johnson")
+            //        candidate.TotalElectors = 25;
+            //    if (candidate.Name == "Jill Stein")
+            //        candidate.TotalElectors = 15;
+
+            //    otherCandidates.Add(candidate);
+            //}
+
+            var sortedCandidates = new List<Candidate>();
+            sortedCandidates.Add(this.Election.Winner);
+            sortedCandidates.AddRange(this.Election.OtherCandidates);
+            sortedCandidates.Add(this.Election.RunnerUp);
+
+            for (int i = 0; i < sortedCandidates.Count; i++)
+            {
+                var candidate = sortedCandidates[i];
+
+                Console.WriteLine("ElectionGuage Electors " + candidate.TotalElectors + " " + candidate.Name + " " + candidate.Party);
+                currentValue += candidate.TotalElectors;
+
+                var color = "Gray";
+                if (partyColors.ContainsKey(candidate.Party))
+                {
+                    color = partyColors[candidate.Party];
+                }
+
+                //var info = new GaugeRangeInfo()
+                var info = new LinearGraphRange()
+                {
+                    Name = "range " + i.ToString(),
+                    StartValue = previousValue,
+                    EndValue = currentValue,
+                    Brush = color,
+                    Outline = color,
+                    InnerStartExtent = 0.2,
+                    InnerEndExtent = 0.2,
+                    OuterStartExtent = 0.95,
+                    OuterEndExtent = 0.95
+                };
+                //ranges.Add(info);
+                this.Gauge.Ranges.Add(info);
+
+                previousValue = currentValue;
+            }
+            //this.GaugeRanges = ranges;
+            //this.Gauge.Ranges = ranges;
+            //this.MapLabels = labels;
+            //Console.WriteLine("ElectionGuage updating... Complete ");
+            //await this.ShapeMap.ActualSeries[0].RenderSeriesAsync(false);
+        }
+        StateHasChanged();
+    }
+
+    private void onAnimateToGauge2()
+    {
+        this.MinimumValue = 0;
+        this.MaximumValue = 540;
+        this.Value = 0;
+        this.Interval = 90;
+
+        // setting appearance of labels
+        this.LabelInterval = 10;
+        this.LabelExtent = 0.02;
+
+        // setting custom appearance of performance bar
+        this.ValueInnerExtent = 0.5;
+        this.ValueOuterExtent = 0.7;
+        this.ValueBrush = "#000000";
+
+        // setting custom appearance of target bar
+        this.TargetValueBrush = "#000000";
+        this.TargetValueBreadth = 2;
+        this.TargetValue = 270;
+
+        // setting appearance of major/minor ticks
+        this.MinorTickCount = 5;
+        this.MinorTickEndExtent = 0.10;
+        this.MinorTickStartExtent = 0.20;
+        this.MinorTickStrokeThickness = 1;
+        this.TickStartExtent = 0.20;
+        this.TickEndExtent = 0.05;
+        this.TickStrokeThickness = 1;
+
+        // setting extent of gauge scale
+        this.ScaleBackgroundThickness = 0.5;
+        this.ScaleBackgroundBrush = "#dbdbdb";
+        this.ScaleBackgroundOutline = "gray";
+        this.ScaleStartExtent = 0.05;
+        this.ScaleEndExtent = 0.95;
+        this.ScaleBackgroundThickness = 0;
+
+        // setting appearance of backing fill and outline
+        this.BackingBrush = "#f7f7f7";
+        this.BackingOutline = "#d1d1d1";
+        this.BackingStrokeThickness = 0;
+
+        double[] startValues = { 100, 150, 175 };
+        double[] endValues   = { 150, 175, 200 };
+
+        var colors = new List<string>() { "#0078C8", "#21A7FF", "#4FB9FF" };
+        var ranges = new List<GaugeRangeInfo>();
+        for (int i = 0; i < colors.Count; i++)
+        {
+            var info = new GaugeRangeInfo()
+            {
+                Name = "range " + i.ToString(),
+                StartValue = startValues[i],
+                EndValue = endValues[i],
+                Brush = colors[i],
+                Outline = colors[i],
+                InnerStartExtent = 0.2,
+                InnerEndExtent = 0.2,
+                OuterStartExtent = 0.95,
+                OuterEndExtent = 0.95
+            };
+            ranges.Add(info);
+        }
+        this.GaugeRanges = ranges;
+    }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("ElectionGuage OnInitialized");
+
+        BulletGraphModule.Register(IgniteUIBlazor);
+
+        onAnimateToGauge2();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("ElectionGuage OnInitializedAsync");
+
+        await Task.Delay(1);
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Console.WriteLine("ElectionGuage Rendering...");
+            OnElectionChanged();
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+
+    public class GaugeRangeInfo
+    {
+        public string Name { get; set; }
+        public string Brush { get; set; }
+        public string Outline { get; set; }
+        public double StartValue { get; set; }
+        public double EndValue { get; set; }
+        public double InnerStartExtent { get; set; }
+        public double InnerEndExtent { get; set; }
+        public double OuterStartExtent { get; set; }
+        public double OuterEndExtent { get; set; }
+    }
+
+}

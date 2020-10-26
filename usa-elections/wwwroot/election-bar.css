@@ -1,0 +1,143 @@
+﻿.ui-chart-pointer-tooltip-content-container {
+    background:  #78D410 !important;
+    color: #E4DFDF !important;
+    border-color: pink !important;
+}
+
+.ui-tooltip-container {
+    border-color: #252525 !important;
+    color: #252525 !important;
+    padding: 0px !important;
+    /*background:  #E79DFA !important;*/
+    /*z-index: 1000000;*/
+    /*z-index: 300000 !important;*/
+} 
+ 
+.ui-tooltip-content {
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  padding-top:    0.15rem;
+  padding-bottom: 0.15rem;
+  padding-left:   0.5rem;
+  padding-right:  0.5rem; 
+  font-size: 0.75rem; 
+  /*background: #D9951E;*/  
+  /*z-index: 1000000;*/
+}
+
+.igPage {
+    background: white;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: nowrap; /* nowrap | wrap | wrap-reverse; */
+    align-items: stretch;
+    align-self: stretch;
+
+    /* height: calc(100% - 1rem);
+    width: calc(100% - 1rem);
+    padding: 0.5rem; */ 
+    height: 100%;
+    width: 100%;
+    min-width: 200px;
+    padding: 0rem;
+    margin: 0px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.igLegend-badge {
+    height: 0.8rem;
+    width:  0.8rem;
+    margin-left: 1.2rem;
+    margin-right: 0.3rem;
+    border-radius: 0.2rem;
+    border-color: #676767;
+    border-width: thin;
+    border-style: solid;
+}
+
+.igLegend-label {
+    font-family: 'Titillium Web', Verdana, Tahoma, sans-serif;
+    font-size: 0.8rem;
+    text-align: center;
+    vertical-align: top;
+    height: auto;
+    line-height: 1rem;
+}
+
+.igFill {
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+.igRelative {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+
+    /*background: gray;*/
+    /*width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    padding: 5px;
+    margin: 0px;*/
+}
+
+.igHorizotnal {
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+}
+
+.igVertical {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+}
+
+.igCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.igOverlay { 
+    /*height: 100%;
+    width: 100%;*/
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+.igText,
+.igButton {  
+    font-family: 'Titillium Web', Verdana, Tahoma, Arial, sans-serif;
+    font-size: 0.8rem;
+    text-align: center;
+    vertical-align: middle;
+}
+ 
+.igButton { 
+    font-weight: 600;
+    text-transform: uppercase;
+    width: calc(100% - 0.5rem);
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 0.5rem;
+    color: #464646;
+    background: #FFFFFF;
+    border: 0px solid #C1BFBF;
+    border-radius: .25rem;
+    border-width: thin;
+    padding: .375rem .75rem;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.igButton:active,
+.igButton:hover  {
+    border-color: #C1BFBF;
+    background: #EEEEEE;
+}

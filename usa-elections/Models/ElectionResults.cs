@@ -1,11 +1,17 @@
 ﻿using IgniteUI.Blazor.Controls;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Linq; 
 
 namespace Infragistics.Samples
 {
+    public enum ElectionDisplayMode
+    {
+        Electoral = 0,
+        Popular = 1,
+        None = 4
+    }
+
     public class Election
     {
         // Election's Year, e.g. 2020
@@ -16,12 +22,28 @@ namespace Infragistics.Samples
         public List<Candidate> Candidates { get; set; }
 
         public StateResults[] States { get; set; }
-        
+
         public List<ResultsByState> ResultsByStates { get; set; }
         public List<CandidateResult> ResultsByCandidates { get; set; }
 
+        public Candidate Winner { get; set; }
+        public Candidate RunnerUp { get; set; }
+        public List<Candidate> StackedCandidates { get; set; }
+        public List<Candidate> OtherCandidates { get; set; }
+        public List<string> CandidateNames { get; set; }
+        public List<string> PartyNames { get; set; }
+        public List<string> PartyColors { get; set; }
+        public string PartyColorsInString { get; set; }
+
+        public List<Candidate> WinnerList { get; set; }
+        //public List<ElectionTreeItem> Tree { get; set; }
+        public List<ResultsByState> Tree { get; set; }
+        
         public int TotalVotes { get; set; }
         public int TotalElectors { get; set; }
+
+        public double IntervalElectors { get; set; }
+        public double IntervalVotes { get; set; }
 
         public Election()
         {
@@ -30,7 +52,149 @@ namespace Infragistics.Samples
 
             ResultsByStates = new List<ResultsByState>();
 
+            Candidates = new List<Candidate>();
+            OtherCandidates = new List<Candidate>();
+
             ResultsByCandidates = new List<CandidateResult>();
+        } 
+
+        public void Populate()
+        {
+            if (this.Candidates == null) return;
+            if (this.Candidates.Count < 2)            
+                throw new Exception("Election has not enough candidates");
+
+            var tree = new List<ResultsByState>();
+            foreach (var state in ResultsByStates)
+            {
+                //if (state.StateSymbol == "CA")
+                //{
+                //    state.WinnerVotes = 10;
+                //}
+                tree.Add(state);
+            }
+            //tree.AddRange(this.ResultsByStates);
+            
+            foreach (var candidate in this.Candidates)
+            {
+                var treeItem = new ResultsByState();
+                treeItem.Winner = candidate;
+                treeItem.WinnerParty = null;
+                treeItem.WinnerNameAndParty = null;
+                treeItem.WinnerName = candidate.Name;
+                treeItem.StateSymbol = candidate.NameAndParty;
+                treeItem.WinnerElectors = double.NaN;
+                treeItem.WinnerVotes = double.NaN;
+                treeItem.WinnerPercentage = double.NaN;
+                tree.Add(treeItem);
+               
+                if (ElectionService.PartyColors.ContainsKey(candidate.Party))
+                {
+                    candidate.PartyColor = ElectionService.PartyColors[candidate.Party];
+                }
+                else
+                {
+                    candidate.PartyColor = "LightGray";
+                }
+            }
+
+            this.Tree = tree;
+
+            if (this.Candidates[0].TotalElectors > this.Candidates[1].TotalElectors)
+            {
+                Winner = this.Candidates[0];
+                RunnerUp = this.Candidates[1];
+            }
+            else
+            {
+                RunnerUp = this.Candidates[0];
+                Winner = this.Candidates[1];
+            }
+             
+            OtherCandidates = new List<Candidate>();
+            foreach (var candidate in this.Candidates)
+            {
+                //TODO remove
+                if (candidate.Name == "Gary Johnson")
+                    candidate.TotalElectors = 25;
+                if (candidate.Name == "Jill Stein")
+                    candidate.TotalElectors = 15;
+                if (candidate.Party == "Independent")
+                    candidate.TotalElectors = 5;
+                
+                if (candidate.Name != this.Winner.Name &&
+                    candidate.Name != this.RunnerUp.Name)
+                {
+                    OtherCandidates.Add(candidate);
+                }
+            }
+
+            WinnerList = new List<Candidate>() { Winner };
+
+
+         
+
+            StackedCandidates = new List<Candidate>();
+            StackedCandidates.Add(this.Winner);
+            foreach (var candidate in this.OtherCandidates)
+            {
+                StackedCandidates.Add(candidate);
+            }
+            StackedCandidates.Add(this.RunnerUp);
+
+            for (int i = 0; i < this.StackedCandidates.Count; i++)
+            {
+                var candidate = this.StackedCandidates[i];
+                if (i == 0)
+                {
+                    candidate.Stack = candidate.Clone();
+                }
+                else
+                {
+                    var previous = this.StackedCandidates[i - 1];
+                    candidate.Stack = candidate.Clone();
+                    candidate.Stack.TotalElectors += previous.Stack.TotalElectors;
+                    candidate.Stack.TotalVotes += previous.Stack.TotalVotes;
+                }
+            }
+
+            this.StackedCandidates = (from item in this.StackedCandidates
+                                      orderby item.Stack.TotalElectors descending, 
+                                      item.Name descending select item).ToList();
+
+            CandidateNames = new List<string>();
+            PartyNames = new List<string>();
+            PartyColors = new List<string>();
+            foreach (var candidate in this.StackedCandidates)
+            {
+                CandidateNames.Add(candidate.Name);
+                PartyNames.Add(candidate.Party);
+                PartyColors.Add(candidate.PartyColor);
+            }
+            PartyColorsInString = string.Join(", ", this.PartyColors);
+
+            //foreach (var candidate in this.StackedCandidates)
+            //{
+            //    candidate.Stack = new Candidate(); // candidate.Clone();
+            //    candidate.Stack.TotalElectors += 
+            //    stackedElectors += candidate.TotalElectors;
+            //    StackedCandidates.Add(candidate.Clone());
+            //}
+
+             
+            var midElectors = Math.Round(TotalElectors / 2.0 * 10) / 10;
+            var midVotes    = Math.Round(TotalVotes / 2.0 / 1000000) * 1000000;
+
+            IntervalElectors = Math.Round(midElectors / 3.0);
+
+            //var intRoundVotes = Math.Round(TotalVotes / 6.0 / 1000000) * 1000000;
+            //var intFloorVotes = Math.Floor(TotalVotes / 6.0 / 1000000) * 1000000;
+            //var intPrec = Math.Abs(intRoundVotes - intFloorVotes) / 2.0;
+            //intPrec = Math.Floor(intPrec / 100000.0) * 100000.0;
+            //IntervalVotes = intFloorVotes + intPrec;
+            IntervalVotes    = Math.Round(TotalVotes / 6.0 / 100000) * 100000;
+            //IntervalVotes = TotalVotes / 6.0;
+            Console.WriteLine("\n midVotes =" + midVotes + "\n IntervalVotes =" + IntervalVotes + "\n TotalVotes =" + TotalVotes);
         }
 
         public List<CandidateResult> SortBy(string field, ListSortDirection direction)
@@ -106,29 +270,57 @@ namespace Infragistics.Samples
 
             return ResultsByCandidates;
         }
-
-
     }
 
-
+    //public class ElectionTreeItem
+    //{  
+    //    public ResultsByState State { get; set; }
+    //    public string Parent { get; set; }
+    //    public string Name { get; set; }
+    //    public double Value { get; set; }
+    //    public string Party { get; set; }
+    //}
+    
     public class Candidate
     {
+        public Candidate Clone()
+        {
+            var ret = new Candidate();
+            ret.Party = this.Party;
+            ret.Name = this.Name;
+            ret.TermStart = this.TermStart;
+            ret.TermEnd = this.TermEnd;
+            ret.Image = this.Image;
+            ret.SortIndex = this.SortIndex;
+            ret.TotalStates = this.TotalStates;
+            ret.TotalElectors = this.TotalElectors;
+            ret.TotalVotes = this.TotalVotes;
+            ret.TotalVotesPercent = this.TotalVotesPercent;
+            ret.TotalElectorsPercent = this.TotalElectorsPercent;
+            return ret;
+        }
         // Candinate's ID, e.g. 1
         public int ID { get; set; }
         // Candinate's Name 
         public string Name { get; set; }
         // Candinate's Party, e.g. "Democrat"
         public string Party { get; set; }
+        public string PartyColor { get; set; }
+        
         public string Image { get; set; }
         public string TermStart { get; set; }
         public string TermEnd { get; set; }
 
+        public string NameAndParty { get; set; }
         public int SortIndex { get; set; }
         public int TotalStates { get; set; }
         public int TotalElectors { get; set; }
         public int TotalVotes { get; set; }
         public double TotalVotesPercent { get; set; }
+        public double TotalVotesMilions { get; set; }
         public double TotalElectorsPercent { get; set; }
+
+        public Candidate Stack { get; set; }
 
         public Candidate()
         {
@@ -154,8 +346,7 @@ namespace Infragistics.Samples
     }
 
     public static class ElectionUtil
-    {
-        
+    {        
         public static List<CandidateResult> SortBy(this List<CandidateResult> items, string field, ListSortDirection direction)
         {
             List<CandidateResult> sortItems = null;
@@ -205,7 +396,11 @@ namespace Infragistics.Samples
         // Electoral Votes for a candinate, e.g. 5
         public int E { get; set; }
         
-        public Candidate Candidate { get; set; } 
+        public Candidate Candidate { get; set; }
+
+        public string CandidateParty { get { return Candidate == null ? "" : Candidate.Party; } }
+        public string CandidateImage { get { return Candidate == null ? "" : Candidate.Image; } }
+        public string CandidateColor { get { return Candidate == null ? "" : Candidate.PartyColor; } } 
 
         public double VotesPerStatePercentage { get; set; }
         public double VotesTotalPercentage { get; set; }
@@ -215,6 +410,7 @@ namespace Infragistics.Samples
 
         public int SortIndex { get; set; }
         public string State { get; set; }
+        public string StateName { get; set; }
         //public string CandidateName { get; set; }
         public string CandidateName { get { return Candidate == null ? "" : Candidate.Name; } }
 
@@ -235,6 +431,11 @@ namespace Infragistics.Samples
             ElectorsPerStatePercentage = 0;
             ElectorsTotalPercentage = 0;
         }
+
+        public void Populate()
+        {
+
+        }
     }
     
     public class StateTotals
@@ -243,9 +444,7 @@ namespace Infragistics.Samples
         public int PopularVotes { get; set; }
         public int ElectoralVotes { get; set; }
     }
-       
-     
-     
+        
     public class ResultsByCandidate
     {
         //public List<CandidateResult> Data { get; set; }
@@ -276,205 +475,4 @@ namespace Infragistics.Samples
 
     }
 
-    public class ResultsByState
-    {
-        public CandidateResult C1 { get; set; }
-        public CandidateResult C2 { get; set; }
-
-        public ResultsByState()
-        {
-            C1PopularVotes = 0;
-            C1ElectoralVotes = 0;
-
-            C2PopularVotes = 0;
-            C2ElectoralVotes = 0;
-
-            C3PopularVotes = 0;
-            C3ElectoralVotes = 0;
-
-            C4PopularVotes = 0;
-            C4ElectoralVotes = 0;
-
-            C5PopularVotes = 0;
-            C5ElectoralVotes = 0;
-
-            C6PopularVotes = 0;
-            C6ElectoralVotes = 0;
-
-            OtherName = "Other";
-            OtherPopularVotes = 0;
-            OtherElectoralVotes = 0;
-        }
-
-        #region ResultsByState
-        //public ResultsByState(CandidateResult c1)
-        //   : this(c1, null, null, null, null, null)
-        //{ }
-
-        //public ResultsByState(CandidateResult c1, CandidateResult c2)
-        //    : this(c1, c2, null, null, null, null)
-        //{ }
-
-        //public ResultsByState(CandidateResult c1, CandidateResult c2, CandidateResult c3)
-        //    : this(c1, c2, c3, null, null, null)
-        //{ }
-
-        //public ResultsByState(CandidateResult c1, CandidateResult c2, CandidateResult c3, CandidateResult c4)
-        //    : this(c1, c2, c3, c4, null, null)
-        //{ }
-
-        //public ResultsByState(CandidateResult c1, CandidateResult c2, CandidateResult c3, CandidateResult c4, CandidateResult c5)
-        //    : this(c1, c2, c3, c4, c5, null)
-        //{ }
-
-        //public ResultsByState(CandidateResult c1, CandidateResult c2, CandidateResult c3, CandidateResult c4, CandidateResult c5, CandidateResult c6)
-        //    : this(new List<CandidateResult> { c1, c2, c3, c4, c5, c6 })
-        //{ }
-        #endregion
-
-        public ResultsByState(List<CandidateResult> candidates)
-        {
-            //C1 = c1;
-            //C2 = c2;
-            C1 = new CandidateResult();
-            C2 = new CandidateResult();
-
-            OtherName = "Other";
-            OtherPopularVotes = 0;
-            OtherElectoralVotes = 0;
-            OtherPercentVotes = 0;
-
-            if (candidates.Count < 2) return;
-
-            var c1 = candidates[0];
-            C1Name = c1.Candidate.Name;
-            C1PopularVotes = c1.V;
-            C1ElectoralVotes = c1.E;
-
-            var c2 = candidates[1];
-            C2Name = c2.Candidate.Name;
-            C2PopularVotes = c2.V;
-            C2ElectoralVotes = c2.E;
-
-            if (c1.E >= c2.E)
-            { 
-                this.WinnerCandidate    = c1.Candidate.Name;
-                this.WinnerParty        = c1.Candidate.Party;
-                this.WinnerVotes        = c1.V;
-                this.WinnerElectors     = c1.E;
-                this.WinnerPercentage   = c1.VotesPerStatePercentage;
-
-                this.RunnerUpCandidate  = c2.Candidate.Name;
-                this.RunnerUpParty      = c2.Candidate.Party;
-                this.RunnerUpVotes      = c2.V;
-                this.RunnerUpElectors   = c2.E;
-                this.RunnerUpPercentage = c2.VotesPerStatePercentage;
-            }
-            else
-            {
-                this.WinnerCandidate    = c2.Candidate.Name;
-                this.WinnerParty        = c2.Candidate.Party;
-                this.WinnerVotes        = c2.V;
-                this.WinnerElectors     = c2.E;
-                this.WinnerPercentage   = c2.VotesPerStatePercentage;
-
-                this.RunnerUpCandidate  = c1.Candidate.Name;
-                this.RunnerUpParty      = c1.Candidate.Party;
-                this.RunnerUpVotes      = c1.V;
-                this.RunnerUpElectors   = c1.E;
-                this.RunnerUpPercentage = c1.VotesPerStatePercentage;
-            }
-
-            //C2Name = c1 == null ? "" : c2.Candidate.Name;
-            //C2PopularVotes = c2 == null ? 0 : c2.V;
-            //C2ElectoralVotes = c2 == null ? 0 : c2.E;
-
-            //C3Name = c1 == null ? "" : c3.Candidate.Name;
-            //C3PopularVotes = c3 == null ? 0 : c3.V;
-            //C3ElectoralVotes = c3 == null ? 0 : c3.E;
-
-            //C4Name = c1 == null ? "" : c4.Candidate.Name;
-            //C4PopularVotes = c4 == null ? 0 : c4.V;
-            //C4ElectoralVotes = c4 == null ? 0 : c5.E;
-
-            //C5Name = c1 == null ? "" : c5.Candidate.Name;
-            //C5PopularVotes = c5 == null ? 0 : c5.V;
-            //C5ElectoralVotes = c5 == null ? 0 : c5.E;
-
-            //C6Name = c1 == null ? "" : c6.Candidate.Name;
-            //C6PopularVotes = c6 == null ? 0 : c6.V;
-            //C6ElectoralVotes = c6 == null ? 0 : c6.E;
-
-            //C1PercentVotes = c1 == null ? 0 : c1.VotesPerStatePercentage;
-            //C2PercentVotes = c2 == null ? 0 : c2.VotesPerStatePercentage;
-            //C3PercentVotes = c3 == null ? 0 : c3.VotesPerStatePercentage;
-            //C4PercentVotes = c4 == null ? 0 : c4.VotesPerStatePercentage;
-            //C5PercentVotes = c5 == null ? 0 : c5.VotesPerStatePercentage;
-            //C6PercentVotes = c6 == null ? 0 : c6.VotesPerStatePercentage;
-        }
-
-        public int TotalVotes { get { return WinnerVotes; } }
-        public int TotalElectors { get { return WinnerElectors; } }
-         
-        public bool HasPartialWinner { get; set; }
-        public string WinnerCandidate { get; set; }
-        public string WinnerParty { get; set; }
-        public int    WinnerVotes { get; set; }
-        public int    WinnerElectors { get; set; }
-        public double WinnerPercentage { get; set; }
-
-        public string RunnerUpCandidate { get; set; }
-        public string RunnerUpParty { get; set; }
-        public int    RunnerUpVotes { get; set; }
-        public int    RunnerUpElectors { get; set; }
-        public double RunnerUpPercentage { get; set; } 
-        
-        public string StateSymbol { get; set; }
-        public string StateName { get; set; }
-        public bool StateHeldElections { get; set; }
-
-        public double StateLocationX { get; set; }
-        public double StateLocationY { get; set; }
-
-        public double StateCenterX { get; set; }
-        public double StateCenterY { get; set; }
-        public bool StateHasLabelBox { get; set; }
-
-        public double C1PercentVotes { get; set; }
-        public double C2PercentVotes { get; set; }
-        public double C3PercentVotes { get; set; }
-        public double C4PercentVotes { get; set; }
-        public double C5PercentVotes { get; set; }
-        public double C6PercentVotes { get; set; }
-        public double OtherPercentVotes { get; set; }
-
-        // 1st candinate's name, Popular votes and Electoral Votes
-        public string C1Name { get; set; }
-        public    int C1PopularVotes { get; set; } 
-        public    int C1ElectoralVotes { get; set; }
-
-        public string C2Name { get; set; }
-        public    int C2PopularVotes { get; set; }
-        public    int C2ElectoralVotes { get; set; }
-        
-        public string OtherName { get; set; }
-        public    int OtherPopularVotes { get; set; } 
-        public    int OtherElectoralVotes { get; set; }
-
-        public string C3Name { get; set; }
-        public    int C3PopularVotes { get; set; }
-        public    int C3ElectoralVotes { get; set; }
-        
-        public string C4Name { get; set; }
-        public    int C4PopularVotes { get; set; }
-        public    int C4ElectoralVotes { get; set; }
-
-        public string C5Name { get; set; }
-        public    int C5PopularVotes { get; set; }
-        public    int C5ElectoralVotes { get; set; }
-        
-        public string C6Name { get; set; }
-        public    int C6PopularVotes { get; set; }
-        public    int C6ElectoralVotes { get; set; }
-    }
 }

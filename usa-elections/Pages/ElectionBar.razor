@@ -1,0 +1,213 @@
+﻿@using Microsoft.AspNetCore.Components 
+@using IgniteUI.Blazor.Controls
+ 
+@inject IIgniteUIBlazor IgniteUIBlazor; 
+
+@*style="height: calc(130px - 1rem); padding-top: 1rem; z-index: 300000;" *@ 
+<div class="igComponent" >
+
+    @if (Election != null)
+    {
+            var max = Math.Round(DisplayInterval * 6);
+           @*<ItemLegend @ref="Legend" Height="100px" Width="200px"/>*@
+           <DataChart Height="100%" Width="100%"
+                      @ref="BarChartRef"
+                      TitleTopMargin="10"
+                      IsHorizontalZoomEnabled="true"
+                      IsVerticalZoomEnabled="true"
+                      Outlines="@Election.PartyColorsInString"
+                      Brushes="@Election.PartyColorsInString">
+
+                @*DataSource="@Election.Candidates"*@
+                <CategoryYAxis Name="yAxis" Label="Name" DataSource="@Election.WinnerList"
+                               Title="Candidates" TitleLeftMargin="10" TitleRightMargin="0"
+                               Gap="0.0" Overlap="1" LabelVisibility="@Visibility.Collapsed"
+                               TickLength="0"/>
+
+                @*<NumericXAxis  Name="xAxisDecreasing" MinimumValue="0" IsInverted="true"
+                               MaximumValue="@Election.TotalElectors" 
+                               Interval="@Election.IntervalElectors"
+                               TickLength="2" MajorStrokeThickness="0" MajorStroke="lime"
+                               LabelLocation="@AxisLabelsLocation.OutsideTop"
+                               LabelVerticalAlignment="@VerticalAlignment.Bottom"/>*@
+               
+                              @*LabelExtent="60" 
+                              Title="@DisplayTitle"  *@
+                <NumericXAxis Name="xAxis"    
+                              MinimumValue="0" 
+                              MaximumValue="@max" 
+                              Interval="@DisplayInterval"
+                              TickLength="5" 
+                              MajorStrokeThickness="0" 
+                              MajorStroke="red"
+                              LabelLocation="@AxisLabelsLocation.OutsideBottom"
+                              LabelVerticalAlignment="@VerticalAlignment.Top"
+                              LabelTopMargin="2"
+                              AbbreviateLargeNumbers="true">
+                    @*<NumberFormatSpecifier Locale="en-US" 
+                              LabelFormat="{0}"
+                                           MinimumFractionDigits="1">
+                    </NumberFormatSpecifier>*@
+                </NumericXAxis>
+
+
+               @foreach (var candidate in @Election.StackedCandidates)
+               {
+                   var candidateList = new List<Candidate>() { candidate };
+                   <BarSeries
+                      XAxisName="xAxis"
+                      YAxisName="yAxis"
+                      DataSource="@candidateList"
+                      ValueMemberPath="@DisplayValue" 
+                      Title="@candidate.Name"
+                      AreaFillOpacity="1"
+                      ShowDefaultTooltip="true"
+                      IsTransitionInEnabled="false"
+                      IsHighlightingEnabled="false"
+                      TooltipTemplate="@CreateTooltip">
+                   </BarSeries>
+               }             
+           </DataChart>
+    }
+         
+</div>
+
+@code {
+
+    RenderFragment CreateTooltip(DataContext context)
+    {
+        var brush = "";
+        var votes = "";
+        var electors = "";
+        var party = "";
+        var name = "";
+
+        if (context != null && context.Item != null)
+        {
+            var item = context.Item as Candidate;
+            brush = item.PartyColor;
+            name = item.Name;
+            party = item.Party;
+            votes = item.TotalVotesMilions + "M (" + item.TotalVotesPercent + "%)";
+            electors = item.TotalElectors + " (" + item.TotalElectorsPercent + "%)";
+        }
+        if (DisplayMode == ElectionDisplayMode.Popular)
+        {
+             return @<div class="ui-tooltip-content" >
+               <div>@name (@party)</div>
+                <div>Popular Votes: @votes</div>
+            </div>;
+        }
+        else
+        {
+            //; color: @brush width: 200px; background: @brush
+            return @<div class="ui-tooltip-content" >
+                @*<div>@item.Name: @item.TotalElectors (@item.TotalElectorsPercent)</div>*@
+                <div>@name (@party)</div>
+                <div>Electoral Votes: @electors</div> 
+                @*<div>@item.Party</div>*@
+                @*<div>@brush</div>*@
+                @*<div>@item.Name</div>
+                <div>Electors: @item.TotalElectors</div>*@
+                @*<div>Electors: @item.Stack.TotalElectors</div>*@
+            </div>;
+        }
+    }
+
+    private ElectionDisplayMode _DisplayMode = ElectionDisplayMode.Electoral;
+    [Parameter]
+    public ElectionDisplayMode DisplayMode
+    {
+        get { return _DisplayMode; }
+        set { _DisplayMode = value; this.OnChanged(); }
+    }
+
+    private string onFromatLabel(object? item)
+    {   
+        return "F";
+    }
+    public string DisplayValue { get { return DisplayMode == ElectionDisplayMode.Electoral ?
+                "Stack.TotalElectors" : "Stack.TotalVotes"; } }
+
+    public string DisplayTitle { get { return DisplayMode == ElectionDisplayMode.Electoral ?
+                "Electoral Votes" : "Popular Votes"; } }
+
+    public double DisplayInterval { get { return DisplayMode == ElectionDisplayMode.Electoral ?
+                Election.IntervalElectors : Election.IntervalVotes; } }
+
+    public double DisplayMax { get { return DisplayMode == ElectionDisplayMode.Electoral ?
+                Election.TotalElectors : Election.TotalVotes; } }
+
+    private DataChart BarChart;
+    public DataChart BarChartRef
+    {
+        get { return BarChart; }
+        set { BarChart = value; this.OnChanged(); }
+    }
+
+    private Election election;
+    [Parameter]
+    public Election Election
+    {
+        get { return election; }
+        set { election = value; this.OnChanged(); }
+    }
+    [Parameter]
+    public string style { get; set; }
+
+    public int CurrentYear = 0;
+
+    private void OnChanged()
+    {
+        //Console.WriteLine("ElectionBar updating... ");
+
+        //if (this.BarChart != null && this.Election != null)
+        //{
+        //    //this.BarChart.Legend = Legend;
+        //}
+
+        if (this.BarChart != null && this.Election != null && this.Election.Year != this.CurrentYear)
+        {
+            Console.WriteLine("ElectionBar OnChanged... " + this.Election.Year);
+            this.CurrentYear = this.Election.Year;
+            StateHasChanged();
+        }
+    }
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Console.WriteLine("ElectionBar OnInitialized");
+
+        DataChartCoreModule.Register(IgniteUIBlazor); //DataChartCategoryCoreModule.Register(IgniteUIBlazor);
+        DataChartCategoryModule.Register(IgniteUIBlazor);
+        DataChartInteractivityModule.Register(IgniteUIBlazor);
+        DataChartVerticalCategoryModule.Register(IgniteUIBlazor);
+        NumberAbbreviatorModule.Register(IgniteUIBlazor);
+        ItemToolTipLayerModule.Register(IgniteUIBlazor);
+        CategoryToolTipLayerModule.Register(IgniteUIBlazor);
+
+        LegendModule.Register(IgniteUIBlazor);
+        ItemLegendModule.Register(IgniteUIBlazor);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        //Console.WriteLine("ElectionBar OnInitializedAsync");
+
+        await Task.Delay(1);
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //Console.WriteLine("ElectionBar Rendering...");
+            OnChanged();
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+}

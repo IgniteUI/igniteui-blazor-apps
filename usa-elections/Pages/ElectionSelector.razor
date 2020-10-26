@@ -1,0 +1,90 @@
+﻿@using Microsoft.AspNetCore.Components 
+@using IgniteUI.Blazor.Controls
+ 
+@inject IIgniteUIBlazor IgniteUIBlazor; 
+
+@*style="height: calc(130px - 1rem); padding-top: 1rem; z-index: 300000;" *@ 
+<div class="igFill" >
+
+    @if (Elections != null)
+    {
+    @*@ref="@ElectionByStatesGridRef"*@
+    <DataGrid Height="100%" Width="100%"
+                      AutoGenerateColumns="false"
+                      DataSource="@Elections"
+                      SelectionMode="@GridSelectionMode.SingleRow"
+              HeaderHeight="32" RowHeight="32">
+
+        <TextColumn Field="Year" HeaderText="Elections" 
+                    HorizontalAlignment="CellContentHorizontalAlignment.Center" />
+                
+        @*<NumericColumn Width="80" Field="Year" HeaderText="EV"  />*@
+    </DataGrid>
+    }         
+</div>
+
+@code {     
+
+    private List<Election> elections;
+    [Parameter]
+    public List<Election> Elections
+    {
+        get { return elections; }
+        set { elections = value; this.OnChanged(); }
+    }
+
+    public int CurrentYear = 0;
+
+    private void OnChanged()
+    {
+        //Console.WriteLine("ElectionLegend updating... ");
+
+        //if (this.Election != null)
+        //{
+        //    Console.WriteLine("ElectionLegend OnChanged... " + this.Election.Year);
+        //    //this.BarChart.Legend = Legend;
+        //}
+        //StateHasChanged();
+
+        if (this.Elections != null)
+        {
+            Console.WriteLine("ElectionSelector OnChanged... " + this.Elections.Count);
+            //this.CurrentYear = this.Election.Year;
+            StateHasChanged();
+        }
+    }
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Console.WriteLine("ElectionSelector OnInitialized");
+        elections = new List<Election>(); 
+        for (int i = 2020; i > 1902; i-=4)
+        {
+            var e = new Election();
+            e.Year = i;
+            elections.Add(e);
+        }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        //Console.WriteLine("ElectionSelector OnInitializedAsync");
+
+        await Task.Delay(1);
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //Console.WriteLine("ElectionSelector Rendering...");
+            OnChanged();
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+}

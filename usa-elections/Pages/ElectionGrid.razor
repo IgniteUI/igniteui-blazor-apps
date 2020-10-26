@@ -1,0 +1,243 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using IgniteUI.Blazor.Controls
+
+@inject HttpClient Http
+@inject IIgniteUIBlazor IgniteUIBlazor;
+@inject Infragistics.Samples.ElectionService ElectionService
+
+<div class="igFill">
+
+    @*<div class="igComponent">*@
+       
+        @if (Election != null && Election.ResultsByCandidates != null)
+        {
+            @*<div style="padding: 10px; height: 30px; text-align:center">US Election Results in @Election.Year</div>*@
+            //SelectionBehavior="@GridSelectionBehavior.Toggle"
+            <DataGrid Height="100%" Width="100%"
+                      AutoGenerateColumns="false"
+                      SelectionMode="@GridSelectionMode.SingleRow"
+                      
+                      DataSource="@Election.ResultsByCandidates" 
+                      @ref="@GridRef"
+                      SummaryScope="@GridSummaryScope"
+                      GroupSummaryDisplayMode="@GridGroupSummaryDisplayMode"
+                      GroupHeaderDisplayMode="@GridSectionDisplayMode"
+                      IsGroupCollapsable="true">
+                
+                <TextColumn Width="@("*>200")" Field="CandidateSort" HeaderText="Candidate" />
+                @*<TextColumn Width="@("*>200")" Field="CandidateImage" HeaderText="Photo" />*@
+                <TextColumn Width="@("*>200")" Field="CandidateParty" HeaderText="Party" 
+                            HorizontalAlignment="CellContentHorizontalAlignment.Center"/>
+
+                <TextColumn Width="@("*>100")" Field="State" HeaderText="State"  
+                            HorizontalAlignment="CellContentHorizontalAlignment.Center"/>
+                
+                            @*CellUpdatingScript="onUpdatingBackground"*@
+                
+                <NumericColumn Width="@("*>160")" Field="E"  HeaderText="Electal Votes"  />
+                @*<NumericColumn Width="@("*>130")" Field="ElectorsPerStatePercentage" HeaderText="%" MaxFractionDigits="1" MinFractionDigits="1"/>*@
+                
+                <NumericColumn Width="@("*>160")" Field="V"  HeaderText="Popular Votes" ShowGroupingSeparator="true"  />
+                <NumericColumn Width="@("*>130")" Field="VotesPerStatePercentage" HeaderText="Votes %" MaxFractionDigits="1" MinFractionDigits="1"/>
+           
+            </DataGrid>
+               @*<DataGrid Height="50px" Width="100%"
+                      DataSource="@ResultsByStates2"
+                      AutoGenerateColumns="false">
+                <TextColumn Field="StateSymbol" Width="100" HeaderText="" HorizontalAlignment="CellContentHorizontalAlignment.Center" />
+                <TextColumn Field="C1Name" Width="260" HeaderText="Hilary Clinton" />
+                <TextColumn Field="C2Name" Width="260" HeaderText="Donald Trump" HorizontalAlignment="CellContentHorizontalAlignment.Center" />
+                <TextColumn Field="OtherName" Width="180" HeaderText="Other" HorizontalAlignment="CellContentHorizontalAlignment.Center" />
+            </DataGrid>
+
+            <DataGrid Height="30%" Width="100%"
+                      @ref="@ElectionByStatesGridRef"
+                      AutoGenerateColumns="false"
+                      DataSource="@SelectedElection.ResultsByStates" 
+                      SummaryScope="@DataSourceSummaryScope.Root"
+                      GroupSummaryDisplayMode="@GridGroupSummaryDisplayMode"
+                      GroupHeaderDisplayMode="@GridSectionDisplayMode">
+
+                <TextColumn Width="100" Field="StateSymbol" HeaderText="State" 
+                            HorizontalAlignment="CellContentHorizontalAlignment.Center" />
+                
+                <NumericColumn Width="80"  Field="C1ElectoralVotes" HeaderText="EV"  />
+                <NumericColumn Width="100" Field="C1PopularVotes" HeaderText="Votes" ShowGroupingSeparator="true"  />
+                <NumericColumn Width="80"  Field="C1PercentVotes" HeaderText="%"   MaxFractionDigits="1" MinFractionDigits="1"/>
+                 
+                <NumericColumn Width="80"  Field="C2ElectoralVotes"   HeaderText="EV"  />
+                <NumericColumn Width="100" Field="C2PopularVotes"  HeaderText="Votes" ShowGroupingSeparator="true"  />
+                <NumericColumn Width="80"  Field="C2PercentVotes" HeaderText="%"   MaxFractionDigits="1" MinFractionDigits="1"/>
+                
+                <NumericColumn Width="100" Field="OtherPopularVotes"  HeaderText="Votes" ShowGroupingSeparator="true"   />
+                <NumericColumn Width="80"  Field="OtherPercentVotes" HeaderText="%"   MaxFractionDigits="1" MinFractionDigits="1"/>
+            </DataGrid>*@
+
+        }
+
+    @*</div>*@
+</div>
+
+@code {
+    private Election election;
+    [Parameter]
+    public Election Election
+    {
+        get { return election; }
+        set { election = value; this.OnChanged(); }
+    }
+
+    //private List<Election> AllElections;
+    //private Election SelectedElection;
+
+    private DataSourceSectionHeaderDisplayMode GridSectionDisplayMode = DataSourceSectionHeaderDisplayMode.Combined;
+    private DataSourceSummaryScope GridSummaryScope = DataSourceSummaryScope.Groups;
+    private GroupSummaryDisplayMode GridGroupSummaryDisplayMode = GroupSummaryDisplayMode.Cells;
+
+    // Election By Candidates Grid
+    private DataGrid Grid;
+    private DataGrid GridRef
+    {
+        get { return Grid; }
+        set { Grid = value; this.OnReferenced(); StateHasChanged(); }
+    }
+
+    void OnGridSortChanged(GridSortDescriptionsChangedEventArgs args)
+    {
+        var sortBy = Grid.SortDescriptions[0];
+        //Console.WriteLine("OnGridSortChanged " + sortBy.Name);
+        //Console.WriteLine("OnGridSortChanged " + sortBy.Field);
+        //Console.WriteLine("OnGridSortChanged " + sortBy.SortDirection);
+
+        if (this.Election != null && this.Election.ResultsByCandidates != null)
+        {
+            //this.Grid.NotifyClearItems(this.SelectedElection.ResultsByCandidates);
+            //this.Grid.DataSource = null;
+            //this.SelectedElection.SortBy(sortBy.Field, sortBy.SortDirection);
+            //this.Grid.DataSource = this.SelectedElection.ResultsByCandidates;
+
+            //var sortItems = this.SelectedElection.ResultsByCandidates.SortBy(sortBy.Field, sortBy.SortDirection);
+            //if (sortItems != null)
+            //{
+            //    this.SelectedElection.ResultsByCandidates = sortItems;
+            //    this.Grid.DataSource = this.SelectedElection.ResultsByCandidates;
+            //}
+        }
+    }
+
+    void OnCellClicked(GridCellEventArgs args)
+    {
+        //Console.WriteLine("OnCellClicked " + args.Type);
+    }
+
+    private void OnChanged()
+    {
+        Console.WriteLine("ElectionGrid OnChanged");
+    }
+
+    private void OnReferenced()
+    {
+        Console.WriteLine("ElectionGrid OnGridRef");
+
+        Grid.SortDescriptionsChanged += OnGridSortChanged;
+        Grid.CellClicked += OnCellClicked;
+
+        var ColumnGroup = new ColumnGroupDescription()
+        {
+            //Field = "State", DisplayName = "State"
+            //Field = "CandidateName", DisplayName = "Candidate"
+            Field = "CandidateSort", DisplayName = "CandidateSort"
+        };
+        this.Grid.GroupDescriptions.Add(ColumnGroup);
+        this.Grid.IsGroupRowSticky = true;
+        this.Grid.IsGroupExpandedDefault = false;
+
+        var SumVotes = new ColumnSummaryDescription()
+        {
+            Field = "V", DisplayName = "V", Operand = SummaryOperand.Sum
+        };
+        var SumElectors = new ColumnSummaryDescription()
+        {
+            Field = "E", DisplayName = "E", Operand = SummaryOperand.Sum
+        };
+        //var SumPercentage = new ColumnSummaryDescription()
+        //{
+        //    Field = "TotalPercentage", DisplayName = "%", Operand = SummaryOperand.Sum
+        //};
+        var SumVotesPerStatePercentage = new ColumnSummaryDescription()
+        {
+            Field = "VotesPerStatePercentage",
+            Operand = SummaryOperand.Custom,
+            ProvideCalculatorScript = "onCalculateVotesTotalPercentage"
+        };
+
+        var CountStates = new ColumnSummaryDescription()
+        {
+            Field = "State",
+            Operand = SummaryOperand.Custom,
+            ProvideCalculatorScript = "onCalculateState"
+        };
+        //var CountStates = new ColumnSummaryDescription()
+        //{
+        //    Field = "State", DisplayName = "State", Operand = SummaryOperand.Count
+        //};
+        
+        var SumParty = new ColumnSummaryDescription()
+        {
+            Field = "CandidateParty",
+            Operand = SummaryOperand.Custom,
+            ProvideCalculatorScript = "onCalculateParty"
+        };
+        this.Grid.SummaryDescriptions.Add(CountStates);
+        this.Grid.SummaryDescriptions.Add(SumParty);
+        this.Grid.SummaryDescriptions.Add(SumVotes);
+        this.Grid.SummaryDescriptions.Add(SumElectors);
+        this.Grid.SummaryDescriptions.Add(SumVotesPerStatePercentage);
+
+
+        //var ColumnSort = new ColumnSortDescription()
+        //{
+        //    Field = "E", SortDirection = ListSortDirection.Descending
+        //};
+        //this.Grid.SortDescriptions.Add(ColumnSort);
+    }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("ElectionGrid OnInitialized");
+        base.OnInitialized();
+
+        //Console.WriteLine("App OnInit " + NavManager.BaseUri);
+        //Console.WriteLine("App OnInit " + NavManager.Uri);
+
+        DataGridModule.Register(IgniteUIBlazor);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("ElectionGrid OnInitializedAsync");
+        //try
+        //{
+
+        //    //ElectionService.Http = Http;
+        //    //await ElectionService.Load();
+
+        //    //Console.WriteLine("ElectionGrid rendering...");
+
+        //    //this.SelectedElection = ElectionService.Elections[0];
+        //    //this.ResultsByStates = this.Elections.ResultsByState;
+        //    //this.ResultsByCandidate = this.Elections.ResultsByCandidate;
+
+        //    //Console.WriteLine("Elections rendering... done");
+
+        //    //Console.WriteLine("SB.Nav toc");
+        //    //System.Diagnostics.Debug.WriteLine("SB.Nav toc.json found: " + elections.Length);
+        //}
+        //catch (Exception ex)
+        //{
+        //    System.Diagnostics.Debug.WriteLine("Elections - error: \n" + ex.ToString());
+        //}
+    }
+
+}

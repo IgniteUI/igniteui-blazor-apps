@@ -1,0 +1,148 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Rendering
+@using IgniteUI.Blazor.Controls
+
+@inject HttpClient Http
+@inject IIgniteUIBlazor IgniteUIBlazor;
+@inject Infragistics.Samples.ElectionService ElectionService
+
+<div class="igComponent" style="height: calc(100% - 2rem); width: calc(100% - 2rem); padding: 1rem">
+     
+        @if (Election != null)
+        {
+                  //ParentIdMemberPath="Parent"
+            //NodePointerEnter="@onNodePointerEnter"
+            // FillScaleMode="@TreemapFillScaleMode.Value"
+            //      FillScaleMinimumValue="0"
+            //      FillScaleMaximumValue="540"
+            //      FillBrushes="#4e62cf, #8a58d6" 
+            //      IsFillScaleLogarithmic="false"
+              //   IdMemberPath="Name"
+              //   LabelMemberPath="Name"
+              //   ValueMemberPath="Value"
+              //    ParentIdMemberPath="Parent"   
+              //    RootTitle="Candidate"
+         <Treemap Height="100%" Width="100%" @ref="TreemapRef"
+                  DataSource="@Election.Tree"
+                  RootTitle="Candidate"
+                  ParentIdMemberPath="WinnerNameAndParty"  
+                  ValueMemberPath="@DisplayValue"
+                  IdMemberPath="StateSymbol"
+                  LabelMemberPath="StateSymbol"
+                  NodeStylingScript="onStyleTreeNode"
+                  LayoutType="@TreemapLayoutType.Squarified"
+                  LayoutOrientation="@TreemapOrientation.Horizontal"
+                  HeaderDisplayMode="@TreemapHeaderDisplayMode.Overlay"
+                  HeaderBackground="#E0F11F"
+                  HeaderHoverBackground="#28E124" 
+                  Outline="black"
+                  StrokeThickness="1"                
+                  ParentNodeLeftMargin="1"
+                  ParentNodeLeftPadding="0"
+                  ParentNodeRightMargin="1"
+                  ParentNodeRightPadding="0"
+                  ParentNodeTopMargin="1"
+                  ParentNodeTopPadding="0"
+                  ParentNodeBottomMargin="1"
+                  ParentNodeBottomPadding="0"
+                  TransitionDuration="0">
+             
+                  @*OverlayHeaderBackground="purple"
+                  BreadcrumbSequence=" > "*@
+         </Treemap>
+        }
+              
+</div>
+
+@code {
+
+    private Treemap Treemap;
+    public Treemap TreemapRef
+    {
+        get { return Treemap; }
+        set { Treemap = value; this.OnChanged(); }
+    }
+
+    private Election _Election;
+    [Parameter]
+    public Election Election
+    {
+        get { return _Election; }
+        set { _Election = value; this.OnChanged(); }
+    }
+
+    private ElectionDisplayMode _DisplayMode = ElectionDisplayMode.Electoral;
+    [Parameter]
+    public ElectionDisplayMode DisplayMode
+    {
+        get { return _DisplayMode; }
+        set { _DisplayMode = value; this.OnChanged(); }
+    }
+
+    public string DisplayValue { get { return DisplayMode == ElectionDisplayMode.Electoral ? "WinnerElectors" : "WinnerVotes"; } }
+
+    public int CurrentYear = 0;
+
+    private void OnChangedDisplayMode()
+    {
+        if (this.Treemap != null && this.Election != null)
+        {
+            Console.WriteLine("ElectionTree OnChangedDisplayMode... ");
+            //if (DisplayMode == ElectionDisplayMode.Popular)
+            //    this.Treemap.ValueMemberPath = "WinnerVotes";
+            //else
+            //    this.Treemap.ValueMemberPath = "WinnerElectors";
+
+            //this.Treemap.MarkDirty();
+            //StateHasChanged();
+        }
+    }
+
+    private void OnChanged()
+    {
+        //Console.WriteLine("ElectionTree updating... ");
+        //if (this.Treemap != null && this.Election != null)
+        //{
+        //    Console.WriteLine("ElectionTree updating... " + this.Election.Year);
+
+        //    //await this.ShapeMap.ActualSeries[0].RenderSeriesAsync(false);
+        //}
+        //StateHasChanged();
+
+        if (this.Treemap != null && this.Election != null && this.Election.Year != this.CurrentYear)
+        {
+            Console.WriteLine("ElectionTree OnChanged... " + this.Election.Year);
+            this.CurrentYear = this.Election.Year;
+            StateHasChanged();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("ElectionTree OnInitialized");
+
+        TreemapModule.Register(IgniteUIBlazor);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("ElectionTree OnInitializedAsync");
+
+        await Task.Delay(1);
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Console.WriteLine("ElectionTree Rendering...");
+            OnChanged();
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+
+
+}

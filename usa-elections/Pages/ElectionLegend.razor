@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNetCore.Components 
+@using IgniteUI.Blazor.Controls
+ 
+@inject IIgniteUIBlazor IgniteUIBlazor; 
+
+@*style="height: calc(130px - 1rem); padding-top: 1rem; z-index: 300000;" *@ 
+<div class="igHorizotnal igCenter" >
+
+    @if (Election != null)
+    {
+        @for (int i = Election.StackedCandidates.Count - 1; i >= 0; i--)
+        {
+            var candidate = Election.StackedCandidates[i];
+            <div class="igLegend-badge" style="background: @candidate.PartyColor"> </div>
+            <div class="igLegend-label"> @candidate.NameAndParty</div>
+        }
+        @*@foreach (var candidate in @Election.StackedCandidates)
+        {
+            <div class="electionLegend-badge" style="background: @candidate.PartyColor"> </div>
+            <div class="electionLegend-label"> @candidate.Name</div>
+        }*@     
+    }         
+</div>
+
+@code {     
+
+    private Election election;
+    [Parameter]
+    public Election Election
+    {
+        get { return election; }
+        set { election = value; this.OnChanged(); }
+    }
+
+    public int CurrentYear = 0;
+
+    private void OnChanged()
+    {
+        //Console.WriteLine("ElectionLegend updating... ");
+
+        //if (this.Election != null)
+        //{
+        //    Console.WriteLine("ElectionLegend OnChanged... " + this.Election.Year);
+        //    //this.BarChart.Legend = Legend;
+        //}
+        //StateHasChanged();
+
+        if (this.Election != null && this.Election.Year != this.CurrentYear)
+        {
+            Console.WriteLine("ElectionLegend OnChanged... " + this.Election.Year);
+            this.CurrentYear = this.Election.Year;
+            StateHasChanged();
+        }
+    }
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Console.WriteLine("ElectionLegend OnInitialized");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        //Console.WriteLine("ElectionLegend OnInitializedAsync");
+
+        await Task.Delay(1);
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //Console.WriteLine("ElectionLegend Rendering...");
+            OnChanged();
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+}
