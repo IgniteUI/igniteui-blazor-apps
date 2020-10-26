@@ -39,3 +39,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+*.xlsx
+usa-elections/wwwroot/data/elections tmp.txt
+*.zip
+*.xml
