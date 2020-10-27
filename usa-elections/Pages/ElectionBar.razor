@@ -122,10 +122,7 @@
         set { _DisplayMode = value; this.OnChanged(); }
     }
 
-    private string onFromatLabel(object? item)
-    {   
-        return "F";
-    }
+  
     public string DisplayValue { get { return DisplayMode == ElectionDisplayMode.Electoral ?
                 "Stack.TotalElectors" : "Stack.TotalVotes"; } }
 

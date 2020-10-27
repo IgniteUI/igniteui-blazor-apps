@@ -27,18 +27,18 @@
                 
                 <TextColumn Width="@("*>200")" Field="CandidateSort" HeaderText="Candidate" />
                 @*<TextColumn Width="@("*>200")" Field="CandidateImage" HeaderText="Photo" />*@
-                <TextColumn Width="@("*>200")" Field="CandidateParty" HeaderText="Party" 
+                <TextColumn Width="@("*>120")" Field="CandidateParty" HeaderText="Party" 
                             HorizontalAlignment="CellContentHorizontalAlignment.Center"/>
 
-                <TextColumn Width="@("*>100")" Field="State" HeaderText="State"  
+                <TextColumn Width="@("*>90")" Field="State" HeaderText="State"  
                             HorizontalAlignment="CellContentHorizontalAlignment.Center"/>
                 
                             @*CellUpdatingScript="onUpdatingBackground"*@
                 
-                <NumericColumn Width="@("*>160")" Field="E"  HeaderText="Electal Votes"  />
+                <NumericColumn Width="@("*>130")" Field="E" HeaderText="Electoral Votes"  />
                 @*<NumericColumn Width="@("*>130")" Field="ElectorsPerStatePercentage" HeaderText="%" MaxFractionDigits="1" MinFractionDigits="1"/>*@
                 
-                <NumericColumn Width="@("*>160")" Field="V"  HeaderText="Popular Votes" ShowGroupingSeparator="true"  />
+                <NumericColumn Width="@("*>130")" Field="V" HeaderText="Popular Votes" ShowGroupingSeparator="true"  />
                 <NumericColumn Width="@("*>130")" Field="VotesPerStatePercentage" HeaderText="Votes %" MaxFractionDigits="1" MinFractionDigits="1"/>
            
             </DataGrid>
@@ -238,6 +238,7 @@
         //{
         //    System.Diagnostics.Debug.WriteLine("Elections - error: \n" + ex.ToString());
         //}
+        await Task.Delay(1);
     }
 
 }

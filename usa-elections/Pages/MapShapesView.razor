@@ -9,15 +9,15 @@
 @inject IIgniteUIBlazor IgniteUIBlazor;
 @inject Infragistics.Samples.ElectionService ElectionService
 
-<div class="igPage" style="padding-right: 1rem;">
+<div class="igPage" style="background: white">
 
-    <div class="igVertical"  style="width: 9rem; height: calc(100% - 2rem); padding-left: 1rem; padding-top: 1rem;">
+    <div class="igVertical" style="width: 9rem; height: calc(100% - 1rem); padding-top: 1rem;">
         <ElectionSelector />
     </div>
         
     @*@if (SelectedElection != null && SelectedElection.ResultsByStates != null)
     {*@
-    <div class="igFill igVertical" style="background: white;"> 
+    <div class="igFill igVertical" style="width: calc(100% - 9rem); background: white;"> 
             
         <div class="igHorizotnal" style="width: calc(100% - 2rem); padding-left: 1.1rem; padding-right: 0.75rem; margin-top: 1rem">
             <div class="igButton" style="@ElectorsButtonStyle" @onclick="onDisplayElectoralVotes">Electoral Votes</div>
@@ -92,7 +92,7 @@
             </div>
         </div>
         
-        <div class="igFill" style="max-height: 30%; width: calc(100% - 2.2rem); padding-left: 1.1rem; padding-right: 0.75rem; ">
+        <div class="igFill" style="max-height: 32%; width: calc(100% - 2.2rem); padding-left: 1.1rem; padding-right: 0.75rem;">
             <ElectionGrid Election="@SelectedElection"/>
         </div>
           
@@ -146,13 +146,12 @@
     private List<Election> AllElections;
     private Election SelectedElection;
     //private List<CandidateResult> ResultsByCandidate;
-    //private List<ResultsByState> ResultsByStates;
-    private List<ResultsByState> ResultsByStates2;
+    //private List<ResultsByState> ResultsByStates; 
 
     //private ElectionDisplayMode VotesDisplayMode = ElectionDisplayMode.Electoral;
-    private DataSourceSectionHeaderDisplayMode GridSectionDisplayMode = DataSourceSectionHeaderDisplayMode.Combined;
-    private DataSourceSummaryScope GridSummaryScope = DataSourceSummaryScope.Groups;
-    private GroupSummaryDisplayMode GridGroupSummaryDisplayMode = GroupSummaryDisplayMode.Cells;
+    //private DataSourceSectionHeaderDisplayMode GridSectionDisplayMode = DataSourceSectionHeaderDisplayMode.Combined;
+    //private DataSourceSummaryScope GridSummaryScope = DataSourceSummaryScope.Groups;
+    //private GroupSummaryDisplayMode GridGroupSummaryDisplayMode = GroupSummaryDisplayMode.Cells;
 
     private DataChart ElectionByStatesChart;
     private DataChart ElectionByStatesChartRef
@@ -211,7 +210,7 @@
     private double TreeMapOpacity = 1.0;
     private double ShapeMapOpacityStep = 0.1;
     private double DiagramMapOpacityStep = 0.1;
-    private double TreeMapOpacityStep = 0.1;
+    //private double TreeMapOpacityStep = 0.1;
 
     private void onFadeAnimateShapeMap()
     {
@@ -385,8 +384,7 @@
             //Console.WriteLine("App rendering...");
 
             //this.SelectedElection = ElectionService.Elections[0];
-            ////this.ResultsByStates = this.Elections.ResultsByState;
-            //this.ResultsByStates2 = null;
+            ////this.ResultsByStates = this.Elections.ResultsByState; 
 
             //await UpdateMapShapes();
             //this.ResultsByCandidate = this.Elections.ResultsByCandidate;
@@ -432,9 +430,9 @@
 
         ElectionService.Http = Http;
         await ElectionService.Load();
+        this.AllElections = ElectionService.Elections;
         this.SelectedElection = ElectionService.Elections[0];
-        //this.ResultsByStates = this.Elections.ResultsByState;
-        this.ResultsByStates2 = null;
+        //this.ResultsByStates = this.Elections.ResultsByState; 
 
         if (this.ShapeMap != null)
         {
@@ -499,8 +497,8 @@
         //Console.WriteLine("Map zooming... Complete");
 
         await UpdateMapShapes();
-
     }
+
     private Dictionary<string, StateInfo> ShapesLookup;
 
     private async Task UpdateMapShapes()
