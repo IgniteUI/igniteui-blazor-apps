@@ -5,6 +5,8 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <AssemblyName>Infragistics.Samples</AssemblyName>
     <RootNamespace>Infragistics.Samples</RootNamespace>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

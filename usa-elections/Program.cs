@@ -17,7 +17,7 @@ namespace Infragistics.Samples
     {
         public static async Task Main(string[] args)
         {
-            Console.WriteLine("App Main()");
+            Console.WriteLine("App Main v1.0.1");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
