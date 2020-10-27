@@ -1,4 +1,4 @@
-﻿console.log("MapStylingShapes loaded")
+﻿console.log("MapStylingShapes v1.0.1")
  
 var styles = {
     Republican:  { outline: "black", fill: "#FF0808" },

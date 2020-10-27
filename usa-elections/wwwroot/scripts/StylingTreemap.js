@@ -1,4 +1,4 @@
-﻿console.log("StylingTreemap loaded")
+﻿console.log("StylingTreemap v1.0.1")
 
 var styles = {
     Republican: { outline: "black", fill: "#FF0808" },
