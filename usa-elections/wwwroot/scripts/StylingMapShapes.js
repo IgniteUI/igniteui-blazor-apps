@@ -1,11 +1,11 @@
 ﻿//console.log("MapStylingShapes v1.0.1")
  
-var styles = {
-    Republican:  { outline: "black", fill: "#FF0808" },
-    Democrat:    { outline: "black", fill: "#008DFF" },
-    NoStatehood: { outline: "black", fill: "lightgray" },
-    //NoStatehood: { outline: "gray", fill: "white" },
-}; 
+//var styles = {
+//    Republican:  { outline: "black", fill: "#FF0808" },
+//    Democrat:    { outline: "black", fill: "#008DFF" },
+//    NoStatehood: { outline: "black", fill: "lightgray" },
+//    //NoStatehood: { outline: "gray", fill: "white" },
+//}; 
  
 function onStyleShape(o, e) {
     
@@ -30,12 +30,12 @@ function onStyleShape(o, e) {
 
     // styling states that did not exists in the election year
     if (StateCreation > ElectionYear) {
-        var style = styles.NoStatehood;
+        var style = PartyStyles.NoStatehood;
         e.shapeFill   = style.fill;
         e.shapeStroke = style.outline;
 
     } else {
-        var style = styles[WinnerParty];
+        var style = PartyStyles[WinnerParty];
         if (style) {
             //if (Code == "NJ" || Code == "FL") {
             //    console.log("onStyleShapeScript " + Name + " " + WinnerParty + " Statehood=" + (ElectionYear > Statehood));

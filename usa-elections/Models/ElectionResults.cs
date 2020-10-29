@@ -194,7 +194,7 @@ namespace Infragistics.Samples
             //IntervalVotes = intFloorVotes + intPrec;
             IntervalVotes    = Math.Round(TotalVotes / 6.0 / 100000) * 100000;
             //IntervalVotes = TotalVotes / 6.0;
-            Console.WriteLine("\n midVotes =" + midVotes + "\n IntervalVotes =" + IntervalVotes + "\n TotalVotes =" + TotalVotes);
+            //Console.WriteLine("\n midVotes =" + midVotes + "\n IntervalVotes =" + IntervalVotes + "\n TotalVotes =" + TotalVotes);
         }
 
         public List<CandidateResult> SortBy(string field, ListSortDirection direction)

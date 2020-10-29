@@ -22,6 +22,7 @@ namespace Infragistics.Samples
         public string Name { get; set; }
         public int Index { get; set; }
         public int CreationYear { get; set; }
+        public int Population { get; set; }
         public bool StateHasLabelBox { get; set; }
         //public bool Statehood { get; set; }
     }
@@ -40,19 +41,23 @@ namespace Infragistics.Samples
         static ElectionService()
         {
             PartyColors = new Dictionary<string, string>();
-            PartyColors.Add("Democrat",             "#008DFF");
+            //PartyColors.Add("Democrat",             "#008DFF");
+            //PartyColors.Add("Democrat-Leaning",     "#4BADFC");
+            //PartyColors.Add("Republican",           "#FF0808");
+            //PartyColors.Add("Republican-Leaning",   "#F47575");
+            PartyColors.Add("Democrat",             "#5885EC");
             PartyColors.Add("Democrat-Leaning",     "#4BADFC");
-            PartyColors.Add("Republican",           "#FF0808");
+            PartyColors.Add("Republican",           "#DE5E58");
             PartyColors.Add("Republican-Leaning",   "#F47575");
-            PartyColors.Add("NationalRepublican", "#8E5EE9"); // 1832
-            PartyColors.Add("DemocraticRepublican_1", "#8E5EE9"); //1824
-            PartyColors.Add("DemocraticRepublican_2", "#8E5EE9"); // 1824
-            PartyColors.Add("DemocraticRepublican_3", "#8E5EE9"); // 1824
-            PartyColors.Add("DemocraticRepublican_4", "#8E5EE9"); // 1824
+            PartyColors.Add("NationalRepublican",     "#B058EC"); // 1832
+            PartyColors.Add("DemocraticRepublican_1", "#B058EC"); //1824
+            PartyColors.Add("DemocraticRepublican_2", "#B058EC"); // 1824
+            PartyColors.Add("DemocraticRepublican_3", "#B058EC"); // 1824
+            PartyColors.Add("DemocraticRepublican_4", "#B058EC"); // 1824
            
             PartyColors.Add("Libertarian",          "#F7AC22");
             PartyColors.Add("Green",               "#0CDE23");
-            PartyColors.Add("Independent",          "#8E5EE9");
+            PartyColors.Add("Independent",          "#B058EC");
             PartyColors.Add("Other",                "#C6C6C6");
             //TODO set colors
             PartyColors.Add("Reform", "#8E5EE9");

@@ -1,11 +1,11 @@
 ﻿//console.log("MapStylingMarkers loaded")
 
-var styles = {
-    Republican: { outline: "black", fill: "#FF0808" },
-    Democrat: { outline: "black", fill: "#008DFF" },
-    NoStatehood: { outline: "black", fill: "lightgray" },
-    //NoStatehood: { outline: "gray", fill: "white" },
-};
+//var styles = {
+//    Republican: { outline: "black", fill: "#FF0808" },
+//    Democrat: { outline: "black", fill: "#008DFF" },
+//    NoStatehood: { outline: "black", fill: "lightgray" },
+//    //NoStatehood: { outline: "gray", fill: "white" },
+//};
 
 function onTemplateMarker(o, e) {
     //console.log("Map onTemplateMarker " + e);
@@ -56,7 +56,7 @@ function onTemplateMarker(o, e) {
                 //console.log("Map onTemplateMarker " + data.item.StateWithBox);
                  
                 var winnerParty = data.item.WinnerParty;
-                var winnerStyle = styles[winnerParty];
+                var winnerStyle = PartyStyles[winnerParty];
                 //if (style) {
                 //    ctx.strokeStyle = style.outline;
                 //    ctx.fillStyle = style.fill;
@@ -121,4 +121,15 @@ function onTemplateMarker(o, e) {
 
 //igRegisterScript("onTemplateMarker", onTemplateMarker, false);
 igRegisterScript("onTemplateMarker", onTemplateMarker, true);
- 
+
+
+function onHexImportCompleted(o, e) {
+    console.log("Map onHexImportCompleted " + e);
+
+}
+
+igRegisterScript("onHexImportCompleted", onHexImportCompleted, false);
+
+
+
+

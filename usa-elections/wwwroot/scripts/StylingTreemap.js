@@ -1,11 +1,11 @@
 ﻿//console.log("StylingTreemap v1.0.1")
 
-var styles = {
-    Republican: { outline: "black", fill: "#FF0808" },
-    Democrat: { outline: "black", fill: "#008DFF" },
-    NoStatehood: { outline: "black", fill: "lightgray" },
-    //NoStatehood: { outline: "gray", fill: "white" },
-}; 
+//var styles = {
+//    Republican: { outline: "black", fill: "#FF0808" },
+//    Democrat: { outline: "black", fill: "#008DFF" },
+//    NoStatehood: { outline: "black", fill: "lightgray" },
+//    //NoStatehood: { outline: "gray", fill: "white" },
+//}; 
 
 function onStyleTreeNode(o, e) {
     //console.log("StylingTreemap onStyleTreeNode ");
@@ -14,7 +14,7 @@ function onStyleTreeNode(o, e) {
         e.style.fill = "#414141";
 
     } else {
-        var style = styles[e.item.WinnerParty];
+        var style = PartyStyles[e.item.WinnerParty];
         if (style) {
             e.style.fill = style.fill;
         } else {
@@ -22,7 +22,6 @@ function onStyleTreeNode(o, e) {
         }
     }
     
-
     //if (e.parentLabel != null) {
     //    var style = styles[e.item.Party];
     //    if (style) {
@@ -38,7 +37,7 @@ function onStyleTreeNode(o, e) {
     //    e.style.fill = "#DEA51C";
     //    //e.style.color = "#DEA51C";
     //}
-
 };
+
 igRegisterScript("onStyleTreeNode", onStyleTreeNode, false);
  

@@ -1,0 +1,301 @@
+﻿@using Microsoft.AspNetCore.Components 
+@using IgniteUI.Blazor.Controls
+ 
+@inject IIgniteUIBlazor IgniteUIBlazor; 
+
+@*style="height: calc(130px - 1rem); padding-top: 1rem; z-index: 300000;" *@ 
+
+<div class="igFill igOverflow" style="background: white">
+
+    @*@if (Election != null)
+    {
+           
+    }*@
+      
+           <GeographicMap Height="100%" Width="100%" Zoomable="true"
+                      @ref="HexMap"
+                      SeriesMouseLeftButtonDownScript="onHexShapeMouseDown"
+                      BackgroundContent="@null">
+
+                                      @*StyleShapeScript="onStyleShape"*@
+               <GeographicShapeSeries Outline="black" Brush="#3FCB3F" Thickness="0.5"
+                                      StyleShapeScript="onHexShapeStyle"
+                                      MarkerTemplateScript="onHexMarkerStyle"/> 
+               
+                                      @*MarkerTemplateScript="onTemplateMarker"*@
+                @*<GeographicSymbolSeries
+                   Name="labels" Title="HexMarkers"
+                   DataSource="@HexMarkers"
+                   LatitudeMemberPath ="Y"
+                   LongitudeMemberPath="X" 
+                   TransitionInDuration="0" TransitionDuration="0"
+                   ShowDefaultTooltip="true">
+                   <TooltipTemplate>
+                            <div style="width: 200px; height: 70px; background: white">
+                                <div style="color: red">series.Title</div>
+                                <div style="color: red">item.StateCenterY</div>
+                                <div style="color: red">context</div>
+                            </div>
+                   </TooltipTemplate>
+               </GeographicSymbolSeries>*@
+           </GeographicMap>
+</div>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Console.WriteLine("ElectionHex OnInitialized");
+
+        GeographicMapModule.Register(IgniteUIBlazor);
+        DataChartInteractivityModule.Register(IgniteUIBlazor);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        //Console.WriteLine("ElectionHex OnInitializedAsync");
+
+        await Task.Delay(1);
+    }
+
+    private GeographicMap         HexMap;
+    private GeographicShapeSeries HexSeries;
+    private ShapeDataSource       HexShapes;
+    private List<HexMarker>       HexMarkers;
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Console.WriteLine("ElectionHex Importing...");
+
+            if (this.HexMap != null)
+            {
+                //HexSeries.StyleUpdated();
+                HexSeries = (GeographicShapeSeries)this.HexMap.ActualSeries[0];
+                HexSeries.ShapefileDataSource = (
+                    new ShapeDataSource() {
+                        Name="hexSeries",
+                        ImportCompletedScript = "onHexImportCompleted",
+                        ShapefileSource = "shapes/usa_states_hex_map.shp",
+                        DatabaseSource  = "shapes/usa_states_hex_map.dbf",
+                        ImportCompleted = new EventCallback<AsyncCompletedEventArgs>(null,
+                            (Func<AsyncCompletedEventArgs, Task>)OnImportCompleted)
+                    }
+                );
+            }
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected async Task OnImportCompleted(AsyncCompletedEventArgs args)
+    {
+        Console.WriteLine("ElectionHex Importing... done");
+
+        if (this.HexMap != null && HexSeries != null)
+        {
+            this.HexShapes = HexSeries.ShapefileDataSource;
+            var geoRect2 = HexShapes.ComputedWorldRect;
+            //var labelPointX = await this.HexShapes.GetRecordValuesAsync("NamePosX");
+
+            var stateCodes = await this.HexShapes.GetRecordValuesAsync("Code");
+            var stateNames = await this.HexShapes.GetRecordValuesAsync("Name");
+            var statehoods = await this.HexShapes.GetRecordValuesAsync("Statehood");
+            var statePops  = await this.HexShapes.GetRecordValuesAsync("Population");
+
+            var winParties = new string[stateCodes.Length];
+            var winEditable = new string[stateCodes.Length];
+            var electionYears = new string[stateCodes.Length];
+
+            HexMarkers = new List<HexMarker>();
+
+            ShapesLookup = new Dictionary<string, StateInfo>();
+
+            var rand = new Random();
+            var parties = new List<string> { "Republican", "Democrat", "Tossup" };
+            for (var i = 0; i < stateCodes.Length; i++)
+            {
+                var info = new StateInfo();
+                info.Name = (string)stateNames[i];
+                info.Code = (string)stateCodes[i];
+                info.CreationYear = int.Parse(statehoods[i].ToString());
+                info.Population = int.Parse(statePops[i].ToString());
+                info.Index = i;
+
+                ShapesLookup.Add(info.Code, info);
+
+                var p = rand.Next(0, 3); // (parties.Count - 1) % i;
+                winParties[i] = parties[p]; // "Tossup";
+                winEditable[i] = "true";
+                electionYears[i] = "2020";
+                //var bounds = await this.HexShapes.GetLargestShapeBoundsForRecordAsync(i);
+                //var x = await this.HexShapes.GetMaxLongitudeAsync(i, false, -180, 180);
+                //var bounds = await this.HexShapes.(i);
+
+                //var bounds = await this.HexShapes.GetRecordBoundsAsync(i);
+                //var center = this.GetCenter(bounds);
+                //var marker = new HexMarker();
+                //marker.X = center.X;
+                //marker.Y = center.Y;
+                //marker.Label = stateCodes[i].ToString();
+                //HexMarkers.Add(marker);
+
+                //Console.WriteLine("ElectionHex " + stateCodes[i] + " = " + bounds.X + " " +  x );
+            }
+
+            await HexShapes.SetRecordValuesAsync("WinnerParty", winParties); await HexShapes.SetRecordValuesAsync("winParty", winParties);
+            await HexShapes.SetRecordValuesAsync("WinnerEditable", winEditable);
+            await HexShapes.SetRecordValuesAsync("ElectionYear", electionYears);
+
+            var geoRect = new Rect(-4, -4, 8, 8);
+            await this.HexMap.UpdateWorldRectAsync(geoRect);
+        }
+
+        StateHasChanged();
+        await Task.Delay(1);
+    }
+
+    private Dictionary<string, StateInfo> ShapesLookup;
+
+    private void OnChanged()
+    {
+        Console.WriteLine("ElectionHex OnChanged... ");
+
+        Task.Delay(1).ContinueWith((t) => OnChangedAsync());
+
+        //if (this.Election != null && this.HexMap != null && this.HexShapes != null &&
+        //    this.Election.Year != this.CurrentYear)
+        //{
+        //    Console.WriteLine("ElectionHex OnChangedAsync... " + this.Election.Year);
+        //    this.CurrentYear = this.Election.Year;
+
+        //    var results = Election.ResultsByStates;
+        //    var winnerParty = new string[results.Count];
+        //    var winnerCandidate = new string[results.Count];
+        //    var winnerElectors = new string[results.Count];
+        //    var winnerVotes = new string[results.Count];
+        //    var winnerPercentage = new string[results.Count];
+
+        //    var stateHeldElections = new string[results.Count];
+        //    var electionYears = new string[results.Count];
+
+        //    for (int i = 0; i < results.Count; i++)
+        //    {
+        //        electionYears[i] = Election.Year.ToString();
+
+        //        if (ShapesLookup.ContainsKey(results[i].StateSymbol))
+        //        {
+        //            var state = ShapesLookup[results[i].StateSymbol];
+        //            //var statWithElections = state.CreationYear < 1840;
+        //            var statWithElections = state.CreationYear < Election.Year;
+        //            var shapeIndex = state.Index;
+        //            //electionYear[shapeIndex] = "1840"; // state.CreationYear.ToString();
+        //            electionYears[shapeIndex] = state.CreationYear.ToString();
+
+        //            winnerParty[shapeIndex] = results[i].WinnerParty;
+        //            winnerCandidate[shapeIndex] = results[i].WinnerName;
+        //            winnerElectors[shapeIndex] = results[i].WinnerElectors.ToString();
+        //            winnerVotes[shapeIndex] = results[i].WinnerVotes.ToString();
+        //            winnerPercentage[shapeIndex] = results[i].WinnerPercentage.ToString();
+        //            stateHeldElections[shapeIndex] = statWithElections.ToString();
+        //        }
+        //    }
+
+        //    HexShapes.SetRecordValues("WinnerParty", winnerParty);
+        //    HexShapes.SetRecordValues("WinnerName", winnerCandidate);
+        //    HexShapes.SetRecordValues("WinnerElectors", winnerElectors);
+        //    HexShapes.SetRecordValues("WinnerVotes", winnerVotes);
+        //    HexShapes.SetRecordValues("ElectionsHeld", stateHeldElections);
+        //    HexShapes.SetRecordValues("ElectionYear", electionYears);
+
+        //    StateHasChanged();
+        //}
+    }
+
+    private async Task OnChangedAsync()
+    {
+        if (this.Election != null && this.HexMap != null && this.HexShapes != null &&
+            this.Election.Year != this.CurrentYear)
+        {
+            Console.WriteLine("ElectionHex OnChangedAsync... " + this.Election.Year);
+            this.CurrentYear = this.Election.Year;
+
+            var results = Election.ResultsByStates;
+            var winnerParty = new string[results.Count];
+            var winnerCandidate = new string[results.Count];
+            var winnerElectors = new string[results.Count];
+            var winnerVotes = new string[results.Count];
+            var winnerPercentage = new string[results.Count];
+
+            var stateHeldElections = new string[results.Count];
+            var electionYears = new string[results.Count];
+
+            for (int i = 0; i < results.Count; i++)
+            {
+                electionYears[i] = Election.Year.ToString();
+
+                if (ShapesLookup.ContainsKey(results[i].StateSymbol))
+                {
+                    var state = ShapesLookup[results[i].StateSymbol];
+                    //var statWithElections = state.CreationYear < 1840;
+                    var statWithElections = state.CreationYear < Election.Year;
+                    var shapeIndex = state.Index;
+                    //electionYear[shapeIndex] = "1840"; // state.CreationYear.ToString();
+                    electionYears[shapeIndex] = state.CreationYear.ToString();
+
+                    winnerParty[shapeIndex] = results[i].WinnerParty;
+                    winnerCandidate[shapeIndex] = results[i].WinnerName;
+                    winnerElectors[shapeIndex] = results[i].WinnerElectors.ToString();
+                    winnerVotes[shapeIndex] = results[i].WinnerVotes.ToString();
+                    winnerPercentage[shapeIndex] = results[i].WinnerPercentage.ToString();
+                    stateHeldElections[shapeIndex] = statWithElections.ToString();
+                }
+            }
+
+            await HexShapes.SetRecordValuesAsync("WinnerParty", winnerParty);
+            await HexShapes.SetRecordValuesAsync("WinnerName", winnerCandidate);
+            await HexShapes.SetRecordValuesAsync("WinnerElectors", winnerElectors);
+            await HexShapes.SetRecordValuesAsync("WinnerVotes", winnerVotes);
+            await HexShapes.SetRecordValuesAsync("ElectionsHeld", stateHeldElections);
+            await HexShapes.SetRecordValuesAsync("ElectionYear", electionYears);
+
+            StateHasChanged();
+        }
+
+        await Task.Delay(1);
+    }
+
+    public int CurrentYear = 0;
+
+    private Election _Election;
+    [Parameter]
+    public Election Election
+    {
+        get { return _Election; }
+        set { _Election = value; this.OnChanged(); }
+    }
+
+    private ElectionDisplayMode _DisplayMode = ElectionDisplayMode.Electoral;
+    [Parameter]
+    public ElectionDisplayMode DisplayMode
+    {
+        get { return _DisplayMode; }
+        set { _DisplayMode = value; this.OnChanged(); }
+    }
+
+    //private Point GetCenter(Rect bounds)
+    //{
+    //    var x = bounds.Left + (bounds.Width / 2.0);
+    //    var y = bounds.Top + (bounds.Height / 2.0);
+    //    return new Point(x, y);
+    //}
+
+    public class HexMarker
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+        public string Label { get; set; }
+    }
+}

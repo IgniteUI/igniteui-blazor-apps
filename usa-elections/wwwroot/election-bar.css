@@ -50,6 +50,11 @@
     overflow-x: hidden;
 }
 
+.igOverflow {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
 .igLegend-badge {
     height: 0.8rem;
     width:  0.8rem;

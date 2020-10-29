@@ -43,3 +43,12 @@
 usa-elections/wwwroot/data/elections tmp.txt
 *.zip
 *.xml
+usa-elections/wwwroot/config/state-locations.json
+usa-elections/wwwroot/config/state-locations-gap.csv
+*.txt
+usa-elections/wwwroot/data/elections org.json
+usa-elections/wwwroot/data/elections-2000-2004.json
+usa-elections/wwwroot/data/elections-2008-2012.json
+usa-elections/wwwroot/data/elections-2016.csv
+*.geojson
+usa-elections/Pages/MapBubblesView.razor

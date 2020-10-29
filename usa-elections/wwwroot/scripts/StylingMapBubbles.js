@@ -1,13 +1,13 @@
 ﻿//console.log("MapStylingBubbles loaded")
 
-var styles = {
-    Republican: { outline: "black", fill: "#FF0808" },
-    Democrat: { outline: "black", fill: "#008DFF" },
-    NoStatehood: { outline: "black", fill: "lightgray" },
-    //NoStatehood: { outline: "gray", fill: "white" },
-};
+//var styles = {
+//    Republican: { outline: "black", fill: "#FF0808" },
+//    Democrat: { outline: "black", fill: "#008DFF" },
+//    NoStatehood: { outline: "black", fill: "lightgray" },
+//    //NoStatehood: { outline: "gray", fill: "white" },
+//};
 function renderCircle(ctx, x, y, r, party) {
-    var style = styles[party];
+    var style = PartyStyles[party];
     if (style) {
         ctx.strokeStyle = style.outline;
         ctx.fillStyle = style.fill;
