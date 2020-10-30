@@ -23,7 +23,7 @@ function renderCircle(ctx, x, y, r, party) {
 }
 
 function onTemplateBubble(o, e) {
-    console.log("Bubble onTemplateBubble ");
+    //console.log("Bubble onTemplateBubble ");
 
     var markerSize = 14;
     return {

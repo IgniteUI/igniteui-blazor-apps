@@ -4,13 +4,44 @@
 @inject IIgniteUIBlazor IgniteUIBlazor; 
 
 @*style="height: calc(130px - 1rem); padding-top: 1rem; z-index: 300000;" *@ 
-<div class="igComponent" >
+<div class="igVertical" >
 
     @if (Election != null)
     {
+        var candidate1 = Election.Winner;
+        var candidate2 = Election.RunnerUp;
+        if (candidate1.Party == "Republican")
+        {
+            candidate1 = Election.RunnerUp;
+            candidate2 = Election.Winner;
+        }
+
+        <div class="igCandidate-bar" >
+
+            <div class="igCandidate" style="color: @candidate1.PartyColor; padding-left: 0rem; "> 
+                <div class="igCandidate-value" style="padding-right: 0.5rem;"> @candidate1.TotalElectors </div>
+                <div class="igVertical" style="text-align: left;"> 
+                    <div class="igCandidate-name-first"> @candidate1.FirstName </div>
+                    <div class="igCandidate-name-last" > @candidate1.LastName </div>
+                </div>  
+            </div>  
+
+            <div class="igCandidate-center" style="">
+                <img class="igCandidate-house" src="images/gauge_white_house.svg" />
+            </div>
+          
+            <div class="igCandidate" style="color: @candidate2.PartyColor; padding-right: 0rem; "> 
+                <div class="igVertical" style="text-align: right;"> 
+                    <div class="igCandidate-name-first"> @candidate2.FirstName </div>
+                    <div class="igCandidate-name-last" > @candidate2.LastName </div>
+                </div>  
+                <div class="igCandidate-value" style="padding-left: 0.5rem;"> @candidate2.TotalElectors </div>
+            </div>  
+        </div>
+
             var max = Math.Round(DisplayInterval * 6);
            @*<ItemLegend @ref="Legend" Height="100px" Width="200px"/>*@
-           <DataChart Height="100%" Width="100%"
+           <DataChart Height="1.5rem" Width="100%"
                       @ref="BarChartRef"
                       TitleTopMargin="10"
                       IsHorizontalZoomEnabled="true"
@@ -42,6 +73,7 @@
                               MajorStroke="red"
                               LabelLocation="@AxisLabelsLocation.OutsideBottom"
                               LabelVerticalAlignment="@VerticalAlignment.Top"
+                              LabelVisibility="@Visibility.Collapsed"
                               LabelTopMargin="2"
                               AbbreviateLargeNumbers="true">
                     @*<NumberFormatSpecifier Locale="en-US" 

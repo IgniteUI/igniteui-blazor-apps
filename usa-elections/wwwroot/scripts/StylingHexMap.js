@@ -130,21 +130,33 @@ function onHexMarkerStyle(o, e) {
                 //ctx.fillStyle = "blue";
                 //ctx.fillRect(x, y, renderInfo.availableWidth, renderInfo.availableHeight);
 
+                var viewportHeight = renderInfo.passInfo.viewportHeight;
+                var viewportRatio = viewportHeight / 500.0;
+                var fontSize = 10;
+                var lineSize = 6;
+                //if (viewportRatio < 1) {
+                    fontSize = Math.round(viewportRatio * fontSize);
+                    lineSize = Math.round(viewportRatio * lineSize);
+                //}
+                ctx.font = "normal " + fontSize + "px Verdana";
+
                 var item = renderInfo.data.item;
                 var code = item.getFieldValue("Code").toString(); 
 
-                var winnerElectors = item.getFieldValue("WinnerElectors");
-                if (winnerElectors > 0) {
-                    ctx.font = "normal 10px Verdana";
-                    ctx.fillStyle = "white";
-                    ctx.fillText(winnerElectors, cx, cy + 6);
-                    cy = cy - 6;
-                }
-
-                ctx.font = "normal 10px Verdana";
-                ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
+                ctx.textAlign = "center";
                 ctx.fillStyle = "white";
+
+                var winnerElectors = 20;
+                //if (code == "TX") {
+                //    console.log("onHexMarkerStyle " + code + " " + fontSize + " " + viewportRatio + " " + viewportHeight);
+                //}
+                //var winnerElectors = item.getFieldValue("WinnerElectors");
+                if (winnerElectors > 0) {
+                    ctx.fillText(winnerElectors, cx, cy + lineSize);
+                    cy = cy - lineSize;
+                }
+                  
                 ctx.fillText(code, cx, cy);
             }
         }

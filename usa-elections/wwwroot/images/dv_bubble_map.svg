@@ -1,0 +1,18 @@
+<svg id="USA_Map_Diagram" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <path id="Path" d="M0,0H36V36H0Z" fill="none" fill-rule="evenodd"/>
+  <g id="Group_11" data-name="Group 11" transform="translate(3.079 9.085)">
+    <circle id="Ellipse_2" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(0 0)" fill="#27265F"/>
+    <circle id="Ellipse_2-2" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(6.057 0)" fill="#27265F"/>
+    <circle id="Ellipse_2-3" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(12.114 0)" fill="#27265F"/>
+    <circle id="Ellipse_2-4" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(24.228 0)" fill="#27265F"/>
+    <circle id="Ellipse_2-5" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(0 5.047)" fill="#27265F"/>
+    <circle id="Ellipse_2-6" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(6.057 5.047)" fill="#27265F"/>
+    <circle id="Ellipse_2-7" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(12.114 5.047)" fill="#27265F"/>
+    <circle id="Ellipse_2-8" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(18.171 5.047)" fill="#27265F"/>
+    <circle id="Ellipse_2-9" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(24.228 5.047)" fill="#27265F"/>
+    <circle id="Ellipse_2-10" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(6.057 11.104)" fill="#27265F"/>
+    <circle id="Ellipse_2-11" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(12.114 11.104)" fill="#27265F"/>
+    <circle id="Ellipse_2-12" data-name="Ellipse 2" cx="2.019" cy="2.019" r="2.019" transform="translate(18.171 11.104)" fill="#27265F"/>
+    <circle id="Ellipse_3" data-name="Ellipse 3" cx="2.019" cy="2.019" r="2.019" transform="translate(24.228 17.161)" fill="#27265F"/>
+  </g>
+</svg>

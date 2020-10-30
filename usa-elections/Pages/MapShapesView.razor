@@ -6,10 +6,28 @@
 @using Infragistics.Samples
 
 @inject HttpClient Http
-@inject IIgniteUIBlazor IgniteUIBlazor;
+@inject IJSRuntime JSRuntime
+@inject IIgniteUIBlazor IgniteUIBlazor
 @inject Infragistics.Samples.ElectionService ElectionService
 
 <div class="igPage" style="background: white">
+    
+    <div class="igToolbar" style="padding-left: 1rem;">
+        <div class="igToolbar-title">US Presidential Elections Dashboard</div>
+        <div class="igToolbar-actions">
+            <img class="igImage igHover" @onclick="onDisplayElectoralVotes" src="images/show_electoral_votes.svg" />
+            <img class="igImage igHover" @onclick="onDisplayPopularVotes"   src="images/show_popular_votes.svg"  />
+            <img class="igImage igHover" @onclick="onDisplayGrid"           src="images/show_data_grid.svg"  />
+            <img class="igImage igHover" @onclick="onDisplayProductPage"    src="images/show_product_page.svg"  />
+        </div>
+
+        @*<div class="igButton" style="@HexButtonStyle" @onclick="onDisplayHexMap">Hex Map</div>
+        <div class="igButton" style="@DiagramButtonStyle" @onclick="onDisplayDiagramMap">Bubble Map</div>
+        <div class="igButton" style="@TreeMapButtonStyle" @onclick="onDisplayTreeMap">Tree Map</div>*@
+  
+    </div>
+
+    <div class="igContent" style="background: white">
 
     <div class="igVertical" style="width: 9rem; height: calc(100% - 1rem); padding-top: 1rem;">
         <ElectionSelector />
@@ -17,28 +35,43 @@
         
     @*@if (SelectedElection != null && SelectedElection.ResultsByStates != null)
     {*@
-    <div class="igFill igVertical" style="width: calc(100% - 9rem); background: white;"> 
+    <div class="igFill igVertical" style="width: calc(100% - 2rem); padding-left: 1rem; padding-right: 1rem;"> 
             
-        <div class="igHorizotnal" style="width: calc(100% - 2rem); padding-left: 1.1rem; padding-right: 0.75rem; margin-top: 1rem">
+        @*<div class="igHorizotnal" style="width: calc(100% - 2rem); padding-left: 1.1rem; padding-right: 0.75rem; margin-top: 1rem">
             <div class="igButton" style="@ElectorsButtonStyle" @onclick="onDisplayElectoralVotes">Electoral Votes</div>
             <div class="igButton" style="@PopularButtonStyle" @onclick="onDisplayPopularVotes">Popular Votes</div> 
+        </div>*@
+                      
+        <div class="igHorizotnal" style="width: 100%; margin-top: 1rem; justify-content: center;">
+            <div class="igButton" style="@ShapeMapButtonStyle" @onclick="onDisplayShapeMap">
+                <img class="igImage" style="margin-right: 1rem; padding-left: 0rem" src="images/dv_usa_map.svg" />
+                <div>US Map</div>
+            </div>
+            <div class="igButton" style="@HexButtonStyle" @onclick="onDisplayHexMap">
+                <img class="igImage" style="margin-right: 1rem; padding-left: 0rem" src="images/dv_bubble_map.svg" />
+                <div>Hex Map</div>
+            </div>
+            <div class="igButton" style="@DiagramButtonStyle" @onclick="onDisplayDiagramMap">
+                <img class="igImage" style="margin-right: 1rem; padding-left: 0rem" src="images/dv_bubble_map.svg" />
+                <div>Bubble Map</div>
+            </div>
+            <div class="igButton" style="@TreeMapButtonStyle" @onclick="onDisplayTreeMap">
+                <img class="igImage" style="margin-right: 1rem; padding-left: 0rem" src="images/dv_treemap.svg" />
+                <div>Tree Map</div>
+            </div>
+            @*<div class="igButton" style="@HexButtonStyle border-radius: 0rem" @onclick="onDisplayHexMap">Hex Map</div>*@
+            @*<div class="igButton" style="@DiagramButtonStyle border-radius: 0rem" @onclick="onDisplayDiagramMap">Bubble Map</div>*@
+            @*<div class="igButton" style="@TreeMapButtonStyle border-radius: 0rem" @onclick="onDisplayTreeMap">Tree Map</div>*@
+            @*<div class="igButton" style="@ChartButtonStyle border-radius: .25rem 0px 0px .25rem;" @onclick="onDisplayChartView">Chart</div>*@
         </div>
-        
-        <div class="igComponent" style="z-index: 100000; height: calc(80px - 1rem); padding-top: 1rem; ">
+
+        <div class="igComponent" style="z-index: 100000; height: auto; max-width: 48.75rem; padding-top: 0.5rem; align-self: center;">
               <ElectionBar Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
             @*<ElectionGuage Election="@SelectedElection" ></ElectionGuage>*@
         </div> 
 
         <div class="igComponent" style="height: auto; padding-top: 1rem; ">
               <ElectionLegend Election="@SelectedElection" />
-        </div>
-              
-        <div class="igHorizotnal" style="width: calc(100% - 2rem); padding-left: 1.1rem; padding-right: 0.75rem; margin-top: 1rem">
-            <div class="igButton" style="@ShapeMapButtonStyle" @onclick="onDisplayShapeMap">US Map</div>
-            <div class="igButton" style="@HexButtonStyle" @onclick="onDisplayHexMap">Hex Map</div>
-            <div class="igButton" style="@DiagramButtonStyle" @onclick="onDisplayDiagramMap">Bubble Map</div>
-            <div class="igButton" style="@TreeMapButtonStyle" @onclick="onDisplayTreeMap">Tree Map</div>
-            @*<div class="igButton" style="@ChartButtonStyle" @onclick="onDisplayChartView">Chart</div>*@
         </div>
 
         @*height: 40%;*@ 
@@ -98,7 +131,7 @@
             </div>
         </div>
         
-        <div class="igFill" style="max-height: 30%; width: calc(100% - 2.2rem); padding-left: 1.1rem; padding-right: 0.75rem;">
+        <div class="igFill" style="@GridStyle">
             <ElectionGrid Election="@SelectedElection"/>
         </div>
           
@@ -106,6 +139,7 @@
     @*}*@ 
     
     
+    </div>
 </div>
 
 @code {
@@ -114,29 +148,36 @@
     //private ResultsDisplayMode MapMode = ResultsDisplayMode.HexMap;
     public ElectionDisplayMode VotesDisplayMode { get; set; }
 
-    public string ChartButtonStyle { get { return ChartViewVisible ? "background: #FFFFFF" : "background: #ECECEC"; } }
-    public string TreeMapButtonStyle { get { return TreeMapVisible ? "background: #FFFFFF" : "background: #ECECEC"; } }
-    public string ShapeMapButtonStyle { get { return ShapeMapVisible ? "background: #FFFFFF" : "background: #ECECEC"; } }
-    public string DiagramButtonStyle { get { return DiagramMapVisible ? "background: #FFFFFF" : "background: #ECECEC"; } }
-    public string HexButtonStyle { get { return HexMapVisible ? "background: #FFFFFF" : "background: #ECECEC"; } }
+    public bool GridVisible { get; set; }
+    public string GridStyle { get { return !GridVisible ? "display: none" : "display: block; max-height: 30%; width: calc(100% - 2.2rem); padding-left: 1.1rem; padding-right: 0.75rem;"; } }
+
+    string GetButtonStyle(bool isVisible)
+    {
+        return isVisible ?
+            "background: #E7EAF7; opacity: 1.0" :
+            "background: #FFFFFF; opacity: 0.7";
+        //return isVisible ? 
+        //    "background: #E7EAF7; color: #27265F; border-color:#27265F" : 
+        //    "background: #FFFFFF; color: #A7ADC6; border-color:#A7ADC6"; 
+    }
+
+    public string ChartButtonStyle { get { return GetButtonStyle(ChartViewVisible); } }
+    public string TreeMapButtonStyle { get { return GetButtonStyle(TreeMapVisible); } }
+    public string ShapeMapButtonStyle { get { return GetButtonStyle(ShapeMapVisible); } }
+    public string DiagramButtonStyle { get { return GetButtonStyle(DiagramMapVisible); } }
+    public string HexButtonStyle { get { return GetButtonStyle(HexMapVisible); } }
 
     public string ElectorsButtonStyle { get { return VotesDisplayMode == ElectionDisplayMode.Electoral ? "background: #FFFFFF" : "background: #ECECEC"; } }
     public string PopularButtonStyle { get { return VotesDisplayMode == ElectionDisplayMode.Popular ? "background: #FFFFFF" : "background: #ECECEC"; } }
 
     public bool   ShapeMapVisible { get { return MapMode == ResultsDisplayMode.ShapeMap; } }
     public string ShapeMapStyle { get { return ShapeMapVisible ? "display: block" : "display: none"; } }
-    //public string ShapeMapStyle  { get { return "display: block"; } }
-    //public string ShapeMapDisplay { get { return ShapeMapVisible ? "z-index: 1" : "z-index: -1"; } }
 
     public bool   TreeMapVisible { get { return MapMode == ResultsDisplayMode.TreeMap; } }
     public string TreeMapStyle { get { return TreeMapVisible ? "display: block" : "display: none"; } }
-    //public string TreeMapStyle { get { return "display: block"; } }
-    //public string TreeMapDisplay { get { return TreeMapVisible ? "z-index: 1" : "z-index: -1"; } }
 
     public bool   DiagramMapVisible { get { return MapMode == ResultsDisplayMode.DiagramMap; } }
     public string DiagramMapStyle { get { return DiagramMapVisible ? "display: block" : "display: none"; } }
-    //public string DiagramMapStyle { get { return "display: block"; } }
-    //public string DiagramMapDisplay { get { return DiagramMapVisible ? "z-index: 1" : "z-index: -1"; } }
 
     public bool   HexMapVisible { get { return MapMode == ResultsDisplayMode.HexMap; } }
     public string HexMapStyle { get { return HexMapVisible ? "display: block" : "display: none"; } }
@@ -287,7 +328,6 @@
         Task.Delay(350).ContinueWith((t) => onFadeHexMap());
     }
 
-
     private void onDisplayDiagramMap()
     {
         if (this.MapMode == ResultsDisplayMode.DiagramMap) return;
@@ -325,12 +365,24 @@
         this.VotesDisplayMode = ElectionDisplayMode.Electoral;
         this.StateHasChanged();
     }
+
     private void onDisplayPopularVotes()
     {
         Console.WriteLine("onDisplayPopularVotes " + VotesDisplayMode);
 
         this.VotesDisplayMode = ElectionDisplayMode.Popular;
         this.StateHasChanged();
+    }
+
+    public void onDisplayGrid()
+    {
+        GridVisible = !GridVisible;
+    }
+
+    public void onDisplayProductPage() {
+        var url = "https://www.infragistics.com/products/ignite-ui-blazor";
+        JSRuntime.InvokeAsync<object>("open", url, "_blank");
+        //window.open("https://www.infragistics.com/products/ignite-ui-react/react/components/general-getting-started.html", "_blank")
     }
 
     private void OnElectionByStatesChartRef()

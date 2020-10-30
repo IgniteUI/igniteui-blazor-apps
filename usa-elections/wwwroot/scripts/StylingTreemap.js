@@ -10,6 +10,8 @@
 function onStyleTreeNode(o, e) {
     //console.log("StylingTreemap onStyleTreeNode ");
 
+    e.style.textColor = "white";
+
     if (e.item == null) {
         e.style.fill = "#414141";
 

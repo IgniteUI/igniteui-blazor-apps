@@ -12,7 +12,8 @@
         {
             var candidate = Election.StackedCandidates[i];
             <div class="igLegend-badge" style="background: @candidate.PartyColor"> </div>
-            <div class="igLegend-label"> @candidate.NameAndParty</div>
+            <div class="igLegend-label"> @candidate.Party (@candidate.TotalElectors)</div>
+            @*<div class="igLegend-label"> @candidate.NameAndParty</div>*@
         }
         @*@foreach (var candidate in @Election.StackedCandidates)
         {

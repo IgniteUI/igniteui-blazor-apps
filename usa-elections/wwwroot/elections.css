@@ -26,7 +26,42 @@
   /*z-index: 1000000;*/
 }
 
+.igToolbar {
+    background: #585397;
+    display: flex;
+    flex-flow: row;
+    width: calc(100% - 1.5rem);
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    align-items: center;
+}
+
+.igToolbar-title {
+    width: 100%;
+    color: #FFFFFF;
+    font-family: 'Titillium Web', Verdana, Tahoma, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;    
+}
+
+.igToolbar-actions {
+    /*background: #383838;*/
+    display: flex;
+    flex-flow: row;
+    align-self: center;
+}
+
+
 .igPage {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+}
+
+.igContent {
     background: white;
     display: flex;
     flex-flow: row;
@@ -60,10 +95,10 @@
     width:  0.8rem;
     margin-left: 1.2rem;
     margin-right: 0.3rem;
-    border-radius: 0.2rem;
-    border-color: #676767;
-    border-width: thin;
-    border-style: solid;
+    /*border-radius: 0.2rem;*/
+    /*border-color: #676767;*/
+    /*border-width: thin;*/
+    /*border-style: solid;*/
 }
 
 .igLegend-label {
@@ -74,6 +109,55 @@
     height: auto;
     line-height: 1rem;
 }
+
+
+.igCandidate {
+    font-family: 'Titillium Web', Verdana, Tahoma, Arial, sans-serif;
+    
+    width: auto; 
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+.igCandidate-value {  
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: 0px;
+    /*padding-left: 1rem;*/ 
+}
+
+.igCandidate-name-first {  
+    font-size: 1.0rem;
+    letter-spacing: 0px;   
+    margin-bottom: -8px;
+}
+.igCandidate-name-last {  
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0px; 
+}
+
+
+.igCandidate-bar { 
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+.igCandidate-center { 
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.igCandidate-house { 
+    height: auto;
+    width: auto;
+}
+
 
 .igFill {
     height: 100%;
@@ -120,6 +204,22 @@
     position: absolute;
 }
 
+.igImage {
+    width:  1.75rem;
+    height: 1.75rem;
+    border-radius: 5px;
+    padding-left:  0.5rem;
+    padding-right: 0.5rem; 
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    cursor: pointer;
+    opacity: inherit;
+}
+
+.igHover:hover {
+    background: #736EB6;
+}
+
 .igText,
 .igButton {  
     font-family: 'Titillium Web', Verdana, Tahoma, Arial, sans-serif;
@@ -129,24 +229,33 @@
 }
  
 .igButton { 
+    display: flex;
+    flex-flow: row;
     font-weight: 600;
     text-transform: uppercase;
     width: calc(100% - 0.5rem);
-    margin-top: 0px;
-    margin-bottom: 0px;
-    margin-right: 0.5rem;
-    color: #464646;
+    max-width: 12rem;
+    margin: 0px;
+    color: #27265F;
     background: #FFFFFF;
-    border: 0px solid #C1BFBF;
-    border-radius: .25rem;
+    border-style: solid;
+    border-color: #A7ADC6; 
+    border-radius: 0rem 0rem 0rem 0rem;
+    /*border-radius: .25rem 0px 0px .25rem;*/
     border-width: thin;
-    padding: .375rem .75rem;
+    padding: 0.0rem;
+    /*padding: .375rem .75rem;*/
     vertical-align: middle;
     cursor: pointer;
+    align-items: center;
+    /*align-content: stretch;*/
+    justify-content: center;
+}
 }
 
 .igButton:active,
 .igButton:hover  {
-    border-color: #C1BFBF;
-    background: #EEEEEE;
+    color: #27265F;
+    background: #E7EAF7;
+    /*border-color: #C1BFBF;*/
 }

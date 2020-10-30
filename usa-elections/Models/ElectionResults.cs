@@ -312,6 +312,9 @@ namespace Infragistics.Samples
         public string TermEnd { get; set; }
 
         public string NameAndParty { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
         public int SortIndex { get; set; }
         public int TotalStates { get; set; }
         public int TotalElectors { get; set; }

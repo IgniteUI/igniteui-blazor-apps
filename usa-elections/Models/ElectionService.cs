@@ -174,9 +174,11 @@ namespace Infragistics.Samples
                     //Console.WriteLine(electionName + candidates.Length + " Candidates");
                     for (int i = 0; i < candidates.Count; i++)                     
                     {
-                        candidates[i].ID = i;
                         var names = candidates[i].Name.Split(" ");
+                        candidates[i].ID = i;
                         candidates[i].NameAndParty = names[1] + " (" + candidates[i].Party + ")";
+                        candidates[i].FirstName = names[0];
+                        candidates[i].LastName = names[1];
                     }
                 } 
 
