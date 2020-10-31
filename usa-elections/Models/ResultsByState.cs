@@ -92,10 +92,21 @@ namespace Infragistics.Samples
                 this.RunnerUpElectors = c1.E;
                 this.RunnerUpPercentage = c1.VotesPerStatePercentage;
             }
+
+            TotalVotes = 0;
+            TotalElectors = 0;
+
+            foreach (var c in candidates)
+            {
+                TotalElectors += c.E;
+                TotalVotes += c.V;
+            }
         }
 
-        public double TotalVotes { get { return WinnerVotes; } }
-        public double TotalElectors { get { return WinnerElectors; } }
+        public double TotalVotes { get; set; }
+        public double TotalElectors { get; set; }
+        //public double TotalVotes { get { return WinnerVotes; } }
+        //public double TotalElectors { get { return WinnerElectors; } }
 
         public bool HasPartialWinner { get; set; }
         public Candidate Winner { get; set; }
@@ -164,3 +175,4 @@ namespace Infragistics.Samples
     }
 
 }
+

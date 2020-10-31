@@ -11,7 +11,10 @@
     height: 100%;
     width: 100%;
     padding: 0px;
-    margin: 0px;
+    margin: 0px;}
+
+div {
+    font-family: 'Titillium Web', Verdana, Tahoma, Arial, sans-serif;
 }
 
 .app {

@@ -17,95 +17,118 @@
         //    candidate1 = Election.RunnerUp;
         //    candidate2 = Election.Winner;
         //}
-        var requirment = Math.Round(DisplayInterval * 3);
-        //var requirment = Math.Ceiling(Election.TotalElectors / 2.0);
-        <div class="igCandidate-bar" >
-
-            <div class="igCandidate" style="color: @candidate1.PartyColor; justify-content: flex-start; padding-left: 0rem; "> 
-                <div class="igCandidate-value" style="padding-right: 0.5rem;"> @candidate1.TotalElectors </div>
-                <div class="igCandidate-name"  style="text-align: left;"> 
-                    <div class="igCandidate-name-first"> @candidate1.FirstName </div>
-                    <div class="igCandidate-name-last" > @candidate1.LastName </div>
-                </div>  
-            </div>  
-
-            <div class="igCandidate-target" style="">
-                <img class="igCandidate-target-house" src="images/gauge_white_house.svg" />
-                <div class="igCandidate-target-value" > @requirment to win </div>
-                @*<img class="igCandidate-target-arrow" src="images/gauge_mid_arrow.svg" />*@
-                @*<div class="igCandidate-target-line"  />*@
-                <img class="igCandidate-target-arrow" src="images/gauge_mid_arrow.png" />
-            </div>
           
-            <div class="igCandidate" style="color: @candidate2.PartyColor; justify-content: flex-end; padding-right: 0rem; "> 
-                <div class="igCandidate-name"  style="text-align: right;"> 
-                    <div class="igCandidate-name-first"> @candidate2.FirstName </div>
-                    <div class="igCandidate-name-last" > @candidate2.LastName </div>
-                </div>  
-                <div class="igCandidate-value" style="padding-left: 0.5rem;"> @candidate2.TotalElectors </div>
-            </div>  
-        </div>
-
             var max = Math.Round(DisplayInterval * 6);
            @*<ItemLegend @ref="Legend" Height="100px" Width="200px"/>*@
-           <DataChart Height="1.5rem" Width="100%"
+           <DataChart Height="100%" Width="100%"
                       @ref="BarChartRef"
                       TitleTopMargin="10"
                       IsHorizontalZoomEnabled="true"
                       IsVerticalZoomEnabled="true"
                       Outlines="@Election.PartyColorsInString"
                       Brushes="@Election.PartyColorsInString">
-
-                @*DataSource="@Election.Candidates"*@
-                <CategoryYAxis Name="yAxis" Label="Name" DataSource="@Election.WinnerList"
-                               Title="Candidates" TitleLeftMargin="10" TitleRightMargin="0"
-                               Gap="0.0" Overlap="1" LabelVisibility="@Visibility.Collapsed"
-                               TickLength="0"/>
-
-                @*<NumericXAxis  Name="xAxisDecreasing" MinimumValue="0" IsInverted="true"
-                               MaximumValue="@Election.TotalElectors" 
-                               Interval="@Election.IntervalElectors"
-                               TickLength="2" MajorStrokeThickness="0" MajorStroke="lime"
-                               LabelLocation="@AxisLabelsLocation.OutsideTop"
-                               LabelVerticalAlignment="@VerticalAlignment.Bottom"/>*@
                
                               @*LabelExtent="60" 
-                              Title="@DisplayTitle"  *@
-                <NumericXAxis Name="xAxis"    
-                              MinimumValue="0" 
+                              Title="@DisplayTitle" 
                               MaximumValue="@max" 
-                              Interval="@DisplayInterval"
-                              TickLength="5" 
-                              MajorStrokeThickness="0" 
-                              MajorStroke="red"
-                              LabelLocation="@AxisLabelsLocation.OutsideBottom"
-                              LabelVerticalAlignment="@VerticalAlignment.Top"
-                              LabelVisibility="@Visibility.Collapsed"
-                              LabelTopMargin="2"
-                              AbbreviateLargeNumbers="true">
+                              Interval="@DisplayInterval" *@
+                @*DataSource="@Election.Candidates  Overlap="1" "*@
                     @*<NumberFormatSpecifier Locale="en-US" 
                               LabelFormat="{0}"
                                            MinimumFractionDigits="1">
                     </NumberFormatSpecifier>*@
+                @*<CategoryXAxis Name="xAxis" Label="StateSymbol" DataSource="@Election.ResultsByStates"
+                               Title="States" TitleLeftMargin="10" TitleRightMargin="0"
+                               Interval="1"
+                               Gap="0.1" LabelVisibility="@Visibility.Visible"
+                               TickLength="0"/>*@
+                               
+                <NumericXAxis Name="xAxis" Title="Total Votes"
+                              TickLength="5" 
+                              MajorStrokeThickness=".5" 
+                              MajorStroke="gray"
+                              LabelLocation="@AxisLabelsLocation.OutsideBottom"
+                              LabelVerticalAlignment="@VerticalAlignment.Center"
+                              LabelVisibility="@Visibility.Visible"
+                              LabelTopMargin="2" IsLogarithmic="true"
+                              AbbreviateLargeNumbers="true">
                 </NumericXAxis>
+                         
+                <NumericYAxis Name="yAxis" Title="Votes Percentage"     
+                              TickLength="5" 
+                              MajorStrokeThickness=".5" 
+                              MajorStroke="gray"
+                              LabelLocation="@AxisLabelsLocation.OutsideLeft"
+                              LabelVerticalAlignment="@VerticalAlignment.Center"
+                              LabelVisibility="@Visibility.Visible"
+                              LabelTopMargin="2"  IsLogarithmic="false"
+                              AbbreviateLargeNumbers="true">
+                </NumericYAxis>
+                <NumericYAxis Name="yAxis2" Title="Votes Percentage"     
+                              TickLength="5" MinimumValue="0" MaximumValue="100"
+                              MajorStrokeThickness=".5" 
+                              MajorStroke="gray"
+                              LabelLocation="@AxisLabelsLocation.OutsideRight"
+                              LabelVerticalAlignment="@VerticalAlignment.Center"
+                              LabelVisibility="@Visibility.Visible"
+                              LabelTopMargin="2"  IsLogarithmic="false"
+                              AbbreviateLargeNumbers="true">
+                </NumericYAxis>
 
+                 <ScatterSeries
+                      XAxisName="xAxis" MarkerOutline="red"
+                      YAxisName="yAxis"
+                      DataSource="@Election.ResultsByStates"
+                      XMemberPath="WinnerVotes" 
+                      YMemberPath="WinnerPercentage" 
+                                MarkerType="@MarkerType.Circle"
+                      Title=""
+                      AreaFillOpacity="1"
+                      ShowDefaultTooltip="true" 
+                      IsHighlightingEnabled="false">
+                   </ScatterSeries>
 
-               @foreach (var candidate in @Election.StackedCandidates)
-               {
-                   var candidateList = new List<Candidate>() { candidate };
-                   <BarSeries
+                 <ScatterSeries
+                      XAxisName="xAxis" MarkerOutline="dodgerblue"
+                      YAxisName="yAxis"
+                      DataSource="@Election.ResultsByStates"
+                      XMemberPath="RunnerUpVotes" 
+                      YMemberPath="RunnerUpPercentage" 
+                                MarkerType="@MarkerType.Circle"
+                      Title=""
+                      AreaFillOpacity="1"
+                      ShowDefaultTooltip="true" 
+                      IsHighlightingEnabled="false">
+                   </ScatterSeries>
+
+                   @*<ColumnSeries
                       XAxisName="xAxis"
                       YAxisName="yAxis"
-                      DataSource="@candidateList"
+                      DataSource="@Election.ResultsByStates"
                       ValueMemberPath="@DisplayValue" 
-                      Title="@candidate.Name"
+                      Title=""
                       AreaFillOpacity="1"
                       ShowDefaultTooltip="true"
                       IsTransitionInEnabled="false"
-                      IsHighlightingEnabled="false"
-                      TooltipTemplate="@CreateTooltip">
-                   </BarSeries>
-               }             
+                      IsHighlightingEnabled="false">
+                   </ColumnSeries>*@
+
+               @*@foreach (var candidate in @Election.StackedCandidates)
+               {
+                   var candidateList = new List<Candidate>() { candidate };*@
+                   @*<BarSeries
+                      XAxisName="xAxis"
+                      YAxisName="yAxis"
+                      DataSource="@Election.ResultsByStates"
+                      ValueMemberPath="@DisplayValue" 
+                      Title=""
+                      AreaFillOpacity="1"
+                      ShowDefaultTooltip="true"
+                      IsTransitionInEnabled="false"
+                      IsHighlightingEnabled="false">
+                   </BarSeries>*@
+                      @*TooltipTemplate="@CreateTooltip"*@
+               @*}*@             
            </DataChart>
     }
          
@@ -163,7 +186,7 @@
 
   
     public string DisplayValue { get { return DisplayMode == ElectionDisplayMode.Electoral ?
-                "Stack.TotalElectors" : "Stack.TotalVotes"; } }
+                "WinnerElectors" : "WinnerVotes"; } }
 
     public string DisplayTitle { get { return DisplayMode == ElectionDisplayMode.Electoral ?
                 "Electoral Votes" : "Popular Votes"; } }
@@ -195,7 +218,7 @@
 
     private void OnChanged()
     {
-        //Console.WriteLine("ElectionBar updating... ");
+        //Console.WriteLine("ElectionChart updating... ");
 
         //if (this.BarChart != null && this.Election != null)
         //{
@@ -204,7 +227,7 @@
 
         if (this.BarChart != null && this.Election != null && this.Election.Year != this.CurrentYear)
         {
-            Console.WriteLine("ElectionBar OnChanged... " + this.Election.Year);
+            Console.WriteLine("ElectionChart OnChanged... " + this.Election.Year);
             this.CurrentYear = this.Election.Year;
             StateHasChanged();
         }
@@ -214,15 +237,17 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Console.WriteLine("ElectionBar OnInitialized");
+        Console.WriteLine("ElectionChart OnInitialized");
 
-        DataChartCoreModule.Register(IgniteUIBlazor); //DataChartCategoryCoreModule.Register(IgniteUIBlazor);
+        DataChartCoreModule.Register(IgniteUIBlazor);
         DataChartCategoryModule.Register(IgniteUIBlazor);
         DataChartInteractivityModule.Register(IgniteUIBlazor);
         DataChartVerticalCategoryModule.Register(IgniteUIBlazor);
         NumberAbbreviatorModule.Register(IgniteUIBlazor);
         ItemToolTipLayerModule.Register(IgniteUIBlazor);
         CategoryToolTipLayerModule.Register(IgniteUIBlazor);
+         
+        DataChartScatterModule.Register(IgniteUIBlazor);
 
         LegendModule.Register(IgniteUIBlazor);
         ItemLegendModule.Register(IgniteUIBlazor);
@@ -231,7 +256,7 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        //Console.WriteLine("ElectionBar OnInitializedAsync");
+        //Console.WriteLine("ElectionChart OnInitializedAsync");
 
         await Task.Delay(1);
     }
@@ -240,7 +265,7 @@
     {
         if (firstRender)
         {
-            //Console.WriteLine("ElectionBar Rendering...");
+            //Console.WriteLine("ElectionChart Rendering...");
             OnChanged();
         }
         return base.OnAfterRenderAsync(firstRender);

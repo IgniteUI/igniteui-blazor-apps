@@ -10,13 +10,14 @@
 @inject IIgniteUIBlazor IgniteUIBlazor
 @inject Infragistics.Samples.ElectionService ElectionService
 
-<div class="igPage" style="background: white">
+<div class="igPage igUnselectable" style="background: white">
     
     <div class="igToolbar" style="padding-left: 1rem;">
         <div class="igToolbar-title">US Presidential Elections Dashboard</div>
         <div class="igToolbar-actions">
             <img class="igImage igHover" @onclick="onDisplayElectoralVotes" src="images/show_electoral_votes.svg" />
-            <img class="igImage igHover" @onclick="onDisplayPopularVotes"   src="images/show_popular_votes.svg"  />
+            <img class="igImage igHover" @onclick="onDisplayPopularVotes"   src="images/show_popular_votes2.svg"  />
+            @*<img class="igImage igHover" @onclick="onDisplayPopularVotes"   src="images/show_popular_votes.svg"  />*@
             <img class="igImage igHover" @onclick="onDisplayGrid"           src="images/show_data_grid.svg"  />
             <img class="igImage igHover" @onclick="onDisplayProductPage"    src="images/show_product_page.svg"  />
         </div>
@@ -35,8 +36,11 @@
         
     @*@if (SelectedElection != null && SelectedElection.ResultsByStates != null)
     {*@
-    <div class="igFill igVertical" style="width: calc(100% - 2rem); padding-left: 1rem; padding-right: 1rem;"> 
+        @*style="width: calc(100% - 2rem); padding-left: 1rem; padding-right: 1rem;"*@
+    <div class="igFill igCenter" style="background: #FFFFFF;"> 
             
+        <div class="igFill" style="max-width: 1000px; justify-content: center; background: #FFFFFF;">
+
         @*<div class="igHorizotnal" style="width: calc(100% - 2rem); padding-left: 1.1rem; padding-right: 0.75rem; margin-top: 1rem">
             <div class="igButton" style="@ElectorsButtonStyle" @onclick="onDisplayElectoralVotes">Electoral Votes</div>
             <div class="igButton" style="@PopularButtonStyle" @onclick="onDisplayPopularVotes">Popular Votes</div> 
@@ -48,7 +52,7 @@
                 <div>US Map</div>
             </div>
             <div class="igButton" style="@HexButtonStyle" @onclick="onDisplayHexMap">
-                <img class="igImage" style="margin-right: 1rem; padding-left: 0rem" src="images/dv_bubble_map.svg" />
+                <img class="igImage" style="margin-right: 1rem; padding-left: 0rem" src="images/dv_hex_map.svg" />
                 <div>Hex Map</div>
             </div>
             <div class="igButton" style="@DiagramButtonStyle" @onclick="onDisplayDiagramMap">
@@ -65,7 +69,7 @@
             @*<div class="igButton" style="@ChartButtonStyle border-radius: .25rem 0px 0px .25rem;" @onclick="onDisplayChartView">Chart</div>*@
         </div>
 
-        <div class="igComponent" style="z-index: 100000; height: auto; max-width: 48.75rem; padding-top: 0.5rem; align-self: center;">
+        <div class="igComponent" style="z-index: 100000; height: auto; padding-top: 0.5rem; align-self: center;">
               <ElectionBar Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
             @*<ElectionGuage Election="@SelectedElection" ></ElectionGuage>*@
         </div> 
@@ -74,8 +78,8 @@
               <ElectionLegend Election="@SelectedElection" />
         </div>
 
-        @*height: 40%;*@ 
-        <div class="igFill igRelative" style="width: calc(100% - 2.2rem); padding-left: 1.1rem; padding-right: 0.75rem; margin-top: 1rem">
+        @*height: 40%; width: calc(100% - 2.2rem); padding-left: 1.1rem; padding-right: 0.75rem; *@ 
+        <div class="igFill igRelative" style="height: calc(100% - 1rem); padding-top: 1rem">
             <div class="igFill igOverlay" style="@ShapeMapStyle; opacity: @ShapeMapOpacity">
                  @* TODO apply shape highliging 
                  SeriesMouseEnterScript="onShapeMouseEnter"
@@ -129,10 +133,15 @@
             <div class="igFill igOverlay" style="@TreeMapStyle; opacity: @TreeMapOpacity">
                 <ElectionTree Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
             </div>
+            <div class="igFill igOverlay" style="@ChartViewStyle; opacity: @ChartViewOpacity">
+                <ElectionChart Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
+            </div>
         </div>
         
         <div class="igFill" style="@GridStyle">
             <ElectionGrid Election="@SelectedElection"/>
+        </div>
+
         </div>
           
     </div>
@@ -144,7 +153,7 @@
 
 @code {
     //private ResultsDisplayMode MapMode = ResultsDisplayMode.None;
-    private ResultsDisplayMode MapMode = ResultsDisplayMode.ShapeMap;
+    private ResultsDisplayMode MapMode = ResultsDisplayMode.HexMap;
     //private ResultsDisplayMode MapMode = ResultsDisplayMode.HexMap;
     public ElectionDisplayMode VotesDisplayMode { get; set; }
 
@@ -160,30 +169,35 @@
         //    "background: #E7EAF7; color: #27265F; border-color:#27265F" : 
         //    "background: #FFFFFF; color: #A7ADC6; border-color:#A7ADC6"; 
     }
+    
+    string GetViewStyle(bool isVisible)
+    {
+        return isVisible ? "display: block" : "display: none";
+    }
 
-    public string ChartButtonStyle { get { return GetButtonStyle(ChartViewVisible); } }
-    public string TreeMapButtonStyle { get { return GetButtonStyle(TreeMapVisible); } }
-    public string ShapeMapButtonStyle { get { return GetButtonStyle(ShapeMapVisible); } }
-    public string DiagramButtonStyle { get { return GetButtonStyle(DiagramMapVisible); } }
-    public string HexButtonStyle { get { return GetButtonStyle(HexMapVisible); } }
 
     public string ElectorsButtonStyle { get { return VotesDisplayMode == ElectionDisplayMode.Electoral ? "background: #FFFFFF" : "background: #ECECEC"; } }
     public string PopularButtonStyle { get { return VotesDisplayMode == ElectionDisplayMode.Popular ? "background: #FFFFFF" : "background: #ECECEC"; } }
 
     public bool   ShapeMapVisible { get { return MapMode == ResultsDisplayMode.ShapeMap; } }
-    public string ShapeMapStyle { get { return ShapeMapVisible ? "display: block" : "display: none"; } }
+    public string ShapeMapStyle { get { return GetViewStyle(HexMapVisible); } }
+    public string ShapeMapButtonStyle { get { return GetButtonStyle(ShapeMapVisible); } }
 
     public bool   TreeMapVisible { get { return MapMode == ResultsDisplayMode.TreeMap; } }
-    public string TreeMapStyle { get { return TreeMapVisible ? "display: block" : "display: none"; } }
+    public string TreeMapStyle { get { return GetViewStyle(TreeMapVisible); } }
+    public string TreeMapButtonStyle { get { return GetButtonStyle(TreeMapVisible); } }
 
     public bool   DiagramMapVisible { get { return MapMode == ResultsDisplayMode.DiagramMap; } }
-    public string DiagramMapStyle { get { return DiagramMapVisible ? "display: block" : "display: none"; } }
+    public string DiagramMapStyle { get { return GetViewStyle(DiagramMapVisible); } }
+    public string DiagramButtonStyle { get { return GetButtonStyle(DiagramMapVisible); } }
 
     public bool   HexMapVisible { get { return MapMode == ResultsDisplayMode.HexMap; } }
-    public string HexMapStyle { get { return HexMapVisible ? "display: block" : "display: none"; } }
+    public string HexMapStyle { get { return GetViewStyle(HexMapVisible); } }
+    public string HexButtonStyle { get { return GetButtonStyle(HexMapVisible); } }
 
     public bool   ChartViewVisible { get { return MapMode == ResultsDisplayMode.ChartView; } }
-    public string ChartViewStyle { get { return ChartViewVisible ? "display: block" : "display: none"; } }
+    public string ChartViewStyle { get { return GetViewStyle(ChartViewVisible); } }
+    public string ChartButtonStyle { get { return GetButtonStyle(ChartViewVisible); } }
 
     private SizeScale SizeScale;
 
@@ -251,6 +265,7 @@
 
     private double HexMapOpacity = 1.0;
     private double ShapeMapOpacity = 1.0;
+    private double ChartViewOpacity = 1.0;
     private double DiagramMapOpacity = 0.0;
     private double TreeMapOpacity = 1.0;
     private double ShapeMapOpacityStep = 0.1;

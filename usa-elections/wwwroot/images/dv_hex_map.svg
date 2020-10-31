@@ -1,0 +1,11 @@
+<svg id="Hex_map" data-name="Hex map" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <path id="Path" d="M0,0H30V30H0Z" fill="none" fill-rule="evenodd"/>
+  <g id="Polygons" transform="translate(3 3)">
+    <path id="Polygon_14" data-name="Polygon 14" d="M5.417,0,7.222,3.009,5.417,6.018H1.806L0,3.009,1.806,0Z" transform="translate(7.787 1.73) rotate(90)" fill="#27265F"/>
+    <path id="Polygon_17" data-name="Polygon 17" d="M5.417,0,7.222,3.009,5.417,6.018H1.806L0,3.009,1.806,0Z" transform="translate(11.3 8.058) rotate(90)" fill="#27265F"/>
+    <path id="Polygon_15" data-name="Polygon 15" d="M5.417,0,7.222,3.009,5.417,6.018H1.806L0,3.009,1.806,0Z" transform="translate(15.071 1.73) rotate(90)" fill="#27265F"/>
+    <path id="Polygon_18" data-name="Polygon 18" d="M5.417,0,7.222,3.009,5.417,6.018H1.806L0,3.009,1.806,0Z" transform="translate(22.096 1.73) rotate(90)" fill="#27265F"/>
+    <path id="Polygon_16" data-name="Polygon 16" d="M5.417,0,7.222,3.009,5.417,6.018H1.806L0,3.009,1.806,0Z" transform="translate(18.583 8.058) rotate(90)" fill="#27265F"/>
+    <path id="Polygon_19" data-name="Polygon 19" d="M5.417,0,7.222,3.009,5.417,6.018H1.806L0,3.009,1.806,0Z" transform="translate(22.096 14.386) rotate(90)" fill="#27265F"/>
+  </g>
+</svg>

@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\ElectionBubbles.razor" />
     <Content Remove="Pages\ElectionGuage.razor" />
     <Content Remove="Pages\MapBubblesView.razor" />
   </ItemGroup>

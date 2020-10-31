@@ -28,6 +28,9 @@ namespace Infragistics.Samples
 
         public Candidate Winner { get; set; }
         public Candidate RunnerUp { get; set; }
+
+        public Candidate CandidateLeft { get; set; }
+        public Candidate CandidateRight { get; set; }
         public List<Candidate> StackedCandidates { get; set; }
         public List<Candidate> OtherCandidates { get; set; }
         public List<string> CandidateNames { get; set; }
@@ -110,7 +113,18 @@ namespace Infragistics.Samples
                 RunnerUp = this.Candidates[0];
                 Winner = this.Candidates[1];
             }
-             
+
+            if (Winner.Party == "Republican")
+            {
+                CandidateLeft  = RunnerUp;
+                CandidateRight = Winner;
+            }
+            else
+            {
+                CandidateLeft = Winner;
+                CandidateRight = RunnerUp;
+            }
+
             OtherCandidates = new List<Candidate>();
             foreach (var candidate in this.Candidates)
             {
@@ -131,16 +145,15 @@ namespace Infragistics.Samples
 
             WinnerList = new List<Candidate>() { Winner };
 
-
-         
-
             StackedCandidates = new List<Candidate>();
-            StackedCandidates.Add(this.Winner);
+            StackedCandidates.Add(this.CandidateLeft);
+            //StackedCandidates.Add(this.Winner);
             foreach (var candidate in this.OtherCandidates)
             {
                 StackedCandidates.Add(candidate);
             }
-            StackedCandidates.Add(this.RunnerUp);
+            //StackedCandidates.Add(this.RunnerUp);
+            StackedCandidates.Add(this.CandidateRight);
 
             for (int i = 0; i < this.StackedCandidates.Count; i++)
             {

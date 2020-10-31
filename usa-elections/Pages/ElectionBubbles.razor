@@ -54,7 +54,12 @@
         {
             //await Task.Delay(10);
             Console.WriteLine("ElectionBubbles OnChanged... " + this.ResultsByStates.Count);
-
+            //var bubbleBounds = new Rect(-8, -8, 12, 12);
+            //if (this.BubbleMap != null)
+            //    this.BubbleMap.UpdateWorldRect(bubbleBounds);
+            
+            Task.Delay(20).ContinueWith((t) => ZoomAsync());
+           
             //await this.ShapeMap.ActualSeries[0].RenderSeriesAsync(false);
         }
         StateHasChanged();
@@ -68,9 +73,50 @@
         GeographicMapModule.Register(IgniteUIBlazor);
     }
 
+    public static Dictionary<string, StateLocation> StateLocations { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         Console.WriteLine("ElectionBubbles OnInitializedAsync");
+
+        ElectionService.Http = Http;
+        await ElectionService.LoadStateLocations();
+
+        var rand = new Random();
+        var parties = new List<string> { "Republican", "Democrat", "Tossup" };
+        var states = new List<ResultsByState>();
+
+        var locations = ElectionService.StateLocations.Values.ToList();
+        for (int i = 0; i < locations.Count; i++)
+        {
+            var location = locations[i];
+
+            var p = rand.Next(0, 3); // (parties.Count - 1) % i;
+
+            var result = new ResultsByState();
+            result.StateLocationX = location.X;
+            result.StateLocationY = location.Y;
+            result.StateSymbol = location.ID;
+
+            result.WinnerElectors = rand.Next(5, 50);
+            result.WinnerParty = parties[p];
+            result.WinnerName = parties[p];
+
+            result.RunnerUpElectors = rand.Next(2, 5);
+            states.Add(result);
+        }
+
+        ResultsByStates = states;
+
+        //winnerParty[shapeIndex] = results[i].WinnerParty;
+        //winnerCandidate[shapeIndex] = results[i].WinnerName;
+        //winnerElectors[shapeIndex] = results[i].WinnerElectors.ToString();
+        //winnerVotes[shapeIndex] = results[i].WinnerVotes.ToString();
+        //winnerPercentage[shapeIndex] = results[i].WinnerPercentage.ToString();
+
+        //var bubbleBounds = new Rect(-8, -8, 12, 12);
+        //if (this.BubbleMap != null)
+        //    await this.BubbleMap.UpdateWorldRectAsync(bubbleBounds);
 
         await Task.Delay(1);
     }

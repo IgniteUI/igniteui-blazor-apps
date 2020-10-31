@@ -15,29 +15,25 @@ function renderCircle(ctx, x, y, r, party) {
         ctx.strokeStyle = "black";
         ctx.fillStyle = "#929292";
     }
-
+    //ctx.globalAlpha = 0.4;
     ctx.beginPath();
     ctx.arc(x, y, r, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.fill();
+    //ctx.globalAlpha = 1.0;
 }
 
 function onTemplateBubble(o, e) {
     //console.log("Bubble onTemplateBubble ");
+     
+    var desiredSize = 46; 
 
-    var markerSize = 14;
     return {
         measure: function (measureInfo) {
             var cont = measureInfo.context;
             var data = measureInfo.data;
-            var name = "null";
-            if (data.item != null) {
-                name = data.item.StateSymbol.toString();
-            }
-            var height = markerSize; //cont.measureText("M").width;
-            var width = markerSize; //ont.measureText(name).width;
-            measureInfo.width  = width;
-            measureInfo.height = height;
+            measureInfo.width = desiredSize;
+            measureInfo.height = desiredSize;
         },
 
         render: function (renderInfo) {
@@ -50,71 +46,74 @@ function onTemplateBubble(o, e) {
 
             var data = renderInfo.data;
             var name = data.item.StateSymbol.toString();
-            var halfWidth  = renderInfo.availableWidth / 2.0;
-            var halfHeight = renderInfo.availableHeight / 2.0;
-
-            //console.log("Map onTemplateMarker name=" + name);
+            var halfWidth  = Math.round(renderInfo.availableWidth / 2.0);
+            var halfHeight = Math.round(renderInfo.availableHeight / 2.0);
 
             var cx = renderInfo.xPosition;
             var cy = renderInfo.yPosition;
 
             var x = renderInfo.xPosition - halfWidth;
-            var y = renderInfo.yPosition - (halfHeight);
-
-            //if (y < 0) {
-            //    y += (halfHeight * 4.0);
-            //}
+            var y = renderInfo.yPosition - halfHeight;
 
             if (renderInfo.isHitTestRender) {
+                //ctx.fillRect(cx - rectHalf, cy - rectHalf, rectSize, rectSize);
                 ctx.fillRect(x, y, renderInfo.availableWidth, renderInfo.availableHeight);
+
             } else {
+
                 //ctx.globalAlpha = 0.4;
                 //ctx.strokeStyle = "red";
                 //ctx.strokeRect(x, y, renderInfo.availableWidth, renderInfo.availableHeight);
                 //ctx.strokeRect(cx, cy, renderInfo.availableWidth, renderInfo.availableHeight);
 
+                var viewportHeight = renderInfo.passInfo.viewportHeight;
+                var viewportRatio = viewportHeight / 500.0;
+                var markerSize = Math.round(viewportRatio * desiredSize);
+                var markerHalf = Math.round(markerSize / 2.0);
+
+                var mx = cx - markerHalf;
+                var my = cy - markerHalf;
+                var fontSize = Math.round(viewportRatio * 10);
+                var lineSize = Math.round(viewportRatio * 6);
+
+                ctx.font = "normal " + fontSize + "px Verdana";
+
                 var winnerParty = data.item.WinnerParty;
-                renderCircle(ctx, cx, cy, 16, winnerParty);
-                
+                //renderCircle(ctx, cx, cy, 16, winnerParty);
+                renderCircle(ctx, cx, cy, markerHalf, winnerParty);
+               
                 //ctx.fillStyle = "#30A510";
                 //ctx.fillRect(x, y, renderInfo.availableWidth, renderInfo.availableHeight);
-
-                var runnerUpElectors = 2; // data.item.RunnerUpElectors;
-                if (runnerUpElectors > 0) {
-                    //cx = cx - 2;
-                    //ctx.textAlign = "right";
-                } else {
-                    //ctx.textAlign = "center";
-                }
-                //ctx.font = "bold 10px Verdana";
-                ctx.font = "normal 10px Verdana";
-                //ctx.textBaseline = "top";
+                                
                 ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
                 ctx.fillStyle = "white";
-                ctx.fillText(name, cx, cy - 4);
-
+                ctx.fillText(name, cx, cy - lineSize);
+                 
                 var winnerElectors = data.item.WinnerElectors;
                 if (winnerElectors > 0) { 
-                    ctx.font = "normal 10px Verdana";
-                    ctx.fillText(winnerElectors, cx, cy + 6); 
-                }
-                
-                if (runnerUpElectors > 0) {
-                    var qw = renderInfo.availableWidth / 2.5;
-                    var qh = renderInfo.availableHeight / 3.0;
-                    cx = cx + qw + 6;
-                    cy = cy + qh + 6;
-                    var runnerUpParty = data.item.RunnerUpParty;
-                    renderCircle(ctx, cx, cy, 6, runnerUpParty);
-                    //renderCircle(ctx, cx + qw + 2, cy + 6, 6, runnerUpParty);
+                    ctx.fillText(winnerElectors, cx, cy + lineSize);
                      
-                    ctx.font = "normal 10px Verdana";
+                    //ctx.strokeStyle = "#24C315"; 
+                    //ctx.strokeRect(mx, my, markerSize, markerSize);
+                }
+
+                var runnerUpElectors = 2; // data.item.RunnerUpElectors;
+                if (runnerUpElectors > 0) {
+
+                    var smallSize = Math.round(markerHalf / 3);
+                    var sx = cx + markerHalf - smallSize;
+                    var sy = cy + markerHalf - smallSize;
+                    var runnerUpParty = data.item.RunnerUpParty;
+                    renderCircle(ctx, sx, sy, smallSize, runnerUpParty);
+                  //renderCircle(ctx, cx + qw + 2, cy + 6, 6, runnerUpParty);
+                     
+                    //ctx.font = "normal 10px Verdana";
                     ctx.textBaseline = "middle";
                     ctx.textAlign = "center";
                     ctx.fillStyle = "white";
-                    ctx.fillText(runnerUpElectors, cx, cy);
-                    //ctx.fillText(runnerUpElectors, cx + qw + 2, cy + 6);
+                    ctx.fillText(runnerUpElectors, sx, sy);
+                  //ctx.fillText(runnerUpElectors, cx + qw + 2, cy + 6);
                 }
             }
         }

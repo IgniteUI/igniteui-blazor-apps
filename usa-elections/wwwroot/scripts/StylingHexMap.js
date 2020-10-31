@@ -132,12 +132,10 @@ function onHexMarkerStyle(o, e) {
 
                 var viewportHeight = renderInfo.passInfo.viewportHeight;
                 var viewportRatio = viewportHeight / 500.0;
-                var fontSize = 10;
-                var lineSize = 6;
-                //if (viewportRatio < 1) {
-                    fontSize = Math.round(viewportRatio * fontSize);
-                    lineSize = Math.round(viewportRatio * lineSize);
-                //}
+
+                var fontSize = Math.round(viewportRatio * 10);
+                var lineSize = Math.round(viewportRatio * 6);
+
                 ctx.font = "normal " + fontSize + "px Verdana";
 
                 var item = renderInfo.data.item;
