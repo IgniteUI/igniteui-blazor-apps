@@ -11,10 +11,10 @@
         var candidate1 = Election.CandidateLeft;
         var candidate2 = Election.CandidateRight;
         //var candidate1 = Election.Winner;
-        //var candidate2 = Election.RunnerUp;
+        //var candidate2 = Election.Looser;
         //if (candidate1.Party == "Republican")
         //{
-        //    candidate1 = Election.RunnerUp;
+        //    candidate1 = Election.Looser;
         //    candidate2 = Election.Winner;
         //}
           
@@ -92,8 +92,8 @@
                       XAxisName="xAxis" MarkerOutline="dodgerblue"
                       YAxisName="yAxis"
                       DataSource="@Election.ResultsByStates"
-                      XMemberPath="RunnerUpVotes" 
-                      YMemberPath="RunnerUpPercentage" 
+                      XMemberPath="LooserVotes" 
+                      YMemberPath="LooserPercentage" 
                                 MarkerType="@MarkerType.Circle"
                       Title=""
                       AreaFillOpacity="1"

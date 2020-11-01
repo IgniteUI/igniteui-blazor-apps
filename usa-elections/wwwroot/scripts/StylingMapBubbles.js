@@ -1,11 +1,6 @@
 ﻿//console.log("MapStylingBubbles loaded")
 
-//var styles = {
-//    Republican: { outline: "black", fill: "#FF0808" },
-//    Democrat: { outline: "black", fill: "#008DFF" },
-//    NoStatehood: { outline: "black", fill: "lightgray" },
-//    //NoStatehood: { outline: "gray", fill: "white" },
-//};
+
 function renderCircle(ctx, x, y, r, party) {
     var style = PartyStyles[party];
     if (style) {
@@ -26,13 +21,13 @@ function renderCircle(ctx, x, y, r, party) {
 function onTemplateBubble(o, e) {
     //console.log("Bubble onTemplateBubble ");
      
-    var desiredSize = 46; 
-
+     var desiredSize = 46;
+     //var desiredSize = 94;
     return {
         measure: function (measureInfo) {
             var cont = measureInfo.context;
             var data = measureInfo.data;
-            measureInfo.width = desiredSize;
+            measureInfo.width  = desiredSize;
             measureInfo.height = desiredSize;
         },
 
@@ -44,8 +39,6 @@ function onTemplateBubble(o, e) {
                 ctx.fillStyle = "black";
             }
 
-            var data = renderInfo.data;
-            var name = data.item.StateSymbol.toString();
             var halfWidth  = Math.round(renderInfo.availableWidth / 2.0);
             var halfHeight = Math.round(renderInfo.availableHeight / 2.0);
 
@@ -61,6 +54,9 @@ function onTemplateBubble(o, e) {
 
             } else {
 
+                var data = renderInfo.data;
+                var name = data.item.StateSymbol.toString();
+
                 //ctx.globalAlpha = 0.4;
                 //ctx.strokeStyle = "red";
                 //ctx.strokeRect(x, y, renderInfo.availableWidth, renderInfo.availableHeight);
@@ -68,53 +64,79 @@ function onTemplateBubble(o, e) {
 
                 var viewportHeight = renderInfo.passInfo.viewportHeight;
                 var viewportRatio = viewportHeight / 500.0;
-                var markerSize = Math.round(viewportRatio * desiredSize);
-                var markerHalf = Math.round(markerSize / 2.0);
+                var markerSize = viewportRatio * desiredSize;
+                var markerHalf = markerSize / 2.0;
 
-                var mx = cx - markerHalf;
-                var my = cy - markerHalf;
+                //var mx = cx - markerHalf;
+                //var my = cy - markerHalf;
                 var fontSize = Math.round(viewportRatio * 10);
                 var lineSize = Math.round(viewportRatio * 6);
-
-                ctx.font = "normal " + fontSize + "px Verdana";
-
+                
+                var ElectionMode = data.item.ElectionMode;
                 var winnerParty = data.item.WinnerParty;
+                var looserParty = data.item.LooserParty;
+
                 //renderCircle(ctx, cx, cy, 16, winnerParty);
                 renderCircle(ctx, cx, cy, markerHalf, winnerParty);
-               
+
                 //ctx.fillStyle = "#30A510";
                 //ctx.fillRect(x, y, renderInfo.availableWidth, renderInfo.availableHeight);
-                                
+
+                ctx.font = "normal " + fontSize + "px Verdana";
                 ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
+
                 ctx.fillStyle = "white";
                 ctx.fillText(name, cx, cy - lineSize);
-                 
-                var winnerElectors = data.item.WinnerElectors;
-                if (winnerElectors > 0) { 
-                    ctx.fillText(winnerElectors, cx, cy + lineSize);
-                     
-                    //ctx.strokeStyle = "#24C315"; 
-                    //ctx.strokeRect(mx, my, markerSize, markerSize);
+
+                var winnerValue = 0;
+                var looserValue = 0;
+                var heldElection = data.item.StateHeldElections;
+                               
+                if (heldElection) {
+                    if (ElectionMode == "Popular") {
+                        winnerValue = abbreviate(data.item.WinnerVotes);
+                        looserValue = 0; //abbreviate(data.item.LooserVotes);
+                    } else if (ElectionMode == "Percent") {
+                        winnerValue = data.item.WinnerPercentage.toFixed(0) + "%";
+                        looserValue = 0; //data.item.LooserPercentage;
+                    } else {
+                        winnerValue = data.item.WinnerElectors;
+                        looserValue = data.item.LooserElectors;
+                    }
+                    if (winnerValue > 0 || winnerValue != "0.0") {
+                        ctx.fillText(winnerValue, cx, cy + lineSize);
+
+                        //ctx.strokeStyle = "#24C315"; 
+                        //ctx.strokeRect(mx, my, markerSize, markerSize);
+                    }
+
+                    var looserParty = data.item.LooserParty;
+                    if (looserParty != "NoStatehood" && winnerParty != "Tossup") {
+
+                        if (looserValue > 0 || looserValue != "0.0") {
+
+                            var smallSize = Math.round(markerHalf / 3);
+                            var sx = cx + markerHalf - smallSize;
+                            var sy = cy + markerHalf - smallSize;
+                            renderCircle(ctx, sx, sy, smallSize, looserParty);
+                            //renderCircle(ctx, cx + qw + 2, cy + 6, 6, looserParty);
+
+                            //ctx.font = "normal 10px Verdana";
+                            ctx.textBaseline = "middle";
+                            ctx.textAlign = "center";
+                            ctx.fillStyle = "white";
+                            ctx.fillText(looserValue, sx, sy);
+                            //ctx.fillText(runnerUpElectors, cx + qw + 2, cy + 6);
+                        }
+                    }
+                }  
+                
+                if (name == "TX") {
+                    console.log(name + " " + ElectionMode + " " + winnerValue + " " + looserValue );
                 }
 
-                var runnerUpElectors = 2; // data.item.RunnerUpElectors;
-                if (runnerUpElectors > 0) {
-
-                    var smallSize = Math.round(markerHalf / 3);
-                    var sx = cx + markerHalf - smallSize;
-                    var sy = cy + markerHalf - smallSize;
-                    var runnerUpParty = data.item.RunnerUpParty;
-                    renderCircle(ctx, sx, sy, smallSize, runnerUpParty);
-                  //renderCircle(ctx, cx + qw + 2, cy + 6, 6, runnerUpParty);
-                     
-                    //ctx.font = "normal 10px Verdana";
-                    ctx.textBaseline = "middle";
-                    ctx.textAlign = "center";
-                    ctx.fillStyle = "white";
-                    ctx.fillText(runnerUpElectors, sx, sy);
-                  //ctx.fillText(runnerUpElectors, cx + qw + 2, cy + 6);
-                }
+                
             }
         }
     }

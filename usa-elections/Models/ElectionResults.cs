@@ -9,6 +9,7 @@ namespace Infragistics.Samples
     {
         Electoral = 0,
         Popular = 1,
+        Percent = 2,
         None = 4
     }
 
@@ -27,7 +28,7 @@ namespace Infragistics.Samples
         public List<CandidateResult> ResultsByCandidates { get; set; }
 
         public Candidate Winner { get; set; }
-        public Candidate RunnerUp { get; set; }
+        public Candidate Looser { get; set; }
 
         public Candidate CandidateLeft { get; set; }
         public Candidate CandidateRight { get; set; }
@@ -106,23 +107,23 @@ namespace Infragistics.Samples
             if (this.Candidates[0].TotalElectors > this.Candidates[1].TotalElectors)
             {
                 Winner = this.Candidates[0];
-                RunnerUp = this.Candidates[1];
+                Looser = this.Candidates[1];
             }
             else
             {
-                RunnerUp = this.Candidates[0];
+                Looser = this.Candidates[0];
                 Winner = this.Candidates[1];
             }
 
             if (Winner.Party == "Republican")
             {
-                CandidateLeft  = RunnerUp;
+                CandidateLeft  = Looser;
                 CandidateRight = Winner;
             }
             else
             {
                 CandidateLeft = Winner;
-                CandidateRight = RunnerUp;
+                CandidateRight = Looser;
             }
 
             OtherCandidates = new List<Candidate>();
@@ -137,7 +138,7 @@ namespace Infragistics.Samples
                     candidate.TotalElectors = 5;
                 
                 if (candidate.Name != this.Winner.Name &&
-                    candidate.Name != this.RunnerUp.Name)
+                    candidate.Name != this.Looser.Name)
                 {
                     OtherCandidates.Add(candidate);
                 }
@@ -152,7 +153,7 @@ namespace Infragistics.Samples
             {
                 StackedCandidates.Add(candidate);
             }
-            //StackedCandidates.Add(this.RunnerUp);
+            //StackedCandidates.Add(this.Looser);
             StackedCandidates.Add(this.CandidateRight);
 
             for (int i = 0; i < this.StackedCandidates.Count; i++)

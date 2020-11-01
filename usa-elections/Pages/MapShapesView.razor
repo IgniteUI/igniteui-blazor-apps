@@ -133,7 +133,7 @@
                 <ElectionTree Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
             </div>
             <div class="igFill igOverlay" style="@ChartViewStyle; opacity: @ChartViewOpacity">
-                <ElectionChart Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
+                @*<ElectionChart Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>*@
             </div>
         </div>
         
@@ -150,10 +150,8 @@
     </div>
 </div>
 
-@code {
-    //private ResultsDisplayMode MapMode = ResultsDisplayMode.None;
-    private ResultsDisplayMode MapMode = ResultsDisplayMode.HexMap;
-    //private ResultsDisplayMode MapMode = ResultsDisplayMode.HexMap;
+@code { 
+    private ResultsDisplayMode MapMode = ResultsDisplayMode.ShapeMap;
     public ElectionDisplayMode VotesDisplayMode { get; set; }
 
     public bool GridVisible { get; set; }
@@ -168,7 +166,7 @@
         //    "background: #E7EAF7; color: #27265F; border-color:#27265F" : 
         //    "background: #FFFFFF; color: #A7ADC6; border-color:#A7ADC6"; 
     }
-    
+
     string GetViewStyle(bool isVisible)
     {
         return isVisible ? "display: block" : "display: none";
@@ -179,7 +177,7 @@
     public string PopularButtonStyle { get { return VotesDisplayMode == ElectionDisplayMode.Popular ? "background: #FFFFFF" : "background: #ECECEC"; } }
 
     public bool   ShapeMapVisible { get { return MapMode == ResultsDisplayMode.ShapeMap; } }
-    public string ShapeMapStyle { get { return GetViewStyle(HexMapVisible); } }
+    public string ShapeMapStyle { get { return GetViewStyle(ShapeMapVisible); } }
     public string ShapeMapButtonStyle { get { return GetButtonStyle(ShapeMapVisible); } }
 
     public bool   TreeMapVisible { get { return MapMode == ResultsDisplayMode.TreeMap; } }
@@ -498,7 +496,7 @@
     {
         if (firstRender)
         {
-            Console.WriteLine("Map Shapes Importing...");
+            Console.WriteLine("ShapeMap Importing...");
 
             if (this.ShapeMap != null)
             {
@@ -519,7 +517,7 @@
 
     protected async Task OnImportCompleted(AsyncCompletedEventArgs args)
     {
-        Console.WriteLine("Map Shapes Importing... done");
+        Console.WriteLine("ShapeMap Importing... done");
 
         ElectionService.Http = Http;
         await ElectionService.Load();
@@ -531,7 +529,7 @@
         {
             this.Shapes = this.ShapeSeries.ShapefileDataSource;
 
-            Console.WriteLine("Map getting records...");
+            Console.WriteLine("ShapeMap getting records...");
             var labelPointX = await this.Shapes.GetRecordValuesAsync("NamePosX");
             var labelPointY = await this.Shapes.GetRecordValuesAsync("NamePosY");
             var shapePointX = await this.Shapes.GetRecordValuesAsync("ShapePosX");
@@ -549,7 +547,7 @@
             //var stateFips  = await this.Shapes.GetRecordValuesAsync("StateFips");
 
             var stateWithBox = new string[stateCodes.Length];
-            Console.WriteLine("Map setting lookup...");
+            Console.WriteLine("ShapeMap setting lookup...");
             ShapesLookup = new Dictionary<string, StateInfo>();
             var _statehoods = "";
             var _names = "";
@@ -564,7 +562,7 @@
                 var info = new StateInfo();
                 info.Name = (string)stateNames[i];
                 info.Code = (string)stateCodes[i];
-                info.CreationYear = int.Parse(statehoods[i].ToString());
+                info.Statehood = int.Parse(statehoods[i].ToString());
                 info.Population = int.Parse(statePops[i].ToString());
                 info.Index = i;
 
@@ -575,7 +573,7 @@
 
                 //_pops += "WHEN \"Code\" = '" + info.Code + "' THEN " + info.Population + " \n";
                 //_names += "WHEN \"Code\" = '" + info.Code + "' THEN '" + info.Name + "' \n";
-                //_statehoods += "WHEN \"Code\" = '" + info.Code + "' THEN " + info.CreationYear + " \n";
+                //_statehoods += "WHEN \"Code\" = '" + info.Code + "' THEN " + info.Statehood + " \n";
 
                 if (StatesWithBoxes.ContainsKey(info.Code))
                 {
@@ -605,7 +603,7 @@
             await Shapes.SetRecordValuesAsync("StateWithBox", stateWithBox);
         }
 
-        //Console.WriteLine("Map setting lookup... Complete");
+        Console.WriteLine("ShapeMap setting lookup... Complete");
 
         //Console.WriteLine("Map Shapes codes: " + stateCodes.Length);
         ////Console.WriteLine("" + string.Join(", ", stateCodes));
@@ -613,7 +611,10 @@
         //var shapeBounds = new Rect(-130, 20, 65, 30);
         var shapeBounds = new Rect(-125, 25, 55, 20);
         if (this.ShapeMap != null)
+        {   
             await this.ShapeMap.UpdateWorldRectAsync(shapeBounds);
+            Console.WriteLine("ShapeMap zooming...");
+        }
 
         //var bubbleBounds = new Rect(-6, -6, 10, 10);
         var bubbleBounds = new Rect(-8, -8, 12, 12);
@@ -631,7 +632,7 @@
     {
         if (SelectedElection != null)
         {
-            Console.WriteLine("Map Shapes updating... Election " + this.SelectedElection.Year);
+            Console.WriteLine("ShapeMap updating... Election " + this.SelectedElection.Year);
 
             var results = SelectedElection.ResultsByStates;
             var winnerParty = new string[results.Count];
@@ -656,10 +657,10 @@
                 if (ShapesLookup.ContainsKey(results[i].StateSymbol))
                 {
                     var state = ShapesLookup[results[i].StateSymbol];
-                    var statWithElections = state.CreationYear < 1840;
+                    var statWithElections = state.Statehood < 1840;
                     var shapeIndex = state.Index;
-                    //electionYear[shapeIndex] = "1840"; // state.CreationYear.ToString();
-                    electionYear[shapeIndex] = state.CreationYear.ToString();
+                    //electionYear[shapeIndex] = "1840"; // state.Statehood.ToString();
+                    electionYear[shapeIndex] = state.Statehood.ToString();
 
                     winnerParty[shapeIndex] = results[i].WinnerParty;
                     winnerCandidate[shapeIndex] = results[i].WinnerName;
@@ -689,7 +690,7 @@
 
             //Console.WriteLine("Map Shapes updating... Complete ");
 
-            Console.WriteLine("Map rendering... ");
+            Console.WriteLine("ShapeMap rendering... ");
             if (this.ShapeMap != null) {
                 await this.ShapeMap.ActualSeries[0].RenderSeriesAsync(false);
                 await this.ShapeMap.ActualSeries[1].RenderSeriesAsync(false);

@@ -7,7 +7,7 @@ function onHexShapeStyle(o, e) {
     var Code = e.item.getFieldValue("Code");
     var WinnerParty = e.item.getFieldValue("WinnerParty");
     var ElectionYear = e.item.getFieldValue("ElectionYear");
-    var StateCreation = e.item.getFieldValue("Statehood");
+    var Statehood = e.item.getFieldValue("Statehood");
 
     var WinnerParty = e.item.getFieldValue("WinnerParty");
 
@@ -18,14 +18,14 @@ function onHexShapeStyle(o, e) {
     // hiding shapes until map is zoomed in and all data fields are set
     if (WinnerParty == null) {
         e.shapeStroke = "transparent";
-        e.shapeFill = "transparent";
+        e.shapeFill   = "transparent";
         return;
     }
 
     // styling states that did not exists in the election year
-    if (StateCreation > ElectionYear) {
+    if (Statehood > ElectionYear) {
         //console.log("onHexShapeStyle " + Code + " NoStatehood");
-        var style = PartyStyles.Unknown;
+        var style = PartyStyles.NoStatehood;
         e.shapeFill = style.fill;
         e.shapeStroke = style.outline;
 
@@ -86,23 +86,26 @@ function onHexShapeMouseDown(o, e) {
 
 igRegisterScript("onHexShapeMouseDown", onHexShapeMouseDown, false);
 
-
 function onHexMarkerStyle(o, e) {
     //console.log("onStyleHexMarker " + e);
+
+    var desiredSize = 46;
 
     return {
         measure: function (measureInfo) {
             var code = "DC";
             var data = measureInfo.data;
-            if (data != null && data.item != null) {
-                //code = data.item.StateSymbol.toString();
-                code = data.item.getFieldValue("Code").toString(); 
-            }
-            var context = measureInfo.context;
-            var height = context.measureText("M").height;
-            var width = context.measureText(code).width;
-            measureInfo.width = width;
-            measureInfo.height = height;
+            //if (data != null && data.item != null) {
+            //    //code = data.item.StateSymbol.toString();
+            //    code = data.item.getFieldValue("Code").toString(); 
+            //}
+            //var context = measureInfo.context;
+            //var height = context.measureText("M").height;
+            //var width = context.measureText(code).width;
+            //measureInfo.width = width;
+            //measureInfo.height = height;
+            measureInfo.width  = desiredSize;
+            measureInfo.height = desiredSize;
         },
 
         render: function (renderInfo) {
@@ -137,25 +140,49 @@ function onHexMarkerStyle(o, e) {
                 var lineSize = Math.round(viewportRatio * 6);
 
                 ctx.font = "normal " + fontSize + "px Verdana";
-
-                var item = renderInfo.data.item;
-                var code = item.getFieldValue("Code").toString(); 
-
                 ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
-                ctx.fillStyle = "white";
 
-                var winnerElectors = 20;
-                //if (code == "TX") {
-                //    console.log("onHexMarkerStyle " + code + " " + fontSize + " " + viewportRatio + " " + viewportHeight);
-                //}
+                var item = renderInfo.data.item;
+                var code = item.getFieldValue("Code").toString();
+                ctx.fillStyle = "white";
+                ctx.fillText(code, cx, cy - lineSize);
+
+                var ElectionYear = item.getFieldValue("ElectionYear");
+                var ElectionMode = item.getFieldValue("ElectionMode");
+                var Statehood = item.getFieldValue("Statehood");
+
+                var winnerValue = 0;
+                var looserValue = 0;
+                //var winnerElectors = 20;
+                //var winnerValue = item.getFieldValue("WinnerElectors");
+                
+               
                 //var winnerElectors = item.getFieldValue("WinnerElectors");
-                if (winnerElectors > 0) {
-                    ctx.fillText(winnerElectors, cx, cy + lineSize);
-                    cy = cy - lineSize;
+                var heldElection = Statehood < ElectionYear
+
+                if (heldElection) {
+                    if (ElectionMode == "Popular") {
+                     //winnerValue = abbreviate(item.getFieldValue("WinnerVotes"));
+                        winnerValue = item.getFieldValue("WinnerPercentage") + "%";
+                       looserValue = 0; //abbreviate(data.item.LooserVotes);
+                    } else if (ElectionMode == "Percent") {
+                        winnerValue = item.getFieldValue("WinnerPercentage").toFixed(0) + "%";
+                        looserValue = 0; //data.item.LooserPercentage;
+                    } else {
+                        winnerValue = item.getFieldValue("WinnerElectors");
+                        looserValue = 0; //data.item.LooserElectors;
+                    }
+                }  
+
+                if (code == "TX") {
+                    console.log("onHexMarkerStyle " + code + " " + ElectionMode + " " + winnerValue );
+                }
+
+                if (winnerValue > 0 || winnerValue != "0.0") {
+                    ctx.fillText(winnerValue, cx, cy + lineSize); 
                 }
                   
-                ctx.fillText(code, cx, cy);
             }
         }
     };

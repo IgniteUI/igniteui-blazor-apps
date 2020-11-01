@@ -11,6 +11,9 @@ namespace Infragistics.Samples
 
         public ResultsByState()
         {
+            WinnerParty = "NoStatehood";
+            LooserParty = "NoStatehood";
+
             C1PopularVotes = 0;
             C1ElectoralVotes = 0;
 
@@ -36,6 +39,9 @@ namespace Infragistics.Samples
          
         public ResultsByState(List<CandidateResult> candidates)
         {
+            WinnerParty   = "NoStatehood";
+            LooserParty = "NoStatehood";
+
             C1 = new CandidateResult();
             C2 = new CandidateResult();
 
@@ -66,13 +72,13 @@ namespace Infragistics.Samples
                 this.WinnerElectors = c1.E;
                 this.WinnerPercentage = c1.VotesPerStatePercentage;
 
-                this.RunnerUp = c2.Candidate;
-                this.RunnerUpName = c2.Candidate.Name;
-                this.RunnerUpNameAndParty = c2.Candidate.NameAndParty;
-                this.RunnerUpParty = c2.Candidate.Party;
-                this.RunnerUpVotes = c2.V;
-                this.RunnerUpElectors = c2.E;
-                this.RunnerUpPercentage = c2.VotesPerStatePercentage;
+                this.Looser = c2.Candidate;
+                this.LooserName = c2.Candidate.Name;
+                this.LooserNameAndParty = c2.Candidate.NameAndParty;
+                this.LooserParty = c2.Candidate.Party;
+                this.LooserVotes = c2.V;
+                this.LooserElectors = c2.E;
+                this.LooserPercentage = c2.VotesPerStatePercentage;
             }
             else
             {
@@ -84,13 +90,13 @@ namespace Infragistics.Samples
                 this.WinnerElectors = c2.E;
                 this.WinnerPercentage = c2.VotesPerStatePercentage;
 
-                this.RunnerUp = c1.Candidate;
-                this.RunnerUpName = c1.Candidate.Name;
-                this.RunnerUpNameAndParty = c1.Candidate.NameAndParty;
-                this.RunnerUpParty = c1.Candidate.Party;
-                this.RunnerUpVotes = c1.V;
-                this.RunnerUpElectors = c1.E;
-                this.RunnerUpPercentage = c1.VotesPerStatePercentage;
+                this.Looser = c1.Candidate;
+                this.LooserName = c1.Candidate.Name;
+                this.LooserNameAndParty = c1.Candidate.NameAndParty;
+                this.LooserParty = c1.Candidate.Party;
+                this.LooserVotes = c1.V;
+                this.LooserElectors = c1.E;
+                this.LooserPercentage = c1.VotesPerStatePercentage;
             }
 
             TotalVotes = 0;
@@ -107,7 +113,8 @@ namespace Infragistics.Samples
         public double TotalElectors { get; set; }
         //public double TotalVotes { get { return WinnerVotes; } }
         //public double TotalElectors { get { return WinnerElectors; } }
-
+         
+        public string ElectionMode { get; set; }
         public bool HasPartialWinner { get; set; }
         public Candidate Winner { get; set; }
         public string WinnerName { get; set; }
@@ -117,13 +124,13 @@ namespace Infragistics.Samples
         public double WinnerElectors { get; set; }
         public double WinnerPercentage { get; set; }
 
-        public Candidate RunnerUp { get; set; }
-        public string RunnerUpName { get; set; }
-        public string RunnerUpParty { get; set; }
-        public string RunnerUpNameAndParty { get; set; }
-        public double RunnerUpVotes { get; set; }
-        public double RunnerUpElectors { get; set; }
-        public double RunnerUpPercentage { get; set; }
+        public Candidate Looser { get; set; }
+        public string LooserName { get; set; }
+        public string LooserParty { get; set; }
+        public string LooserNameAndParty { get; set; }
+        public double LooserVotes { get; set; }
+        public double LooserElectors { get; set; }
+        public double LooserPercentage { get; set; }
 
         public string StateSymbol { get; set; }
         public string StateName { get; set; }

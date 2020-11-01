@@ -10,27 +10,36 @@
 
 <div class="igContainer" style="height: 100%">
      
-        @if (ResultsByStates != null)
-        {
-         <GeographicMap Height="100%" Width="100%" Zoomable="true"
-                           @ref="BubbleMapRef" 
-                           BackgroundContent="@null">
-                <GeographicSymbolSeries Name="bubbles"
-                    DataSource="@ResultsByStates"
-                    LatitudeMemberPath ="StateLocationY"
-                    LongitudeMemberPath="StateLocationX"
-                    ShowDefaultTooltip="true" 
-                    MarkerTemplateScript="onTemplateBubble">
-                </GeographicSymbolSeries> 
+        @*@if (ResultsByStates != null)
+        {*@
+     <GeographicMap Height="100%" Width="100%" Zoomable="true"
+                    @ref="BubbleMapRef" 
+                    BackgroundContent="@null">
+            <GeographicSymbolSeries Name="bubbles"
+                DataSource="@ResultsByStates"
+                LatitudeMemberPath ="StateLocationY"
+                LongitudeMemberPath="StateLocationX"
+                ShowDefaultTooltip="true" 
+                MarkerTemplateScript="onTemplateBubble">
+            </GeographicSymbolSeries> 
 
-         </GeographicMap>
-        }
+     </GeographicMap>
+     @*}*@
               
 </div>
 
 @code {
 
-    private bool IsBubbleMapReady = false;
+    private ElectionDisplayMode _DisplayMode = ElectionDisplayMode.Electoral;
+    [Parameter]
+    public ElectionDisplayMode DisplayMode
+    {
+        get { return _DisplayMode; }
+        set { _DisplayMode = value; this.OnChanged("DisplayMode"); }
+    }
+
+    private bool IsMapZoomed = false;
+    private bool IsMapReady = false;
     private GeographicMap BubbleMap;
     public GeographicMap BubbleMapRef
     {
@@ -50,16 +59,16 @@
     {
         Console.WriteLine("ElectionBubbles OnChanged... " + prop);
 
-        if (this.BubbleMap != null && IsBubbleMapReady && this.ResultsByStates != null)
+        if (this.BubbleMap != null && IsMapReady && this.ResultsByStates != null)
         {
             //await Task.Delay(10);
             Console.WriteLine("ElectionBubbles OnChanged... " + this.ResultsByStates.Count);
             //var bubbleBounds = new Rect(-8, -8, 12, 12);
             //if (this.BubbleMap != null)
             //    this.BubbleMap.UpdateWorldRect(bubbleBounds);
-            
-            Task.Delay(20).ContinueWith((t) => ZoomAsync());
-           
+
+            Task.Delay(100).ContinueWith((t) => ZoomAsync());
+
             //await this.ShapeMap.ActualSeries[0].RenderSeriesAsync(false);
         }
         StateHasChanged();
@@ -91,18 +100,33 @@
         {
             var location = locations[i];
 
-            var p = rand.Next(0, 3); // (parties.Count - 1) % i;
 
             var result = new ResultsByState();
+            result.ElectionMode = ElectionDisplayMode.Electoral.ToString();
+
             result.StateLocationX = location.X;
             result.StateLocationY = location.Y;
             result.StateSymbol = location.ID;
 
-            result.WinnerElectors = rand.Next(5, 50);
-            result.WinnerParty = parties[p];
-            result.WinnerName = parties[p];
+            result.StateHeldElections = i % 4 == 0 ? false : true;
+            if (result.StateHeldElections)
+            {
+                var p = rand.Next(0, parties.Count); 
+                result.WinnerElectors = rand.Next(5, 50);
+                result.WinnerVotes = rand.Next(100000, 5000000) + rand.Next(100000, 700000);
+                result.WinnerParty = parties[p];
+                result.WinnerName = parties[p];
 
-            result.RunnerUpElectors = rand.Next(2, 5);
+                p = rand.Next(0, parties.Count);
+                result.LooserElectors = rand.Next(0, 2);
+                result.LooserVotes = result.WinnerVotes * (rand.Next(1, 8) / 10.0);
+                result.LooserParty = parties[p];
+
+                var total = result.WinnerVotes + result.LooserVotes;
+                result.WinnerPercentage   = result.WinnerVotes / total * 100;
+                result.LooserPercentage = result.LooserVotes / total * 100;
+            }
+
             states.Add(result);
         }
 
@@ -123,32 +147,45 @@
 
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
+        //base.OnAfterRenderAsync();
         if (firstRender)
         {
             Console.WriteLine("ElectionBubbles Rendering...");
-            IsBubbleMapReady = true;
+            IsMapReady = true;
             OnChanged("Rendering");
+
+            //Zoom();
+
         }
         return base.OnAfterRenderAsync(firstRender);
     }
 
     public void Zoom()
     {
-        Console.WriteLine("Zoom ZoomAsync");
-
-        var bubbleBounds = new Rect(-6, -6, 10, 10);
-        this.BubbleMap.UpdateWorldRect(bubbleBounds);
+        Console.WriteLine("ElectionBubbles Zoom");
+        if (BubbleMap != null)
+        {
+            var bubbleBounds = new Rect(-6, -6, 10, 10);
+            this.BubbleMap.UpdateWorldRect(bubbleBounds);
+        }
     }
 
     public async Task ZoomAsync()
     {
         Console.WriteLine("ElectionBubbles ZoomAsync");
+        if (BubbleMap != null)
+        {
+            await Task.Delay(10);
 
-        var bubbleBounds = new Rect(-6, -6, 10, 10);
+            var bubbleBounds = new Rect(-6, -6, 10, 10);
 
-        //this.BubbleMap.ZoomToGeographic(bubbleBounds);
-        await this.BubbleMap.UpdateWorldRectAsync(bubbleBounds);
-        //await Task.Delay(1);
+            //this.BubbleMap.ZoomToGeographic(bubbleBounds);
+            await this.BubbleMap.UpdateWorldRectAsync(bubbleBounds);
+            await Task.Delay(10);
+            this.BubbleMap.Zoomable = false;
+        }
+
+        await Task.Delay(1);
     }
 
 

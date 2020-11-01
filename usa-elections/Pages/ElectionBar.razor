@@ -11,14 +11,19 @@
         var candidate1 = Election.CandidateLeft;
         var candidate2 = Election.CandidateRight;
         //var candidate1 = Election.Winner;
-        //var candidate2 = Election.RunnerUp;
+        //var candidate2 = Election.Looser;
         //if (candidate1.Party == "Republican")
         //{
-        //    candidate1 = Election.RunnerUp;
+        //    candidate1 = Election.Looser;
         //    candidate2 = Election.Winner;
         //}
-        var requirment = Math.Round(DisplayInterval * 3);
-        //var requirment = Math.Ceiling(Election.TotalElectors / 2.0);
+        var midPoint = "50% votes";
+        if (DisplayMode == ElectionDisplayMode.Electoral)
+        {
+            midPoint = Math.Round(DisplayInterval * 3) + " to win";
+        } 
+
+        var requirment = Math.Ceiling(Election.TotalElectors + 1 / 2.0);
         <div class="igCandidate-bar" >
 
             <div class="igCandidate" style="color: @candidate1.PartyColor; justify-content: flex-start; padding-left: 0rem; "> 
@@ -31,7 +36,7 @@
 
             <div class="igCandidate-target" style="">
                 <img class="igCandidate-target-house" src="images/gauge_white_house.svg" />
-                <div class="igCandidate-target-value" > @requirment to win </div>
+                <div class="igCandidate-target-value" > @midPoint </div>
                 @*<img class="igCandidate-target-arrow" src="images/gauge_mid_arrow.svg" />*@
                 @*<div class="igCandidate-target-line"  />*@
                 <img class="igCandidate-target-arrow" src="images/gauge_mid_arrow.png" />

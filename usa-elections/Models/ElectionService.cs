@@ -21,7 +21,7 @@ namespace Infragistics.Samples
         public string Code { get; set; }
         public string Name { get; set; }
         public int Index { get; set; }
-        public int CreationYear { get; set; }
+        public int Statehood { get; set; }
         public int Population { get; set; }
         public bool StateHasLabelBox { get; set; }
         //public bool Statehood { get; set; }
@@ -302,7 +302,7 @@ namespace Infragistics.Samples
                 }
 
                 Candidate electionWinner = null;
-                Candidate electionRunnerUp = null;
+                Candidate electionLooser = null;
 
 
                 election.Populate();

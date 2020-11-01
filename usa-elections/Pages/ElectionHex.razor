@@ -12,33 +12,34 @@
            
     }*@
       
-           <GeographicMap Height="100%" Width="100%" Zoomable="true"
-                      @ref="HexMap"
-                      SeriesMouseLeftButtonDownScript="onHexShapeMouseDown"
-                      BackgroundContent="@null">
-
-                                      @*StyleShapeScript="onStyleShape"*@
-               <GeographicShapeSeries Outline="black" Brush="#3FCB3F" Thickness="0.5"
-                                      StyleShapeScript="onHexShapeStyle"
-                                      MarkerTemplateScript="onHexMarkerStyle"/> 
-               
-                                      @*MarkerTemplateScript="onTemplateMarker"*@
-                @*<GeographicSymbolSeries
-                   Name="labels" Title="HexMarkers"
-                   DataSource="@HexMarkers"
-                   LatitudeMemberPath ="Y"
-                   LongitudeMemberPath="X" 
-                   TransitionInDuration="0" TransitionDuration="0"
-                   ShowDefaultTooltip="true">
-                   <TooltipTemplate>
-                            <div style="width: 200px; height: 70px; background: white">
-                                <div style="color: red">series.Title</div>
-                                <div style="color: red">item.StateCenterY</div>
-                                <div style="color: red">context</div>
-                            </div>
-                   </TooltipTemplate>
-               </GeographicSymbolSeries>*@
-           </GeographicMap>
+    <GeographicMap Height="100%" Width="100%" Zoomable="true"
+                   @ref="HexMap"
+                   BackgroundContent="@null">
+                   @*SeriesMouseLeftButtonDownScript="onHexShapeMouseDown"*@
+         
+        <GeographicShapeSeries Outline="black" 
+                               Brush="black" 
+                               Thickness="0.5"
+                               StyleShapeScript="onHexShapeStyle"
+                               MarkerTemplateScript="onHexMarkerStyle"/> 
+        
+                               @*MarkerTemplateScript="onTemplateMarker"*@
+         @*<GeographicSymbolSeries
+            Name="labels" Title="HexMarkers"
+            DataSource="@HexMarkers"
+            LatitudeMemberPath ="Y"
+            LongitudeMemberPath="X" 
+            TransitionInDuration="0" TransitionDuration="0"
+            ShowDefaultTooltip="true">
+            <TooltipTemplate>
+                     <div style="width: 200px; height: 70px; background: white">
+                         <div style="color: red">series.Title</div>
+                         <div style="color: red">item.StateCenterY</div>
+                         <div style="color: red">context</div>
+                     </div>
+            </TooltipTemplate>
+        </GeographicSymbolSeries>*@
+    </GeographicMap>
 </div>
 
 @code {
@@ -63,7 +64,7 @@
     private GeographicMap         HexMap;
     private GeographicShapeSeries HexSeries;
     private ShapeDataSource       HexShapes;
-    private List<HexMarker>       HexMarkers;
+    //private List<HexMarker>       HexMarkers;
 
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -97,7 +98,7 @@
         if (this.HexMap != null && HexSeries != null)
         {
             this.HexShapes = HexSeries.ShapefileDataSource;
-            var geoRect2 = HexShapes.ComputedWorldRect;
+            //var geoRect2 = HexShapes.ComputedWorldRect;
             //var labelPointX = await this.HexShapes.GetRecordValuesAsync("NamePosX");
 
             var stateCodes = await this.HexShapes.GetRecordValuesAsync("Code");
@@ -105,11 +106,19 @@
             var statehoods = await this.HexShapes.GetRecordValuesAsync("Statehood");
             var statePops  = await this.HexShapes.GetRecordValuesAsync("Population");
 
-            var winParties = new string[stateCodes.Length];
-            var winEditable = new string[stateCodes.Length];
-            var electionYears = new string[stateCodes.Length];
+            var WinnerParty      = new string[stateCodes.Length];
+            var WinnerEditable   = new string[stateCodes.Length];
+            var WinnerElectors   = new string[stateCodes.Length];
+            var WinnerVotes      = new string[stateCodes.Length];
+            var WinnerPercentage = new string[stateCodes.Length];
+            var LooserElectors   = new string[stateCodes.Length];
+            var LooserVotes      = new string[stateCodes.Length];
+            var LooserParty      = new string[stateCodes.Length];
 
-            HexMarkers = new List<HexMarker>();
+            var ElectionYear    = new string[stateCodes.Length];
+            var ElectionMode     = new string[stateCodes.Length];
+
+            //HexMarkers = new List<HexMarker>();
 
             ShapesLookup = new Dictionary<string, StateInfo>();
 
@@ -120,37 +129,49 @@
                 var info = new StateInfo();
                 info.Name = (string)stateNames[i];
                 info.Code = (string)stateCodes[i];
-                info.CreationYear = int.Parse(statehoods[i].ToString());
+                info.Statehood = int.Parse(statehoods[i].ToString());
                 info.Population = int.Parse(statePops[i].ToString());
                 info.Index = i;
 
                 ShapesLookup.Add(info.Code, info);
 
-                var p = rand.Next(0, 3); // (parties.Count - 1) % i;
-                winParties[i] = parties[p]; // "Tossup";
-                winEditable[i] = "true";
-                electionYears[i] = "2020";
-                //var bounds = await this.HexShapes.GetLargestShapeBoundsForRecordAsync(i);
-                //var x = await this.HexShapes.GetMaxLongitudeAsync(i, false, -180, 180);
-                //var bounds = await this.HexShapes.(i);
+                var p = rand.Next(0, parties.Count);
+                WinnerParty[i] = parties[p];
+                WinnerElectors[i] = rand.Next(5, 50).ToString();
+                WinnerVotes[i] = (rand.Next(100000, 5000000) + rand.Next(100000, 700000)).ToString();
+                WinnerPercentage[i] = rand.Next(5, 70).ToString();
 
-                //var bounds = await this.HexShapes.GetRecordBoundsAsync(i);
-                //var center = this.GetCenter(bounds);
-                //var marker = new HexMarker();
-                //marker.X = center.X;
-                //marker.Y = center.Y;
-                //marker.Label = stateCodes[i].ToString();
-                //HexMarkers.Add(marker);
+                WinnerEditable[i] = "true";
+                //ElectionYear[i] = "2020";
+                ElectionYear[i] = "1880";
+                ElectionMode[i] = ElectionDisplayMode.Popular.ToString();
+
+                p = rand.Next(0, parties.Count);
+                LooserParty[i] = parties[p];
+                LooserElectors[i] = rand.Next(0, 2).ToString();
+                LooserVotes[i]    = rand.Next(100000, 700000).ToString();
 
                 //Console.WriteLine("ElectionHex " + stateCodes[i] + " = " + bounds.X + " " +  x );
             }
 
-            await HexShapes.SetRecordValuesAsync("WinnerParty", winParties); await HexShapes.SetRecordValuesAsync("winParty", winParties);
-            await HexShapes.SetRecordValuesAsync("WinnerEditable", winEditable);
-            await HexShapes.SetRecordValuesAsync("ElectionYear", electionYears);
+            await HexShapes.SetRecordValuesAsync("WinnerParty", WinnerParty);
+            await HexShapes.SetRecordValuesAsync("WinnerElectors", WinnerElectors);
+            await HexShapes.SetRecordValuesAsync("WinnerVotes", WinnerVotes);
+            await HexShapes.SetRecordValuesAsync("WinnerPercentage", WinnerPercentage);
+
+            //await HexShapes.SetRecordValuesAsync("LooserParty", LooserParty);
+            //await HexShapes.SetRecordValuesAsync("LooserVotes", LooserVotes);
+            //await HexShapes.SetRecordValuesAsync("LooserElectors", LooserElectors);
+
+            //await HexShapes.SetRecordValuesAsync("WinnerEditable", WinnerEditable);
+            await HexShapes.SetRecordValuesAsync("ElectionYear", ElectionYear);
+            await HexShapes.SetRecordValuesAsync("ElectionMode", ElectionMode);
 
             var geoRect = new Rect(-3, -3, 6, 6);
             await this.HexMap.UpdateWorldRectAsync(geoRect);
+
+            await Task.Delay(10);
+            this.HexMap.Zoomable = false;
         }
 
         StateHasChanged();
@@ -164,54 +185,6 @@
         Console.WriteLine("ElectionHex OnChanged... ");
 
         Task.Delay(1).ContinueWith((t) => OnChangedAsync());
-
-        //if (this.Election != null && this.HexMap != null && this.HexShapes != null &&
-        //    this.Election.Year != this.CurrentYear)
-        //{
-        //    Console.WriteLine("ElectionHex OnChangedAsync... " + this.Election.Year);
-        //    this.CurrentYear = this.Election.Year;
-
-        //    var results = Election.ResultsByStates;
-        //    var winnerParty = new string[results.Count];
-        //    var winnerCandidate = new string[results.Count];
-        //    var winnerElectors = new string[results.Count];
-        //    var winnerVotes = new string[results.Count];
-        //    var winnerPercentage = new string[results.Count];
-
-        //    var stateHeldElections = new string[results.Count];
-        //    var electionYears = new string[results.Count];
-
-        //    for (int i = 0; i < results.Count; i++)
-        //    {
-        //        electionYears[i] = Election.Year.ToString();
-
-        //        if (ShapesLookup.ContainsKey(results[i].StateSymbol))
-        //        {
-        //            var state = ShapesLookup[results[i].StateSymbol];
-        //            //var statWithElections = state.CreationYear < 1840;
-        //            var statWithElections = state.CreationYear < Election.Year;
-        //            var shapeIndex = state.Index;
-        //            //electionYear[shapeIndex] = "1840"; // state.CreationYear.ToString();
-        //            electionYears[shapeIndex] = state.CreationYear.ToString();
-
-        //            winnerParty[shapeIndex] = results[i].WinnerParty;
-        //            winnerCandidate[shapeIndex] = results[i].WinnerName;
-        //            winnerElectors[shapeIndex] = results[i].WinnerElectors.ToString();
-        //            winnerVotes[shapeIndex] = results[i].WinnerVotes.ToString();
-        //            winnerPercentage[shapeIndex] = results[i].WinnerPercentage.ToString();
-        //            stateHeldElections[shapeIndex] = statWithElections.ToString();
-        //        }
-        //    }
-
-        //    HexShapes.SetRecordValues("WinnerParty", winnerParty);
-        //    HexShapes.SetRecordValues("WinnerName", winnerCandidate);
-        //    HexShapes.SetRecordValues("WinnerElectors", winnerElectors);
-        //    HexShapes.SetRecordValues("WinnerVotes", winnerVotes);
-        //    HexShapes.SetRecordValues("ElectionsHeld", stateHeldElections);
-        //    HexShapes.SetRecordValues("ElectionYear", electionYears);
-
-        //    StateHasChanged();
-        //}
     }
 
     private async Task OnChangedAsync()
@@ -229,37 +202,41 @@
             var winnerVotes = new string[results.Count];
             var winnerPercentage = new string[results.Count];
 
-            var stateHeldElections = new string[results.Count];
-            var electionYears = new string[results.Count];
+            //var stateHeldElections = new string[results.Count];
+            var ElectionYear = new string[results.Count];
+            var ElectionMode = new string[results.Count];
 
             for (int i = 0; i < results.Count; i++)
             {
-                electionYears[i] = Election.Year.ToString();
+                ElectionYear[i] = Election.Year.ToString();
 
                 if (ShapesLookup.ContainsKey(results[i].StateSymbol))
                 {
                     var state = ShapesLookup[results[i].StateSymbol];
-                    //var statWithElections = state.CreationYear < 1840;
-                    var statWithElections = state.CreationYear < Election.Year;
+                    //var statWithElections = state.Statehood < 1840;
+                    //var statWithElections = state.Statehood < Election.Year;
                     var shapeIndex = state.Index;
-                    //electionYear[shapeIndex] = "1840"; // state.CreationYear.ToString();
-                    electionYears[shapeIndex] = state.CreationYear.ToString();
+                    //electionYear[shapeIndex] = "1840"; // state.Statehood.ToString();
+                    ElectionYear[shapeIndex] = this.Election.Year.ToString(); // state.Statehood.ToString();
+                    ElectionMode[shapeIndex] = this.DisplayMode.ToString();
 
                     winnerParty[shapeIndex] = results[i].WinnerParty;
                     winnerCandidate[shapeIndex] = results[i].WinnerName;
                     winnerElectors[shapeIndex] = results[i].WinnerElectors.ToString();
                     winnerVotes[shapeIndex] = results[i].WinnerVotes.ToString();
                     winnerPercentage[shapeIndex] = results[i].WinnerPercentage.ToString();
-                    stateHeldElections[shapeIndex] = statWithElections.ToString();
+                    //stateHeldElections[shapeIndex] = statWithElections.ToString();
                 }
             }
 
             await HexShapes.SetRecordValuesAsync("WinnerParty", winnerParty);
-            await HexShapes.SetRecordValuesAsync("WinnerName", winnerCandidate);
+            //await HexShapes.SetRecordValuesAsync("WinnerName", winnerCandidate);
             await HexShapes.SetRecordValuesAsync("WinnerElectors", winnerElectors);
             await HexShapes.SetRecordValuesAsync("WinnerVotes", winnerVotes);
-            await HexShapes.SetRecordValuesAsync("ElectionsHeld", stateHeldElections);
-            await HexShapes.SetRecordValuesAsync("ElectionYear", electionYears);
+            await HexShapes.SetRecordValuesAsync("WinnerPercentage", winnerPercentage);
+            //await HexShapes.SetRecordValuesAsync("ElectionsHeld", stateHeldElections);
+            await HexShapes.SetRecordValuesAsync("ElectionYear", ElectionYear);
+            await HexShapes.SetRecordValuesAsync("ElectionMode", ElectionMode);
 
             StateHasChanged();
         }
@@ -292,10 +269,10 @@
     //    return new Point(x, y);
     //}
 
-    public class HexMarker
-    {
-        public double X { get; set; }
-        public double Y { get; set; }
-        public string Label { get; set; }
-    }
+    //public class HexMarker
+    //{
+    //    public double X { get; set; }
+    //    public double Y { get; set; }
+    //    public string Label { get; set; }
+    //}
 }
