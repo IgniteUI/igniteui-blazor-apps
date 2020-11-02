@@ -170,19 +170,15 @@ namespace Infragistics.Samples
             this.IsLoading = true;
 
             Logger.WriteLine("Elections loading... ");
-            //var elections = await Http.GetFromJsonAsync<Elections[]>("data/elections-2008-2012.json");
-            //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2012.json");
-            //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2016.json");
-            //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2020.json");
-            //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2012-2016.json");
-            var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-recent.json");
-            //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections.json");
-
-            await Parse(elections);
-        }
-
-        public async Task Parse(List<Election> elections)
-        {
+            //var url = "data/elections-2008-2012.json";
+            //var url = "data/elections-2012-2016.json"
+            //var url = "data/elections-2012.json";
+            //var url = "data/elections-2016.json";
+            //var url = "data/elections-2020.json";
+            var url = "data/elections-recent.json";
+            //var url = "data/elections.json";
+            var elections = await Http.GetFromJsonAsync<List<Election>>(url);
+                         
             Console.WriteLine("Elections parsing... " + elections.Count);
              
             foreach (var election in elections)

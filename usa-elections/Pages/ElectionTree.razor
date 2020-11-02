@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.Components.Rendering
 @using IgniteUI.Blazor.Controls
 
+@inject IJSRuntime JSRuntime
 @inject HttpClient Http
 @inject IIgniteUIBlazor IgniteUIBlazor;
 @inject Infragistics.Samples.ElectionService ElectionService
@@ -20,11 +21,16 @@
                   IdMemberPath="StateSymbol"
                   LabelMemberPath="StateSymbol"
                   NodeStylingScript="onStyleTreeNode"
+                  NodePointerEnter="OnNodePointerEnter"
+                  NodePointerLeave="OnNodePointerLeave"
+                  NodePointerOver="OnNodePointerOver"
+                 
                   LayoutType="@TreemapLayoutType.Squarified"
-                  LayoutOrientation="@TreemapOrientation.Horizontal"
+                  LayoutOrientation="@TreemapOrientation.Vertical"
                   HeaderDisplayMode="@TreemapHeaderDisplayMode.Overlay"
                   HeaderBackground="#E0F11F"
                   HeaderHoverBackground="#28E124" 
+                   
                   Outline="white"
                   StrokeThickness="1"                
                   ParentNodeLeftMargin="1"
@@ -40,17 +46,82 @@
                   @*OverlayHeaderBackground="purple"
                   BreadcrumbSequence=" > "*@
          </Treemap>
+
+         @**@ 
+         <div @ref="Tooltip" class="igTooltipBox" style="width: auto; @TooltipPostion @TooltipDisplay">
+             <div>@TooltipLabel</div
+             <div>@TooltipValue</div>
+         </div>
         }
               
 </div>
 
 @code {
+    ElementReference Tooltip;
+    public string TooltipPostion { get; set; }
+    public string TooltipLabel { get; set; }
+    public string TooltipValue { get; set; }
+    public bool   TooltipVisible { get; set; }
+    public string TooltipDisplay { get { return TooltipVisible ? "display: flex" : "display: none"; } }
+
+    void OnNodePointerOver(TreemapNodePointerEventArgs e)
+    {
+        var position = e.Position;
+        var x = e.Position.X;
+        var y = e.Position.Y;
+        if (x < 400) {
+            x += 16;
+        } else {
+            x -= 100;
+        }
+        if (y < 400) {
+            y += 16;
+        } else {
+            y -= 60;
+        }
+
+        if (e.IsOverHeader)
+        {
+            //var item = e.Item as ResultsByState;
+            TooltipLabel = e.Label;
+            TooltipValue = DisplayMode == ElectionDisplayMode.Electoral ? "Electors:" : "Votes:";
+            TooltipValue += " " + e.Sum.ToString();
+        }
+        else
+        {
+            TooltipLabel = "State: " + e.Label;
+            TooltipValue = DisplayMode == ElectionDisplayMode.Electoral ? "Electors:" : "Votes:";
+            TooltipValue += " " + e.Value.ToString();
+        }
+
+        TooltipPostion = "left: " + Math.Round(x) + "px; top: " + Math.Round(y) + "px;";
+        TooltipVisible = true;
+        StateHasChanged();
+
+        //Console.WriteLine("OnNodePointerOver " + item.StateSymbol + " " + TooltipPostion);
+    }
+
+    void OnNodePointerEnter(TreemapNodePointerEventArgs e)
+    {
+        //if (e.IsOverHeader) return;
+        //var item = e.Item as ResultsByState;
+        //Console.WriteLine("OnNodePointerEnter " + item.StateSymbol + " " + e.Position.X);
+    }
+
+    void OnNodePointerLeave(TreemapNodePointerEventArgs e)
+    {
+        TooltipVisible = false;
+        StateHasChanged();
+
+        var item = e.Item as ResultsByState;
+        //Console.WriteLine("OnNodePointerLeave " + item.StateSymbol + " " + e.Position.X);
+    }
 
     private Treemap Treemap;
     public Treemap TreemapRef
     {
         get { return Treemap; }
-        set { Treemap = value; this.OnChanged(); }
+        set { Treemap = value; this.OnTreemap(); }
     }
 
     private Election _Election;
@@ -70,10 +141,36 @@
     }
 
     public string DisplayValue { get { return DisplayMode == ElectionDisplayMode.Electoral ? "WinnerElectors" : "WinnerVotes"; } }
+    public TreemapOrientation DisplayOrientation { get; set; }
 
     public int CurrentYear = 0;
 
     private void OnChanged()
+    {
+        if (this.Election != null)
+        {
+            //double ratio;
+            //if (DisplayMode == ElectionDisplayMode.Electoral)
+            //    ratio = this.Election.Winner.TotalElectors * 1.0 / this.Election.TotalElectors;
+            //else
+            //    ratio = this.Election.Winner.TotalVotes * 1.0 / this.Election.TotalVotes;
+
+            //if (ratio > 0.7)
+            //{
+            //    DisplayOrientation = TreemapOrientation.Horizontal;
+            //}
+            //else
+            //{
+            //    DisplayOrientation = TreemapOrientation.Vertical;
+            //}
+
+            //Console.WriteLine("ElectionTree OnChanged... ratio=" + ratio);
+            //this.CurrentYear = this.Election.Year;
+            //StateHasChanged();
+        }
+    }
+
+    private void OnTreemap()
     {
         if (this.Treemap != null && this.Election != null)
         {
@@ -85,6 +182,7 @@
 
     protected override void OnInitialized()
     {
+        TooltipVisible = false;
         Logger.WriteLine("ElectionTree OnInitialized");
 
         TreemapModule.Register(IgniteUIBlazor);
@@ -106,4 +204,26 @@
         }
         return base.OnAfterRenderAsync(firstRender);
     }
+
+    //public ElectionTree.Bounds TreemapBounds { get; set; }
+    //public class Bounds
+    //{
+    //    public double X { get; set; }
+    //    public double Y { get; set; }
+    //    public double Width { get; set; }
+    //    public double Height { get; set; }
+    //    public double Top { get; set; }
+    //    public double Right { get; set; }
+    //    public double Bottom { get; set; }
+    //    public double Left { get; set; }
+    //}
+
+    //private async Task<ElectionTree.Bounds> GetBoundsAsync()
+    //{
+    //    //var bounds = await JSRuntime.Invoke<Bounds>("GetBounds", [this.Treemap]);
+    //    var args = new object[] { this.Treemap };
+    //    TreemapBounds = await JSRuntime.InvokeAsync<ElectionTree.Bounds>("GetBounds", args);
+    //    //Console.WriteLine("OnNodePointerOver " + TreemapBounds.Width);
+    //    return TreemapBounds;
+    //}
 }

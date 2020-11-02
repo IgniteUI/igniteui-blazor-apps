@@ -59,7 +59,11 @@
     Federalist_1:         { outline: "white", fill: "#69AA67" }, // 1804
     Federalist_2:         { outline: "white", fill: "#7A3E98" }, // 1804
 }; 
+//GetBounds = (element, parm) => { return element.getBoundingClientRect(); };
 
+function GetBounds(element, parm) {
+    return element.getBoundingClientRect(); 
+}
 
 function abbreviate(num) {
     if (num < 1e3) return n;

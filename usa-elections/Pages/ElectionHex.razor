@@ -6,43 +6,39 @@
 @*style="height: calc(130px - 1rem); padding-top: 1rem; z-index: 300000;" *@ 
 
 <div class="igFill igOverflow" style="background: white">
-
-    @*@if (Election != null)
-    {
-           
-    }*@
       
     <GeographicMap Height="100%" Width="100%" Zoomable="false"
                    @ref="HexMap"
-                   BackgroundContent="@null">
+                   BackgroundContent="@null"
+                   SeriesMouseEnter="OnSeriesMouseEnter">
                    @*SeriesMouseLeftButtonDownScript="onHexShapeMouseDown"*@
          
         <GeographicShapeSeries Outline="black" 
                                Brush="black" 
                                Thickness="1.0"
                                StyleShapeScript="onHexShapeStyle"
-                               MarkerTemplateScript="onHexMarkerStyle"/> 
+                               MarkerTemplateScript="onHexMarkerStyle"
+                               ShowDefaultTooltip="false"/> 
+                               @*TooltipTemplate="@CreateTooltip"*@
         
-                               @*MarkerTemplateScript="onTemplateMarker"*@
-         @*<GeographicSymbolSeries
-            Name="labels" Title="HexMarkers"
-            DataSource="@HexMarkers"
-            LatitudeMemberPath ="Y"
-            LongitudeMemberPath="X" 
-            TransitionInDuration="0" TransitionDuration="0"
-            ShowDefaultTooltip="true">
-            <TooltipTemplate>
-                     <div style="width: 200px; height: 70px; background: white">
-                         <div style="color: red">series.Title</div>
-                         <div style="color: red">item.StateCenterY</div>
-                         <div style="color: red">context</div>
-                     </div>
-            </TooltipTemplate>
-        </GeographicSymbolSeries>*@
+                
     </GeographicMap>
 </div>
 
 @code {
+
+    void OnSeriesMouseEnter(ChartMouseEventArgs e)
+    {
+        //var item = e.Item as System.Collections.Generic.Dictionary<string, object>;
+        //var keys = string.Join(", ", item.Keys.ToList()); // hapeType, fieldsNames, fieldsTypes, points, fieldValues, bounds
+        //var bounds = item["bounds"];
+        //Console.WriteLine("ElectionHex OnSeriesMouseEnter " + "\n" + keys);
+
+        // e.GetPosition does not return any value!
+        //var position = e.GetPosition(this.HexMap);
+        //var position = e.GetPosition(this.HexSeries);
+        //Console.WriteLine("ElectionHex OnSeriesMouseEnter " + position.X + " " + position.Y);
+    }
 
     protected override void OnInitialized()
     {
@@ -261,6 +257,57 @@
     {
         get { return _DisplayMode; }
         set { _DisplayMode = value; this.OnChanged("DisplayMode=" + value); }
+    }
+
+    RenderFragment CreateTooltip(DataContext context)
+    {
+        return @<div class="ui-tooltip-content" >
+                <div>name</div>
+                <div>Popular Votes: votes</div>
+            </div>;
+
+        // var brush = "";
+        // var votes = "";
+        // var electors = ""; 
+        // var name = "";
+        //
+        // if (context != null && context.Item != null)
+        // {
+        //     var item = context.Item as Candidate;
+        //     brush = item.PartyColor;
+        //     name = item.Name;
+        //     if (item.Party == "Other")
+        //         name = "Other Candidates";
+        //     else if (item.Party == "Tossup")
+        //         name = "Tossup States";
+        //     else
+        //         name += " (" + item.PartyDisplay + ")";
+        //
+        //     votes = item.TotalVotesMilions + "M (" + item.TotalVotesPercent + "%)";
+        //     electors = item.TotalElectors + " (" + item.TotalElectorsPercent + "%)";
+        // }
+        //
+        // if (DisplayMode == ElectionDisplayMode.Popular)
+        // {
+        //     return @<div class="ui-tooltip-content" >
+        //         <div>@name</div>
+        //         <div>Popular Votes: @votes</div>
+        //     </div>;
+        // }
+        // else
+        // {
+        //     //; color: @brush width: 200px; background: @brush
+        //     return @<div class="ui-tooltip-content" >
+        //         @*<div>@item.Name: @item.TotalElectors (@item.TotalElectorsPercent)</div>*@
+        //         <div>@name</div>
+        //         <div>Electoral Votes: @electors</div> 
+        //         @*<div>@item.Party</div>*@
+        //         @*<div>@brush</div>*@
+        //         @*<div>@item.Name</div>
+        //         <div>Electors: @item.TotalElectors</div>*@
+        //         @*<div>Electors: @item.Stack.TotalElectors</div>*@
+        //     </div>;
+        // }
     }
 
 }

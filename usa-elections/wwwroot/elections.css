@@ -19,12 +19,36 @@
     display: flex;
     flex-direction: column;
     margin: 0px;
-    padding-top:    0.15rem;
-    padding-bottom: 0.15rem;
-    padding-left:   0.5rem;
-    padding-right:  0.5rem; 
+    padding-left:  1rem; 
+    padding-right: 1rem; 
+    padding-top:    0.5rem; 
+    padding-bottom: 0.5rem; 
     /*background: #D9951E;*/  
     /*z-index: 1000000;*/
+}
+
+.igTooltipBox {
+    font-family: 'Titillium Web', Verdana, Tahoma, Arial, sans-serif;
+    font-size: 0.75rem; 
+    display: flex;
+    flex-direction: column;
+    width: 5rem; 
+    height: auto; 
+    position: absolute; 
+    pointer-events: none;
+
+    padding-left: 1rem; 
+    padding-right: 1rem; 
+    padding-top: 0.5rem; 
+    padding-bottom: 0.5rem; 
+    background: rgba(255, 255, 255, 1); 
+    border-color: black;
+    border-style: solid;
+    border-width: thin;
+
+    color: black; 
+    top: 20px; 
+    left: 10px;
 }
 
 .igToolbar {
