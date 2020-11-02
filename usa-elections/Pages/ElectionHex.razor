@@ -12,7 +12,7 @@
            
     }*@
       
-    <GeographicMap Height="100%" Width="100%" Zoomable="true"
+    <GeographicMap Height="100%" Width="100%" Zoomable="false"
                    @ref="HexMap"
                    BackgroundContent="@null">
                    @*SeriesMouseLeftButtonDownScript="onHexShapeMouseDown"*@
@@ -166,7 +166,8 @@
             //await HexShapes.SetRecordValuesAsync("WinnerVotes", WinnerVotes);
             //await HexShapes.SetRecordValuesAsync("WinnerPercentage", WinnerPercentage);
 
-            var geoRect = new Rect(-3, -3, 6, 6);
+            //var geoRect = new Rect(-3, -3, 6, 6); 
+            var geoRect = new Rect(-4, -4, 8, 8);
             await this.HexMap.UpdateWorldRectAsync(geoRect);
 
             //await Task.Delay(10);

@@ -8,7 +8,6 @@
 @inject IIgniteUIBlazor IgniteUIBlazor;
 @inject Infragistics.Samples.ElectionService ElectionService
 
-@*class="igComponent" style="height: calc(100% - 2rem); width: calc(100% - 2rem); padding: 1rem"*@
 <div class="igFill" >
      
         @if (Election != null)
@@ -20,7 +19,6 @@
                   ValueMemberPath="@DisplayValue"
                   IdMemberPath="StateSymbol"
                   LabelMemberPath="StateSymbol"
-                  
                   NodeStylingScript="onStyleTreeNode"
                   LayoutType="@TreemapLayoutType.Squarified"
                   LayoutOrientation="@TreemapOrientation.Horizontal"
@@ -36,9 +34,9 @@
                   ParentNodeTopMargin="1"
                   ParentNodeTopPadding="0"
                   ParentNodeBottomMargin="1"
-                  ParentNodeBottomPadding="0"
-                  TransitionDuration="0">
-             @*<TreemapNodeStyle  TextColor=""/>*@
+                  ParentNodeBottomPadding="0">
+             @*   TransitionDuration="0"
+                 <TreemapNodeStyle  TextColor=""/>*@
                   @*OverlayHeaderBackground="purple"
                   BreadcrumbSequence=" > "*@
          </Treemap>
@@ -75,37 +73,13 @@
 
     public int CurrentYear = 0;
 
-    private void OnChangedDisplayMode()
+    private void OnChanged()
     {
         if (this.Treemap != null && this.Election != null)
         {
-            Logger.WriteLine("ElectionTree OnChangedDisplayMode... ");
-            //if (DisplayMode == ElectionDisplayMode.Popular)
-            //    this.Treemap.ValueMemberPath = "WinnerVotes";
-            //else
-            //    this.Treemap.ValueMemberPath = "WinnerElectors";
-
-            //this.Treemap.MarkDirty();
-            //StateHasChanged();
-        }
-    }
-
-    private void OnChanged()
-    {
-        //Logger.WriteLine("ElectionTree updating... ");
-        //if (this.Treemap != null && this.Election != null)
-        //{
-        //    Logger.WriteLine("ElectionTree updating... " + this.Election.Year);
-
-        //    //await this.ShapeMap.ActualSeries[0].RenderSeriesAsync(false);
-        //}
-        //StateHasChanged();
-
-        if (this.Treemap != null && this.Election != null && this.Election.Year != this.CurrentYear)
-        {
             Logger.WriteLine("ElectionTree OnChanged... " + this.Election.Year);
             this.CurrentYear = this.Election.Year;
-            StateHasChanged();
+            //StateHasChanged();
         }
     }
 
@@ -132,7 +106,4 @@
         }
         return base.OnAfterRenderAsync(firstRender);
     }
-
-
-
 }

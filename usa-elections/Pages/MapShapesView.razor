@@ -29,7 +29,7 @@
 
     <div class="igContent" style="background: white">
 
-    <div class="igVertical" style="width: 13rem; height: calc(100% - 1rem); padding-top: 1rem;">
+    <div class="igVertical" style="width: 9rem; height: calc(100% - 1rem); padding-top: 1rem;">
         <ElectionSelector Changed="OnElectionChanged"/>
         @*Elections="@AllElections"*@ 
     </div>
@@ -87,7 +87,7 @@
                  SeriesMouseMoveScript="onShapeMouseMove"
                  *@
                 @*<div class="igFill" style="background: rgba(0, 0, 255, 0.25); text-align: left;">ShapeMap</div>*@
-                <GeographicMap Height="100%" Width="100%" Zoomable="true"
+                <GeographicMap Height="100%" Width="100%" Zoomable="false"
                            @ref="ShapeMap" 
                            BackgroundContent="@null">
                     <GeographicShapeSeries Outline="black" Thickness="1" 
@@ -609,13 +609,15 @@
         //Logger.WriteLine("Map Shapes codes: " + stateCodes.Length);
         ////Logger.WriteLine("" + string.Join(", ", stateCodes));
 
-        //var shapeBounds = new Rect(-130, 20, 65, 30);
-        var shapeBounds = new Rect(-120 + 100, 32, 40, 10);
+        //var shapeBounds = new Rect(-130, 20, 65, 30); 
         //var shapeBounds = new Rect(-125 + 100, 25, 55, 20);
+        var offsetX = 4;
+        var offsetY = 2;
+        var geoRect = new Rect(-16 - offsetX, 32 - offsetY, 40 + (offsetX * 2), 10 + (offsetY * 2)); 
         if (this.ShapeMap != null)
         {
             Console.WriteLine("ShapeMap zooming...");
-            await this.ShapeMap.UpdateWorldRectAsync(shapeBounds);
+            await this.ShapeMap.UpdateWorldRectAsync(geoRect);
         }
 
         //Logger.WriteLine("Map zooming... Complete");
