@@ -32,6 +32,11 @@
     <div class="igVertical" style="width: 9rem; height: calc(100% - 1rem); padding-top: 1rem;">
         <ElectionSelector Changed="OnElectionChanged"/>
         @*Elections="@AllElections"*@ 
+
+        <img @onclick="onDisplayProductPage"
+             style="height: 2rem; width: 100%; padding-top: 1rem; cursor: pointer;" 
+             src="images/ig_engine_horizontal_light.svg" />
+              
     </div>
         
     @*@if (SelectedElection != null && SelectedElection.ResultsByStates != null)
@@ -246,8 +251,6 @@
         get { return ElectionByStatesChart; }
         set { ElectionByStatesChart = value; this.OnElectionByStatesChartRef(); StateHasChanged(); }
     }
-
-    private bool isAnimating = false;
 
     //private void OnTimerTick()
     //{
