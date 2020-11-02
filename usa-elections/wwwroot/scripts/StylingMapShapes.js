@@ -7,7 +7,7 @@
 //    //NoStatehood: { outline: "gray", fill: "white" },
 //}; 
  
-function onStyleShape(o, e) {
+function onShapeStyle(o, e) {
     
     // styling shapes based on data fields for all states in USA
     //var Name = e.item.getFieldValue("Name");
@@ -17,7 +17,7 @@ function onStyleShape(o, e) {
     var StateCreation = e.item.getFieldValue("Statehood"); 
 
     //if (Code == "CA" || Code == "TX") {
-    //    console.log("Map onStyleShape " + Code + " " + ElectionYear + " " + StateCreation);
+    //    console.log("Map onShapeStyle " + Code + " " + ElectionYear + " " + StateCreation);
     //}
 
     // hiding shapes until map is zoomed in and all data fields are set
@@ -38,13 +38,13 @@ function onStyleShape(o, e) {
         var style = PartyStyles[WinnerParty];
         if (style) {
             //if (Code == "NJ" || Code == "FL") {
-            //    console.log("onStyleShapeScript " + Name + " " + WinnerParty + " Statehood=" + (ElectionYear > Statehood));
+            //    console.log("onShapeStyleScript " + Name + " " + WinnerParty + " Statehood=" + (ElectionYear > Statehood));
             //}
             e.shapeFill = style.fill;
             e.shapeStroke = style.outline;
         } else {
             //if (Code == "NJ" || Code == "FL") {
-            //    console.log("onStyleShapeScript " + Name + " " + WinnerParty + " else ");
+            //    console.log("onShapeStyleScript " + Name + " " + WinnerParty + " else ");
             //}
             e.shapeFill = "gray";
             e.shapeStroke = "black";
@@ -59,7 +59,7 @@ function onStyleShape(o, e) {
     }
 }
 
-igRegisterScript("onStyleShape", onStyleShape, false);
+igRegisterScript("onShapeStyle", onShapeStyle, false);
 
 var isHighlightingShape = false;
 var isEnteringShape = false;

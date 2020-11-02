@@ -1,96 +1,5 @@
 [
    {
-      "Year": 2020,
-      "HasVotes": "true",
-      "Candidates": [
-         {
-            "ID": 1,
-            "Name": "Joe Biden",
-            "Party": "Democrat",
-            "TermStart": "01/20/2021",
-            "TermEnd": "01/20/2025",
-            "Image": "/Images/46JoeBiden.jpg"
-         },
-         {
-            "ID": 2,
-            "Name": "Donald Trump",
-            "Party": "Republican",
-            "TermStart": "01/20/2021",
-            "TermEnd": "01/20/2025",
-            "Image": "/Images/45DonaldTrump.jpg"
-         },
-         {
-            "ID": 3,
-            "Name": "Jo Jorgensen",
-            "Party": "Libertarian",
-            "TermStart": "",
-            "TermEnd": "",
-            "Image": "Jo Jorgensen"
-         },
-         {
-            "ID": 4,
-            "Name": "Howie Hawkins",
-            "Party": "Green",
-            "TermStart": "",
-            "TermEnd": "",
-            "Image": "Howie Hawkins"
-         }
-      ],
-      "States": [
-         { "S": "AL", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "AK", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "AZ", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "AR", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "CA", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "CO", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "CT", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "DE", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "DC", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "FL", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "GA", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "HI", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "ID", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "IL", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "IN", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "IA", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "KS", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "KY", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "LA", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "ME", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "MD", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "MA", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "MI", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "MN", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "MS", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "MO", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "MT", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "NE", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "NV", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "NH", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "NJ", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "NM", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "NY", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "NC", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "ND", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "OH", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "OK", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "OR", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "PA", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "RI", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "SC", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "SD", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "TN", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "TX", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "UT", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "VT", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "VA", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "WA", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "WV", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "WI", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] },
-         { "S": "WY", "R": [ { "ID": 1, "V": 0, "E": 0 }, { "ID": 2, "V": 0, "E": 0 }, { "ID": 3, "V": 0, "E": 0 }, { "ID": 4, "V": 0, "E": 0 } ] }  
-	  ]
-   },
-   {
       "Year": 2016,
       "HasVotes": "true",
       "Candidates": [
@@ -216,6 +125,30 @@
             "TermStart": "",
             "TermEnd": "",
             "Image": "/Images/44MittRomney.jpg"
+         },
+         {
+            "ID": 3,
+            "Name": "Gary Johnson",
+            "Party": "Libertarian",
+            "TermStart": "",
+            "TermEnd": "",
+            "Image": "Gary Johnson"
+         },
+         {
+            "ID": 4,
+            "Name": "Jill Stein",
+            "Party": "Green",
+            "TermStart": "",
+            "TermEnd": "",
+            "Image": "Jill Stein"
+         },
+         {
+            "ID": 5,
+            "Name": "Goode Clymer",
+            "Party": "Others",
+            "TermStart": "",
+            "TermEnd": "",
+            "Image": "Evan McMullin"
          }
       ],
       "States": [
@@ -428,7 +361,7 @@
       "Candidates": [
          {
             "ID": 1,
-            "Name": "Albert Gore Jr.",
+            "Name": "Al Gore",
             "Party": "Democrat",
             "TermStart": "",
             "TermEnd": "",
@@ -511,7 +444,7 @@
       "Candidates": [
          {
             "ID": 1,
-            "Name": "William Clinton",
+            "Name": "Bill Clinton",
             "Party": "Democrat",
             "TermStart": "01/20/1993",
             "TermEnd": "01/20/2001",
@@ -527,7 +460,7 @@
          },
          {
             "ID": 3,
-            "Name": "H. Ross Perot",
+            "Name": "Ross Perot",
             "Party": "Reform",
             "TermStart": "",
             "TermEnd": "",
@@ -594,7 +527,7 @@
       "Candidates": [
          {
             "ID": 1,
-            "Name": "William Clinton",
+            "Name": "Bill Clinton",
             "Party": "Democrat",
             "TermStart": "01/20/1993",
             "TermEnd": "01/20/2001",
@@ -602,7 +535,7 @@
          },
          {
             "ID": 2,
-            "Name": "George H. W. Bush",
+            "Name": "George H. Bush",
             "Party": "Republican",
             "TermStart": "",
             "TermEnd": "",
@@ -610,7 +543,7 @@
          },
          {
             "ID": 3,
-            "Name": "H. Ross Perot",
+            "Name": "Ross H. Perot",
             "Party": "Independent",
             "TermStart": "",
             "TermEnd": "",
@@ -677,7 +610,7 @@
       "Candidates": [
          {
             "ID": 1,
-            "Name": "George H. W. Bush",
+            "Name": "George H. Bush",
             "Party": "Republican",
             "TermStart": "01/20/1989",
             "TermEnd": "01/20/1993",
@@ -1077,7 +1010,7 @@
          {
             "ID": 3,
             "Name": "George Wallace",
-            "Party": "AmericanInd",
+            "Party": "Independent",
             "TermStart": "",
             "TermEnd": "",
             "Image": ""
@@ -1459,7 +1392,7 @@
          },
          {
             "ID": 3,
-            "Name": "J. Strom Thurmond",
+            "Name": "Strom J. Thurmond",
             "Party": "StatesRights",
             "TermStart": "",
             "TermEnd": "",
@@ -3222,7 +3155,7 @@
          {
             "ID": 3,
             "Name": "John Breckinridge",
-            "Party": "SouthernDemocrat",
+            "Party": "Southern_Democrat",
             "TermStart": "",
             "TermEnd": "",
             "Image": ""
@@ -3230,7 +3163,7 @@
          {
             "ID": 4,
             "Name": "John Bell",
-            "Party": "ConstitutionalUnion",
+            "Party": "Constitutional_Union",
             "TermStart": "",
             "TermEnd": "",
             "Image": ""
@@ -3313,7 +3246,7 @@
          {
             "ID": 3,
             "Name": "Millard Fillmore",
-            "Party": "WhigAmerican",
+            "Party": "Whig",
             "TermStart": "",
             "TermEnd": "",
             "Image": ""
@@ -3969,7 +3902,7 @@
          {
             "ID": 1,
             "Name": "Andrew Jackson",
-            "Party": "DemocraticRepublican_1",
+            "Party": "Democratic_Republican_1",
             "TermStart": "",
             "TermEnd": "",
             "Image": ""
@@ -3977,7 +3910,7 @@
          {
             "ID": 2,
             "Name": "John Quincy Adams",
-            "Party": "DemocraticRepublican_2",
+            "Party": "Democratic_Republican_2",
             "TermStart": "03/04/1825",
             "TermEnd": "03/04/1829",
             "Image": "/Images/6JohnQuincyAdams.jpg"
@@ -3985,7 +3918,7 @@
          {
             "ID": 3,
             "Name": "Henry Clay",
-            "Party": "DemocraticRepublican_3",
+            "Party": "Democratic_Republican_3",
             "TermStart": "",
             "TermEnd": "",
             "Image": ""
@@ -3993,7 +3926,7 @@
          {
             "ID": 4,
             "Name": "William Crawford",
-            "Party": "DemocraticRepublican_4",
+            "Party": "Democratic_Republican_4",
             "TermStart": "",
             "TermEnd": "",
             "Image": ""
@@ -4060,7 +3993,7 @@
          {
             "ID": 1,
             "Name": "James Monroe",
-            "Party": "DemocraticRepublican_1",
+            "Party": "Democratic_Republican_1",
             "TermStart": "03/04/1817",
             "TermEnd": "03/04/1825",
             "Image": "/Images/5JamesMonroe.jpg"
@@ -4135,7 +4068,7 @@
          {
             "ID": 1,
             "Name": "James Monroe",
-            "Party": "DemocraticRepublican_1",
+            "Party": "Democratic_Republican_1",
             "TermStart": "03/04/1817",
             "TermEnd": "03/04/1825",
             "Image": "/Images/5JamesMonroe.jpg"
@@ -4210,7 +4143,7 @@
          {
             "ID": 1,
             "Name": "James Madison",
-            "Party": "DemocraticRepublican_1",
+            "Party": "Democratic_Republican_1",
             "TermStart": "03/04/1809",
             "TermEnd": "03/04/1817",
             "Image": "/Images/4JamesMadison.jpg"
@@ -4285,14 +4218,14 @@
          {
             "ID": 1,
             "Name": "James Madison",
-            "Party": "DemocraticRepublican_1",
+            "Party": "Democratic_Republican_1",
             "TermStart": "03/04/1809",
             "TermEnd": "03/04/1817",
             "Image": "/Images/4JamesMadison.jpg"
          },
          {
             "ID": 2,
-            "Name": "Charles Cotesworth Pinckney",
+            "Name": "Charles C. Pinckney",
             "Party": "Federalist_1",
             "TermStart": "",
             "TermEnd": "",
@@ -4301,7 +4234,7 @@
          {
             "ID": 3,
             "Name": "George Clinton",
-            "Party": "DemocraticRepublican_2",
+            "Party": "Democratic_Republican_2",
             "TermStart": "",
             "TermEnd": "",
             "Image": ""
@@ -4368,7 +4301,7 @@
          {
             "ID": 1,
             "Name": "Thomas Jefferson",
-            "Party": "DemocraticRepublican_1",
+            "Party": "Democratic_Republican_1",
             "TermStart": "03/04/1801",
             "TermEnd": "03/04/1809",
             "Image": "/Images/3ThomasJefferson.jpg"
@@ -4443,7 +4376,7 @@
          {
             "ID": 1,
             "Name": "Thomas Jefferson",
-            "Party": "DemocraticRepublican_1",
+            "Party": "Democratic_Republican_1",
             "TermStart": "03/04/1801",
             "TermEnd": "03/04/1809",
             "Image": "/Images/3ThomasJefferson.jpg"
@@ -4518,7 +4451,7 @@
          {
             "ID": 1,
             "Name": "Thomas Jefferson",
-            "Party": "DemocraticRepublican_1",
+            "Party": "Democratic_Republican_1",
             "TermStart": "",
             "TermEnd": "",
             "Image": ""

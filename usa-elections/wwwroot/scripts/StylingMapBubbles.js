@@ -1,6 +1,5 @@
 ﻿//console.log("MapStylingBubbles loaded")
 
-
 function renderCircle(ctx, x, y, r, party) {
     var style = PartyStyles[party];
     if (style) {
@@ -55,7 +54,7 @@ function onTemplateBubble(o, e) {
             } else {
 
                 var data = renderInfo.data;
-                var name = data.item.StateSymbol.toString();
+                var code = data.item.StateSymbol.toString();
 
                 //ctx.globalAlpha = 0.4;
                 //ctx.strokeStyle = "red";
@@ -75,7 +74,10 @@ function onTemplateBubble(o, e) {
                 var ElectionMode = data.item.ElectionMode;
                 var winnerParty = data.item.WinnerParty;
                 var looserParty = data.item.LooserParty;
-
+                var heldElection = data.item.StateHeldElections;
+                if (!heldElection) {
+                    winnerParty = "NoStatehood";
+                }
                 //renderCircle(ctx, cx, cy, 16, winnerParty);
                 renderCircle(ctx, cx, cy, markerHalf, winnerParty);
 
@@ -87,15 +89,15 @@ function onTemplateBubble(o, e) {
                 ctx.textAlign = "center";
 
                 ctx.fillStyle = "white";
-                ctx.fillText(name, cx, cy - lineSize);
+                ctx.fillText(code, cx, cy - lineSize);
 
                 var winnerValue = 0;
                 var looserValue = 0;
-                var heldElection = data.item.StateHeldElections;
                                
                 if (heldElection) {
                     if (ElectionMode == "Popular") {
-                        winnerValue = abbreviate(data.item.WinnerVotes);
+                        //winnerValue = abbreviate(data.item.WinnerVotes);
+                        winnerValue = data.item.WinnerPercentage.toFixed(0) + "%";
                         looserValue = 0; //abbreviate(data.item.LooserVotes);
                     } else if (ElectionMode == "Percent") {
                         winnerValue = data.item.WinnerPercentage.toFixed(0) + "%";
@@ -104,9 +106,9 @@ function onTemplateBubble(o, e) {
                         winnerValue = data.item.WinnerElectors;
                         looserValue = data.item.LooserElectors;
                     }
+
                     if (winnerValue > 0 || winnerValue != "0.0") {
                         ctx.fillText(winnerValue, cx, cy + lineSize);
-
                         //ctx.strokeStyle = "#24C315"; 
                         //ctx.strokeRect(mx, my, markerSize, markerSize);
                     }
@@ -120,22 +122,19 @@ function onTemplateBubble(o, e) {
                             var sx = cx + markerHalf - smallSize;
                             var sy = cy + markerHalf - smallSize;
                             renderCircle(ctx, sx, sy, smallSize, looserParty);
-                            //renderCircle(ctx, cx + qw + 2, cy + 6, 6, looserParty);
-
+                            
                             //ctx.font = "normal 10px Verdana";
                             ctx.textBaseline = "middle";
                             ctx.textAlign = "center";
                             ctx.fillStyle = "white";
-                            ctx.fillText(looserValue, sx, sy);
-                            //ctx.fillText(runnerUpElectors, cx + qw + 2, cy + 6);
+                            ctx.fillText(looserValue, sx, sy); 
                         }
                     }
                 }  
                 
-                if (name == "TX") {
-                    console.log(name + " " + ElectionMode + " " + winnerValue + " " + looserValue );
-                }
-
+                //if (code == "TX") {
+                //    console.log("ElectionBubbles Marker  " + code + " " + ElectionMode + " " + winnerValue + " " + looserValue );
+                //}
                 
             }
         }

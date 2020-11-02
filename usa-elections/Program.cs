@@ -17,7 +17,7 @@ namespace Infragistics.Samples
     {
         public static async Task Main(string[] args)
         {
-            Console.WriteLine("App v1.0.2");
+            Logger.WriteLine("App v1.0.2");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
@@ -30,7 +30,7 @@ namespace Infragistics.Samples
             // registering Infragistics Blazor components
             builder.Services.AddScoped(typeof(IIgniteUIBlazor), typeof(IgniteUIBlazor));
 
-            //Console.WriteLine("App RunAsync()");
+            //Logger.WriteLine("App RunAsync()");
             await builder.Build().RunAsync();
         }
     }

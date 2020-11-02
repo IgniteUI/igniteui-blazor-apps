@@ -8,11 +8,20 @@
 
     @if (Election != null)
     {
-        @for (int i = Election.StackedCandidates.Count - 1; i >= 0; i--)
+        for (int i = Election.StackedCandidates.Count - 1; i >= 0; i--)
         {
             var candidate = Election.StackedCandidates[i];
-            <div class="igLegend-badge" style="background: @candidate.PartyColor"> </div>
-            <div class="igLegend-label"> @candidate.Party (@candidate.TotalElectors)</div>
+            if (candidate.TotalElectors > 0 && DisplayMode == ElectionDisplayMode.Electoral)
+            {
+                <div class="igLegend-badge" style="background: @candidate.PartyColor"> </div>
+                <div class="igLegend-label"> @candidate.PartyDisplay (@candidate.TotalElectors)</div>
+            }
+            else if (candidate.TotalVotesPercent > 0 && DisplayMode != ElectionDisplayMode.Electoral)
+            {
+                var value = candidate.TotalVotesPercent + "%";
+                <div class="igLegend-badge" style="background: @candidate.PartyColor"> </div>
+                <div class="igLegend-label"> @candidate.PartyDisplay (@value)</div>
+            }
             @*<div class="igLegend-label"> @candidate.NameAndParty</div>*@
         }
         @*@foreach (var candidate in @Election.StackedCandidates)
@@ -33,22 +42,25 @@
         set { election = value; this.OnChanged(); }
     }
 
+    [Parameter]
+    public ElectionDisplayMode DisplayMode { get; set; }
+
     public int CurrentYear = 0;
 
     private void OnChanged()
     {
-        //Console.WriteLine("ElectionLegend updating... ");
+        //Logger.WriteLine("ElectionLegend updating... ");
 
         //if (this.Election != null)
         //{
-        //    Console.WriteLine("ElectionLegend OnChanged... " + this.Election.Year);
+        //    Logger.WriteLine("ElectionLegend OnChanged... " + this.Election.Year);
         //    //this.BarChart.Legend = Legend;
         //}
         //StateHasChanged();
 
         if (this.Election != null && this.Election.Year != this.CurrentYear)
         {
-            Console.WriteLine("ElectionLegend OnChanged... " + this.Election.Year);
+            Logger.WriteLine("ElectionLegend OnChanged... " + this.Election.Year);
             this.CurrentYear = this.Election.Year;
             StateHasChanged();
         }
@@ -58,13 +70,13 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Console.WriteLine("ElectionLegend OnInitialized");
+        Logger.WriteLine("ElectionLegend OnInitialized");
     }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        //Console.WriteLine("ElectionLegend OnInitializedAsync");
+        //Logger.WriteLine("ElectionLegend OnInitializedAsync");
 
         await Task.Delay(1);
     }
@@ -73,7 +85,7 @@
     {
         if (firstRender)
         {
-            //Console.WriteLine("ElectionLegend Rendering...");
+            //Logger.WriteLine("ElectionLegend Rendering...");
             OnChanged();
         }
         return base.OnAfterRenderAsync(firstRender);

@@ -8,6 +8,14 @@ using System.Threading.Tasks;
 
 namespace Infragistics.Samples
 {
+    public static class Logger  
+    {
+        public static void WriteLine(string msg)
+        {
+            // Console.WriteLine(msg);
+        }
+    }
+
     public class ObservableObject
     {
         public event Action OnChange;
@@ -37,47 +45,56 @@ namespace Infragistics.Samples
         public List<Election> Elections { get; set; }
 
         public static Dictionary<string, string> PartyColors { get; set; }
-
+          
         static ElectionService()
-        {
+        {           
             PartyColors = new Dictionary<string, string>();
             //PartyColors.Add("Democrat",             "#008DFF");
             //PartyColors.Add("Democrat-Leaning",     "#4BADFC");
             //PartyColors.Add("Republican",           "#FF0808");
             //PartyColors.Add("Republican-Leaning",   "#F47575");
-            PartyColors.Add("Democrat",             "#5885EC");
-            PartyColors.Add("Democrat-Leaning",     "#4BADFC");
-            PartyColors.Add("Republican",           "#DE5E58");
+            PartyColors.Add("Tossup",               "#959494");
+            PartyColors.Add("Democrat",             "#465F98");
+            PartyColors.Add("Democrat-Leaning",     "#5CAADE");
+            PartyColors.Add("Republican",           "#CD433C");
             PartyColors.Add("Republican-Leaning",   "#F47575");
-            PartyColors.Add("NationalRepublican",     "#B058EC"); // 1832
-            PartyColors.Add("DemocraticRepublican_1", "#B058EC"); //1824
-            PartyColors.Add("DemocraticRepublican_2", "#B058EC"); // 1824
-            PartyColors.Add("DemocraticRepublican_3", "#B058EC"); // 1824
-            PartyColors.Add("DemocraticRepublican_4", "#B058EC"); // 1824
-           
-            PartyColors.Add("Libertarian",          "#F7AC22");
-            PartyColors.Add("Green",               "#0CDE23");
-            PartyColors.Add("Independent",          "#B058EC");
-            PartyColors.Add("Other",                "#C6C6C6");
-            //TODO set colors
-            PartyColors.Add("Reform", "#8E5EE9");
-            PartyColors.Add("AmericanInd", "#8E5EE9"); // 1968
-            PartyColors.Add("StatesRights", "#8E5EE9"); // 1948
-            PartyColors.Add("Progressive", "#8E5EE9"); // 1948
-            PartyColors.Add("Socialist", "#8E5EE9"); // 1932
-            PartyColors.Add("Populist", "#8E5EE9"); // 1892
-            PartyColors.Add("Prohibition", "#8E5EE9"); // 1892
-            PartyColors.Add("Greenback", "#0CDE23"); // 1880
-            PartyColors.Add("SouthernDemocrat", "#8E5EE9"); // 1860
-            PartyColors.Add("ConstitutionalUnion", "#8E5EE9"); // 1860
-            PartyColors.Add("WhigAmerican", "#8E5EE9"); // 1856
-            PartyColors.Add("Whig", "#8E5EE9"); // 1852
-            PartyColors.Add("FreeSoil", "#8E5EE9"); // 1852
-            PartyColors.Add("Liberty", "#8E5EE9"); // 1844
-            PartyColors.Add("AntiMasonic", "#8E5EE9"); // 1832
+            //PartyColors.Add("Democrat",             "#5885EC");
+            //PartyColors.Add("Democrat-Leaning",     "#4BADFC");
+            //PartyColors.Add("Republican",           "#DE5E58");
+            //PartyColors.Add("Republican-Leaning",   "#F47575");
+            PartyColors.Add("NationalRepublican",      "#CD433C"); // 1832
+            PartyColors.Add("Democratic_Republican_1", "#7A3E98"); // 1824
+            PartyColors.Add("Democratic_Republican_2", "#465F98"); // 1824
+            PartyColors.Add("Democratic_Republican_3", "#CD433C"); // 1824
+            PartyColors.Add("Democratic_Republican_4", "#FD9B50"); // 1824
 
-            PartyColors.Add("Federalist_1", "#8E5EE9"); // 1804
-            PartyColors.Add("Federalist_2", "#8E5EE9"); // 1804
+            // #CD433C #99222A #74254C #E7768F #C453C4
+            // #465F98 #5CAADE #244C7D #8ACBE3 #5559AA
+            // #FD9B50 #EAC451 #7A3E98 #69AA67 
+
+            PartyColors.Add("Libertarian",          "#FD9B50");
+            PartyColors.Add("Green",               "#69AA67");
+            PartyColors.Add("Independent",          "#7A3E98");
+            PartyColors.Add("Other",                "#B4B4B4");
+           
+            PartyColors.Add("Reform", "#B4B4B4");
+            PartyColors.Add("StatesRights", "#FD9B50"); // 1948
+            PartyColors.Add("Progressive", "#69AA67"); // 1948
+            PartyColors.Add("Socialist", "#99222A"); // 1932
+            PartyColors.Add("Populist", "#FD9B50"); // 1892
+            PartyColors.Add("Prohibition", "#69AA67"); // 1892
+            PartyColors.Add("Greenback", "#69AA67"); // 1880
+            PartyColors.Add("Southern_Democrat", "#465F98"); // 1860
+            PartyColors.Add("Constitutional_Union", "#FD9B50"); // 1860
+            PartyColors.Add("Whig", "#7A3E98"); // 1852
+            PartyColors.Add("FreeSoil", "#FD9B50"); // 1852
+            PartyColors.Add("Liberty", "#FD9B50"); // 1844
+            PartyColors.Add("Anti_Masonic", "#FD9B50"); // 1832
+            PartyColors.Add("Federalist_1", "#69AA67"); // 1804
+            PartyColors.Add("Federalist_2", "#7A3E98"); // 1804
+
+            //PartyColors.Add("AmericanInd", "#B4B4B4"); // 1968
+            //PartyColors.Add("WhigAmerican", "#7A3E98"); // 1856
         }
 
         private bool _IsLoading = true;
@@ -99,94 +116,108 @@ namespace Infragistics.Samples
         
         public async Task LoadStateLocations()
         {
-            StateLocations = new Dictionary<string, StateLocation>();
-
-            Console.WriteLine("Locations loading... ");
-            var locationCSV = await Http.GetStringAsync("config/state-locations.csv");
-            //Console.WriteLine(locationCSV);
-            //Console.WriteLine("Locations loading... done ");
-
-            Console.WriteLine("Locations parsing... ");
-            var locationRows = locationCSV.Split('\n');
-            var offsetRows = Math.Round(locationRows.Length / 2.0);
-            for (int r = 1; r < locationRows.Length; r++)
+            if (StateLocations == null)
             {
-                var locationColumns = locationRows[r].Split(',');
-                var offsetColumns = Math.Round(locationColumns.Length / 2.0);
-                //if (r == 1)
-                //    Console.WriteLine("Locations columns=" + locationColumns.Length);
+                StateLocations = new Dictionary<string, StateLocation>();
 
-                var loc = r + ", ";
-                for (int c = 1; c < locationColumns.Length; c++)
+                Logger.WriteLine("Locations loading... ");
+
+                var locationCSV = await Http.GetStringAsync("config/state-locations.csv");
+                //Logger.WriteLine(locationCSV);
+                //Logger.WriteLine("Locations loading... done ");
+
+                Logger.WriteLine("Locations parsing... ");
+                var locationRows = locationCSV.Split('\n');
+                var offsetRows = Math.Round(locationRows.Length / 2.0);
+                for (int r = 1; r < locationRows.Length; r++)
                 {
-                    var id = locationColumns[c].Trim();
-                    if (id != "")
+                    var locationColumns = locationRows[r].Split(',');
+                    var offsetColumns = Math.Round(locationColumns.Length / 2.0);
+                    //if (r == 1)
+                    //    Logger.WriteLine("Locations columns=" + locationColumns.Length);
+
+                    var loc = r + ", ";
+                    for (int c = 1; c < locationColumns.Length; c++)
                     {
-                        //Console.WriteLine("Locations r=" + r + " y=" + y + " id=" + id);
-                        if (!StateLocations.ContainsKey(id))
+                        var id = locationColumns[c].Trim();
+                        if (id != "")
                         {
-                            var x = (c - offsetColumns);
-                            var y = (r - offsetRows) * -1;
-                            StateLocations.Add(id, new StateLocation(id, x, y));
-                            loc += "" + r + c + ", ";
+                            //Logger.WriteLine("Locations r=" + r + " y=" + y + " id=" + id);
+                            if (!StateLocations.ContainsKey(id))
+                            {
+                                var x = (c - offsetColumns);
+                                var y = (r - offsetRows) * -1;
+                                StateLocations.Add(id, new StateLocation(id, x, y));
+                                loc += "" + r + c + ", ";
+                            }
+                            else
+                                throw new Exception("Duplicated ID in state-locations.csv");
                         }
                         else
-                            throw new Exception("Duplicated ID in state-locations.csv");
+                        {
+                            loc += "  , ";
+                        }
+                        //var locationColumns = locationRows[r].Split(',');
                     }
-                    else
-                    {
-                        loc += "  , ";
-                    }
-                    //var locationColumns = locationRows[r].Split(',');
+                    //Logger.WriteLine(loc);
                 }
-                //Console.WriteLine(loc);
-
             }
 
-            //Console.WriteLine("Locations parsing... done ");
+            //Logger.WriteLine("Locations parsing... done ");
             await Task.Delay(1);
         }
 
         public async Task LoadElections()
         {
-            Console.WriteLine("Elections loading... ");
-            var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2016.json");
-            //var elections = await Http.GetFromJsonAsync<Elections[]>("/data/elections-2008-2012.json");
-            //var elections = await Http.GetFromJsonAsync<Elections[]>("/data/elections.json");
-            //Console.WriteLine("Elections loading... done");
+            this.IsLoading = true;
+
+            Logger.WriteLine("Elections loading... ");
+            //var elections = await Http.GetFromJsonAsync<Elections[]>("data/elections-2008-2012.json");
+            //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2012.json");
+            //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2016.json");
+            var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2012-2016.json");
+            //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections.json");
 
             await Parse(elections);
         }
+
         public async Task Parse(List<Election> elections)
         {
             Console.WriteLine("Elections parsing... " + elections.Count);
-            this.IsLoading = true;
              
             foreach (var election in elections)
             {
-                //Console.WriteLine("Elections parsing... " + election.Year + " Elections");
-                var electionStats = "Elections " + election.Year + ": ";
-                  
+                var electionID = "Elections " + election.Year + " ";
+                var electionStats = electionID;
+                //Console.WriteLine(electionID + "parsing");
+
                 var candidates = election.Candidates;
                 if (candidates != null)
                 {
                     electionStats += candidates.Count + " Candidates, ";
-                    //Console.WriteLine(electionName + candidates.Length + " Candidates");
+                    //Logger.WriteLine(electionName + candidates.Length + " Candidates");
                     for (int i = 0; i < candidates.Count; i++)                     
                     {
                         var names = candidates[i].Name.Split(" ");
                         candidates[i].ID = i;
-                        candidates[i].NameAndParty = names[1] + " (" + candidates[i].Party + ")";
-                        candidates[i].FirstName = names[0];
-                        candidates[i].LastName = names[1];
+                        candidates[i].LastName = names[names.Length - 1];
+                        candidates[i].FirstName = candidates[i].Name.Replace(" " + candidates[i].LastName, "");
+                        candidates[i].NameAndParty = candidates[i].LastName + " (" + candidates[i].Party + ")";
                     }
-                } 
+                }
 
+                //Console.WriteLine(electionID + "states=" + election.States.Length);
                 var states = election.States;
+
+                if (states[0].R.Count != candidates.Count)
+                {
+                    throw new Exception(electionID + "has states[0].R.Count != candidates.Count");
+                }
+
                 if (states != null)
                 {
                     electionStats += states.Length + " States, ";
-                    //Console.WriteLine(electionName + states.Length + " States");
+                    //Logger.WriteLine(electionName + states.Length + " States");
                     foreach (var state in states)
                     {
                         var otherVotes = 0;
@@ -194,6 +225,8 @@ namespace Infragistics.Samples
 
                         var statesVotes = 0;
                         var statesElectors = 0;
+
+                        var stateLog = electionID + " " + state.S;
 
                         foreach (var candidate in state.R)
                         {
@@ -204,9 +237,13 @@ namespace Infragistics.Samples
                             statesElectors += candidate.E;
                         }
 
+                        //Console.WriteLine(stateLog + " stats: E=" + statesElectors + " V=" + statesVotes + " C=" + state.R.Count);
+
                         for (int i = 0; i < state.R.Count; i++)
                         {
                             var candidateID = state.R[i].ID - 1;
+
+                            //Console.WriteLine(stateLog + " candidate: " + candidateID );
 
                             state.R[i].State = state.S;
                             state.R[i].Candidate = candidates[candidateID];
@@ -231,6 +268,8 @@ namespace Infragistics.Samples
                             }
                         }
 
+                        //Console.WriteLine(stateLog + " candidates: " + election.ResultsByCandidates.Count);
+
                         if (state.R.Count == candidates.Count)
                         {
                             for (int i = 0; i < state.R.Count; i++)
@@ -238,8 +277,12 @@ namespace Infragistics.Samples
                                 state.R[i].Candidate = candidates[i];
                             }
                         }
+                        //else
+                        //{
+                        //    Console.WriteLine(electionID + " candidates != results: " + candidates.Count + " " + state.R.Count);
+                        //}
 
-                        ResultsByState results = new ResultsByState(state.R);
+                        var results = new ResultsByState(state.R);
                         
                         if (results != null)
                         {
@@ -248,12 +291,16 @@ namespace Infragistics.Samples
                             results.OtherElectoralVotes = otherElectors;
                             results.OtherPercentVotes = results.OtherPopularVotes * 100.0 / statesVotes;
                             
-                            //Console.WriteLine("Elections locating " + results.StateSymbol);
+                            //Logger.WriteLine("Elections locating " + results.StateSymbol);
                             if (StateLocations.ContainsKey(results.StateSymbol))
                             {
                                 var location = StateLocations[results.StateSymbol];
                                 results.StateLocationX = location.X;
                                 results.StateLocationY = location.Y;
+                            }
+                            else
+                            {
+                                throw new Exception(electionID + "has unknown StateSymbol=" + results.StateSymbol);
                             }
 
                             election.ResultsByStates.Add(results);
@@ -266,12 +313,11 @@ namespace Infragistics.Samples
                         //}
                     }
 
-                    electionStats += election.TotalElectors + " Electors, ";
-                    electionStats += election.TotalVotes + " Votes, ";
-                    //Console.WriteLine(electionName + election.Summary.PopularVotes + " Popular Votes");
-                    //Console.WriteLine(electionName + election.Summary.ElectoralVotes + " Electoral Votes");
+                    //Console.WriteLine(electionID + " ResultsByStates " + election.ResultsByStates.Count);
+
+                    //Logger.WriteLine(electionName + election.Summary.PopularVotes + " Popular Votes");
+                    //Logger.WriteLine(electionName + election.Summary.ElectoralVotes + " Electoral Votes");
                     
-                    Console.WriteLine(electionStats);
                     //electionStats += "\n";
                     for (int i = 0; i < candidates.Count; i++)
                     {
@@ -284,7 +330,7 @@ namespace Infragistics.Samples
                         candidates[i].TotalElectorsPercent = candidates[i].TotalElectors * 100.0 / election.TotalElectors;
                         candidates[i].TotalElectorsPercent = Math.Round(candidates[i].TotalElectorsPercent * 10) / 10;
 
-                        //Console.WriteLine(candidates[i].TotalVotesPercent + " " + candidates[i].Name + " " + candidates[i].TotalVotes);
+                        //Logger.WriteLine(candidates[i].TotalVotesPercent + " " + candidates[i].Name + " " + candidates[i].TotalVotes);
                     }
 
                     foreach (var item in election.ResultsByCandidates)
@@ -293,35 +339,45 @@ namespace Infragistics.Samples
                         item.ElectorsTotalPercentage = item.E * 100.0 / election.TotalElectors;
                     }
 
+                    //Console.WriteLine(electionID + " Sort Candidates");
+
                     election.SortBy("V", IgniteUI.Blazor.Controls.ListSortDirection.Descending);
+
+                    //Console.WriteLine(electionID + " Sort ResultsByCandidates");
 
                     election.ResultsByCandidates = (from item in election.ResultsByCandidates orderby 
                                                     item.SortIndex ascending, item.CandidateName descending select item).ToList();
 
-                
+                    
                 }
 
-                Candidate electionWinner = null;
-                Candidate electionLooser = null;
-
-
+                //Console.WriteLine(electionID + "populating");
                 election.Populate();
 
+                electionStats += election.TotalElectors + " Electors, ";
+                electionStats += election.TotalVotes + " Votes, ";
+                //Console.WriteLine(electionStats);
             }
 
+            for (int i = 0; i < elections.Count; i++)
+            {
+                elections[i].Index = i;
+            }
+
+            Console.WriteLine("Elections parsing... done");
             this.Elections = elections;
 
-            //Console.WriteLine("Elections parsing... done");
             OnLoaded();
             await Task.Delay(1);
         }
 
-        public event EventHandler<EventArgs> SamplesLoaded;
+        public event EventHandler<EventArgs> Loaded;
+
         public void OnLoaded()
         {
             this.IsLoading = false;
 
-            this.SamplesLoaded?.Invoke(this, EventArgs.Empty);
+            this.Loaded?.Invoke(this, EventArgs.Empty);
         }
     }
 }

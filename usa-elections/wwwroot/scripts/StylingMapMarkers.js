@@ -7,8 +7,8 @@
 //    //NoStatehood: { outline: "gray", fill: "white" },
 //};
 
-function onTemplateMarker(o, e) {
-    //console.log("Map onTemplateMarker " + e);
+function onShapeMarker(o, e) {
+    //console.log("Map onShapeMarker " + e);
 
     return {
         measure: function (measureInfo) {
@@ -25,7 +25,7 @@ function onTemplateMarker(o, e) {
         },
 
         render: function (renderInfo) {
-            //console.log("Map onTemplateMarker render ");
+            //console.log("Map onShapeMarker render ");
             var ctx = renderInfo.context;
             if (renderInfo.isHitTestRender) {
                 ctx.fillStyle = renderInfo.data.actualItemBrush.fill;
@@ -38,97 +38,99 @@ function onTemplateMarker(o, e) {
             var halfWidth  = renderInfo.availableWidth / 2.0;
             var halfHeight = renderInfo.availableHeight / 2.0;
 
-            //console.log("Map onTemplateMarker name=" + name);
+            //console.log("Map onShapeMarker name=" + name);
 
             var cx = renderInfo.xPosition;
             var cy = renderInfo.yPosition;
 
             var x = renderInfo.xPosition - halfWidth;
             var y = renderInfo.yPosition - (halfHeight);
-
-            //if (y < 0) {
-            //    y += (halfHeight * 4.0);
-            //}
-
+            
             if (renderInfo.isHitTestRender) {
                 ctx.fillRect(x, y, renderInfo.availableWidth, renderInfo.availableHeight);
             } else {
-                //console.log("Map onTemplateMarker " + data.item.StateWithBox);
+                //console.log("Map onShapeMarker " + data.item.StateWithBox);
                  
                 var winnerParty = data.item.WinnerParty;
                 var winnerStyle = PartyStyles[winnerParty];
-                //if (style) {
-                //    ctx.strokeStyle = style.outline;
-                //    ctx.fillStyle = style.fill;
-                //} else {
-                //    ctx.strokeStyle = "black";
-                //    ctx.fillStyle = "#929292";
-                //}
+               
 
                 //if (data.item.StateWithBox == "true") {
                 //    ctx.fillStyle = "#30A510";
                 //    ctx.fillRect(x - 3, y - 3, renderInfo.availableWidth + 6, renderInfo.availableHeight + 6);
                 //}
+                        
+                if (data.item.StateHasLabelBox) {
+                    ctx.fillStyle   = winnerStyle ? winnerStyle.fill : "orange";
+                    ctx.strokeStyle = winnerStyle ? winnerStyle.fill : "red";
+
+                    //cx = cx + halfHeight + 10;
+                    ctx.fillRect(cx, cy - 2 - halfHeight, 20, 14);
+                    //ctx.fillRect(cx + 10, cy - 2 - halfHeight, 16, 14);
+
+                    ctx.lineWidth = 0.5;
+                    ctx.strokeStyle = "white";
+                    ctx.strokeRect(cx, cy - 2 - halfHeight, 20, 14);
+                    //ctx.strokeRect(cx + 10, cy - 2 - halfHeight, 16, 14);
+
+                    //var winnerElectors = data.item.WinnerElectors;
+                    //if (winnerElectors > 0) {
+                    //    ctx.font = "normal 8px Verdana";
+                    //    ctx.fillStyle = "white";
+                    //    ctx.fillText(winnerElectors, cx + 10 + 8, cy + 2);
+                    //}
+                }  
 
                 ctx.font = "normal 8px Verdana";
-                ctx.fillStyle = "black";
+                ctx.fillStyle = data.item.StateSymbol == "HI" ? "black" : "white";
+                if (data.item.StateSymbol == "AK") {
+                    cy = cy - 3;
+                }
+                else if (data.item.StateSymbol == "TN") {
+                    cy = cy - 2;
+                }
+                else if (data.item.StateSymbol == "ME") {
+                    cy = cy - 4;
+                }
+                else if (data.item.StateSymbol == "PA") {
+                    cy = cy - 4;
+                }
+                else if (data.item.StateSymbol == "KY") {
+                    cy = cy - 4;
+                }
+                else if (data.item.StateSymbol == "WV" ||
+                    data.item.StateSymbol == "SD" ||
+                    data.item.StateSymbol == "ND" ||
+                    data.item.StateSymbol == "NE") {
+                    cy = cy - 4;
+                }
+                else if (data.item.StateSymbol == "FL") {
+                    cy = cy - 2;
+                }
 
                 if (data.item.StateHasLabelBox) {
+                    cx = cx + 10;
                     //ctx.fillStyle = "green";
                     //ctx.textAlign = "right";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
                     ctx.fillText(name, cx, cy + 2);
-                    //console.log("Map onTemplateMarker " + name + " " + cy);
+                    //console.log("Map onShapeMarker " + name + " " + cy);
 
                 } else {
                     ctx.textAlign = "center";
                     ctx.textBaseline = "top";
                     ctx.fillText(name, cx, cy);
-                }
-                //ctx.fillStyle = "#D402D4";
-                //ctx.fillStyle = "white";
-                //ctx.fillStyle = "black";
-                //ctx.textAlign = "center";
-                //ctx.fillText(name, x, y);
-                
-                if (data.item.StateHasLabelBox) {
-                    ctx.fillStyle   = winnerStyle ? winnerStyle.fill : "orange";
-                    ctx.strokeStyle = winnerStyle ? winnerStyle.fill : "red";
-                    //ctx.fillRect(x + 16, y, 16, 16);
-                    //ctx.strokeStyle = "red";
-                    //ctx.strokeRect(cx + 10, cy - 3, 16, renderInfo.availableHeight + 6);
-                    ctx.fillRect(cx + 10, cy - 2 - halfHeight, 16, 14);
-
-                    ctx.lineWidth = 0.5;
-                    ctx.strokeStyle = "black";
-                    ctx.strokeRect(cx + 10, cy - 2 - halfHeight, 16, 14);
-
-                    //ctx.fillStyle = "black";
-                    //ctx.fillRect(cx + 10, cy, 16, 1);
-
-                    var winnerElectors = data.item.WinnerElectors;
-                    if (winnerElectors > 0) {
-                        ctx.font = "normal 8px Verdana";
-                        ctx.fillStyle = "white";
-                        ctx.fillText(winnerElectors, cx + 10 + 8, cy + 2);
-                    }
-                }  
+                } 
             }
         }
     }
 }
 
-//igRegisterScript("onTemplateMarker", onTemplateMarker, false);
-igRegisterScript("onTemplateMarker", onTemplateMarker, true);
+//igRegisterScript("onShapeMarker", onShapeMarker, false);
+igRegisterScript("onShapeMarker", onShapeMarker, true);
 
 
-function onHexImportCompleted(o, e) {
-    console.log("Map onHexImportCompleted " + e);
-
-}
-
-igRegisterScript("onHexImportCompleted", onHexImportCompleted, false);
 
 
 

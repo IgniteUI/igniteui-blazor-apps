@@ -218,7 +218,7 @@
 
     private void OnChanged()
     {
-        //Console.WriteLine("ElectionChart updating... ");
+        //Logger.WriteLine("ElectionChart updating... ");
 
         //if (this.BarChart != null && this.Election != null)
         //{
@@ -227,7 +227,7 @@
 
         if (this.BarChart != null && this.Election != null && this.Election.Year != this.CurrentYear)
         {
-            Console.WriteLine("ElectionChart OnChanged... " + this.Election.Year);
+            Logger.WriteLine("ElectionChart OnChanged... " + this.Election.Year);
             this.CurrentYear = this.Election.Year;
             StateHasChanged();
         }
@@ -237,7 +237,7 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Console.WriteLine("ElectionChart OnInitialized");
+        Logger.WriteLine("ElectionChart OnInitialized");
 
         DataChartCoreModule.Register(IgniteUIBlazor);
         DataChartCategoryModule.Register(IgniteUIBlazor);
@@ -256,7 +256,7 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        //Console.WriteLine("ElectionChart OnInitializedAsync");
+        //Logger.WriteLine("ElectionChart OnInitializedAsync");
 
         await Task.Delay(1);
     }
@@ -265,7 +265,7 @@
     {
         if (firstRender)
         {
-            //Console.WriteLine("ElectionChart Rendering...");
+            //Logger.WriteLine("ElectionChart Rendering...");
             OnChanged();
         }
         return base.OnAfterRenderAsync(firstRender);

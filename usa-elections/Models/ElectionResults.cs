@@ -17,6 +17,7 @@ namespace Infragistics.Samples
     {
         // Election's Year, e.g. 2020
         public int Year { get; set; }
+        public int Index { get; set; }
 
         public string HasVotes { get; set; }
         //public Candidate[] Candidates { get; set; }
@@ -32,6 +33,8 @@ namespace Infragistics.Samples
 
         public Candidate CandidateLeft { get; set; }
         public Candidate CandidateRight { get; set; }
+        public Candidate CandidateOther { get; set; }
+
         public List<Candidate> StackedCandidates { get; set; }
         public List<Candidate> OtherCandidates { get; set; }
         public List<string> CandidateNames { get; set; }
@@ -39,7 +42,7 @@ namespace Infragistics.Samples
         public List<string> PartyColors { get; set; }
         public string PartyColorsInString { get; set; }
 
-        public List<Candidate> WinnerList { get; set; }
+        public List<Candidate> CandidateOverlap { get; set; }
         //public List<ElectionTreeItem> Tree { get; set; }
         public List<ResultsByState> Tree { get; set; }
         
@@ -64,8 +67,7 @@ namespace Infragistics.Samples
 
         public void Populate()
         {
-            if (this.Candidates == null) return;
-            if (this.Candidates.Count < 2)            
+            if (this.Candidates == null || this.Candidates.Count < 2)            
                 throw new Exception("Election has not enough candidates");
 
             var tree = new List<ResultsByState>();
@@ -80,7 +82,21 @@ namespace Infragistics.Samples
             //tree.AddRange(this.ResultsByStates);
             
             foreach (var candidate in this.Candidates)
-            {
+            {               
+                if (ElectionService.PartyColors.ContainsKey(candidate.Party))
+                {
+                    candidate.PartyColor = ElectionService.PartyColors[candidate.Party];
+                }
+                else
+                {
+                    candidate.PartyColor = "LightGray";
+                }
+
+                candidate.PartyDisplay = candidate.Party.Replace("_", " ");
+                candidate.PartyDisplay = candidate.PartyDisplay.Replace("1", "");
+                candidate.PartyDisplay = candidate.PartyDisplay.Replace("1", "");
+                candidate.PartyDisplay = candidate.PartyDisplay.Replace("1", "");
+
                 var treeItem = new ResultsByState();
                 treeItem.Winner = candidate;
                 treeItem.WinnerParty = null;
@@ -91,15 +107,6 @@ namespace Infragistics.Samples
                 treeItem.WinnerVotes = double.NaN;
                 treeItem.WinnerPercentage = double.NaN;
                 tree.Add(treeItem);
-               
-                if (ElectionService.PartyColors.ContainsKey(candidate.Party))
-                {
-                    candidate.PartyColor = ElectionService.PartyColors[candidate.Party];
-                }
-                else
-                {
-                    candidate.PartyColor = "LightGray";
-                }
             }
 
             this.Tree = tree;
@@ -126,34 +133,50 @@ namespace Infragistics.Samples
                 CandidateRight = Looser;
             }
 
+            CandidateOther = new Candidate();
+            CandidateOther.Party = "Other";
+            CandidateOther.PartyDisplay = "Other";
+            CandidateOther.PartyColor = "#B4B4B4"; 
+            CandidateOther.Name = "Other";
+            CandidateOther.LastName = "Other";
+            CandidateOther.FirstName = "";
+
             OtherCandidates = new List<Candidate>();
             foreach (var candidate in this.Candidates)
             {
                 //TODO remove
-                if (candidate.Name == "Gary Johnson")
-                    candidate.TotalElectors = 25;
-                if (candidate.Name == "Jill Stein")
-                    candidate.TotalElectors = 15;
-                if (candidate.Party == "Independent")
-                    candidate.TotalElectors = 5;
+                //if (candidate.Name == "Gary Johnson")
+                //    candidate.TotalElectors = 25;
+                //if (candidate.Name == "Jill Stein")
+                //    candidate.TotalElectors = 15;
+                //if (candidate.Party == "Independent")
+                //    candidate.TotalElectors = 5;
                 
                 if (candidate.Name != this.Winner.Name &&
                     candidate.Name != this.Looser.Name)
                 {
                     OtherCandidates.Add(candidate);
+                    CandidateOther.TotalVotes += candidate.TotalVotes;
+                    CandidateOther.TotalVotesMilions += candidate.TotalVotesMilions;
+                    CandidateOther.TotalElectors += candidate.TotalElectors;
                 }
             }
+            CandidateOther.TotalVotesPercent = CandidateOther.TotalVotes * 100.0 / this.TotalVotes;
+            CandidateOther.TotalVotesPercent = Math.Round(CandidateOther.TotalVotesPercent * 10) / 10;
+            CandidateOther.TotalVotesMilions = Math.Round(CandidateOther.TotalVotesMilions * 10) / 10;
+            CandidateOther.TotalElectorsPercent = CandidateOther.TotalElectors * 100.0 / this.TotalElectors;
+            CandidateOther.TotalElectorsPercent = Math.Round(CandidateOther.TotalElectorsPercent * 10) / 10;
 
-            WinnerList = new List<Candidate>() { Winner };
+            CandidateOverlap = new List<Candidate>() { Winner };
 
             StackedCandidates = new List<Candidate>();
             StackedCandidates.Add(this.CandidateLeft);
-            //StackedCandidates.Add(this.Winner);
-            foreach (var candidate in this.OtherCandidates)
-            {
-                StackedCandidates.Add(candidate);
-            }
-            //StackedCandidates.Add(this.Looser);
+            StackedCandidates.Add(this.CandidateOther);
+
+            //foreach (var candidate in this.OtherCandidates)
+            //{ 
+            //    StackedCandidates.Add(candidate); 
+            //} 
             StackedCandidates.Add(this.CandidateRight);
 
             for (int i = 0; i < this.StackedCandidates.Count; i++)
@@ -186,15 +209,6 @@ namespace Infragistics.Samples
                 PartyColors.Add(candidate.PartyColor);
             }
             PartyColorsInString = string.Join(", ", this.PartyColors);
-
-            //foreach (var candidate in this.StackedCandidates)
-            //{
-            //    candidate.Stack = new Candidate(); // candidate.Clone();
-            //    candidate.Stack.TotalElectors += 
-            //    stackedElectors += candidate.TotalElectors;
-            //    StackedCandidates.Add(candidate.Clone());
-            //}
-
              
             var midElectors = Math.Round(TotalElectors / 2.0 * 10) / 10;
             var midVotes    = Math.Round(TotalVotes / 2.0 / 1000000) * 1000000;
@@ -208,12 +222,42 @@ namespace Infragistics.Samples
             //IntervalVotes = intFloorVotes + intPrec;
             IntervalVotes    = Math.Round(TotalVotes / 6.0 / 100000) * 100000;
             //IntervalVotes = TotalVotes / 6.0;
-            //Console.WriteLine("\n midVotes =" + midVotes + "\n IntervalVotes =" + IntervalVotes + "\n TotalVotes =" + TotalVotes);
+            //Logger.WriteLine("\n midVotes =" + midVotes + "\n IntervalVotes =" + IntervalVotes + "\n TotalVotes =" + TotalVotes);
+        }
+
+        public List<Candidate> GetCandidates(ElectionDisplayMode displayMode)
+        {
+            var candidates = new List<Candidate>();
+            if (displayMode == ElectionDisplayMode.Electoral)
+            {
+                foreach (var c in this.StackedCandidates)
+                {
+                    if (c.TotalElectors > 0)
+                        candidates.Add(c);
+                }
+                candidates = (from item in candidates
+                              orderby item.Stack.TotalElectors descending,
+                              item.Name descending
+                              select item).ToList();
+            }
+            else
+            {
+                foreach (var c in this.StackedCandidates)
+                {
+                    if (c.TotalVotes > 0)
+                        candidates.Add(c);
+                }
+                candidates = (from item in candidates
+                              orderby item.Stack.TotalVotes descending,
+                              item.Name descending
+                              select item).ToList();
+            }
+            return candidates;
         }
 
         public List<CandidateResult> SortBy(string field, ListSortDirection direction)
         {
-            //Console.WriteLine("SortBy " + field + " " + direction);
+            //Logger.WriteLine("SortBy " + field + " " + direction);
 
             List<Candidate> sortItems = null;
             if (field == "VotesPerStatePercentage")
@@ -263,7 +307,7 @@ namespace Infragistics.Samples
                 {
                     sortItems[i].SortIndex = i + 1;
 
-                    //Console.WriteLine(sortItems[i].SortIndex + " " + sortItems[i].Name + " = " + sortItems[i].TotalStates + ", old: " + Candidates[i].Name);
+                    //Logger.WriteLine(sortItems[i].SortIndex + " " + sortItems[i].Name + " = " + sortItems[i].TotalStates + ", old: " + Candidates[i].Name);
                 }
 
                 foreach (var item in ResultsByCandidates)
@@ -286,14 +330,7 @@ namespace Infragistics.Samples
         }
     }
 
-    //public class ElectionTreeItem
-    //{  
-    //    public ResultsByState State { get; set; }
-    //    public string Parent { get; set; }
-    //    public string Name { get; set; }
-    //    public double Value { get; set; }
-    //    public string Party { get; set; }
-    //}
+ 
     
     public class Candidate
     {
@@ -301,16 +338,20 @@ namespace Infragistics.Samples
         {
             var ret = new Candidate();
             ret.Party = this.Party;
+            ret.PartyColor = this.PartyColor; 
+
             ret.Name = this.Name;
             ret.TermStart = this.TermStart;
             ret.TermEnd = this.TermEnd;
             ret.Image = this.Image;
             ret.SortIndex = this.SortIndex;
             ret.TotalStates = this.TotalStates;
+
             ret.TotalElectors = this.TotalElectors;
+            ret.TotalElectorsPercent = this.TotalElectorsPercent;
+
             ret.TotalVotes = this.TotalVotes;
             ret.TotalVotesPercent = this.TotalVotesPercent;
-            ret.TotalElectorsPercent = this.TotalElectorsPercent;
             return ret;
         }
         // Candinate's ID, e.g. 1
@@ -320,6 +361,7 @@ namespace Infragistics.Samples
         // Candinate's Party, e.g. "Democrat"
         public string Party { get; set; }
         public string PartyColor { get; set; }
+        public string PartyDisplay { get; set; }
         
         public string Image { get; set; }
         public string TermStart { get; set; }

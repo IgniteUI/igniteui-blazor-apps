@@ -1,9 +1,14 @@
 ﻿//console.log("MapStylingShapes v1.0.1")
 
+function onHexImportCompleted(o, e) {
+    console.log("Map onHexImportCompleted " + e);
+}
+
+igRegisterScript("onHexImportCompleted", onHexImportCompleted, false);
+
 function onHexShapeStyle(o, e) {
 
     // styling shapes based on data fields for all states in USA
-    //var Name = e.item.getFieldValue("Name");
     var Code = e.item.getFieldValue("Code");
     var WinnerParty = e.item.getFieldValue("WinnerParty");
     var ElectionYear = e.item.getFieldValue("ElectionYear");
@@ -38,12 +43,13 @@ function onHexShapeStyle(o, e) {
             e.shapeFill = style.fill;
             e.shapeStroke = style.outline;
         } else {
-            //if (Code == "NJ" || Code == "FL") {
-            //    console.log("onStyleShapeScript " + Name + " " + WinnerParty + " else ");
-            //}
-            console.log("onHexShapeStyle " + Code + " Pink");
-            e.shapeFill = "Pink";
-            e.shapeStroke = "black";
+            //console.log("ElectionHex ShapeStyle " + Code + " Pink");
+            //e.shapeFill = "Pink";
+            //e.shapeStroke = "black";
+            var style = PartyStyles.NoStatehood;
+            e.shapeFill = style.fill;
+            e.shapeStroke = style.outline;
+
         }
     }
 
@@ -57,35 +63,6 @@ function onHexShapeStyle(o, e) {
 
 igRegisterScript("onHexShapeStyle", onHexShapeStyle, false);
 
-function onHexShapeMouseDown(o, e) {
-    console.log("onHexShapeMouseDown " + " ");
-
-    if (e.item && e.item.setFieldValue) {
-        //console.log("onShapeMouseMove ShapeSelected");
-
-        var WinnerParty = e.item.getFieldValue("WinnerParty");
-
-        var winnerEditable = e.item.getFieldValue("WinnerEditable");
-        if (winnerEditable == "true") {
-            if (WinnerParty == "Tossup") {
-                WinnerParty = "Democrat";
-            } else if (WinnerParty == "Democrat") {
-                WinnerParty = "Republican";
-            } else {
-                WinnerParty = "Tossup";
-            }
-            e.item.setFieldValue("WinnerParty", WinnerParty);
-        }
-        //e.chart.notifyClearItems(e.series.shapefileDataSource);
-        //e.series.outline = 'black';
-        //e.series.markerType = 'Circle';
-        //e.series.renderSeries(false);
-        e.series.styleUpdated();
-    }
-}
-
-igRegisterScript("onHexShapeMouseDown", onHexShapeMouseDown, false);
-
 function onHexMarkerStyle(o, e) {
     //console.log("onStyleHexMarker " + e);
 
@@ -93,8 +70,8 @@ function onHexMarkerStyle(o, e) {
 
     return {
         measure: function (measureInfo) {
-            var code = "DC";
-            var data = measureInfo.data;
+            //var code = "DC";
+            //var data = measureInfo.data;
             //if (data != null && data.item != null) {
             //    //code = data.item.StateSymbol.toString();
             //    code = data.item.getFieldValue("Code").toString(); 
@@ -130,9 +107,7 @@ function onHexMarkerStyle(o, e) {
             } else {
                 //ctx.fillStyle = "red";
                 //ctx.fillRect(cx, cy, renderInfo.availableWidth, renderInfo.availableHeight);
-                //ctx.fillStyle = "blue";
-                //ctx.fillRect(x, y, renderInfo.availableWidth, renderInfo.availableHeight);
-
+                
                 var viewportHeight = renderInfo.passInfo.viewportHeight;
                 var viewportRatio = viewportHeight / 500.0;
 
@@ -154,30 +129,28 @@ function onHexMarkerStyle(o, e) {
 
                 var winnerValue = 0;
                 var looserValue = 0;
-                //var winnerElectors = 20;
-                //var winnerValue = item.getFieldValue("WinnerElectors");
-                
-               
-                //var winnerElectors = item.getFieldValue("WinnerElectors");
+              
                 var heldElection = Statehood < ElectionYear
 
                 if (heldElection) {
                     if (ElectionMode == "Popular") {
                      //winnerValue = abbreviate(item.getFieldValue("WinnerVotes"));
-                        winnerValue = item.getFieldValue("WinnerPercentage") + "%";
-                       looserValue = 0; //abbreviate(data.item.LooserVotes);
+                        winnerValue = item.getFieldValue("WinnerPercentage");
+                        winnerValue = (Math.round(winnerValue)) + "%";  //* 10) / 10
+                        looserValue = 0; //abbreviate(data.item.LooserVotes);
                     } else if (ElectionMode == "Percent") {
-                        winnerValue = item.getFieldValue("WinnerPercentage").toFixed(0) + "%";
+                        winnerValue = item.getFieldValue("WinnerPercentage");
+                        winnerValue = (Math.round(winnerValue)) + "%";
                         looserValue = 0; //data.item.LooserPercentage;
                     } else {
                         winnerValue = item.getFieldValue("WinnerElectors");
                         looserValue = 0; //data.item.LooserElectors;
                     }
-                }  
-
-                if (code == "TX") {
-                    console.log("onHexMarkerStyle " + code + " " + ElectionMode + " " + winnerValue );
                 }
+
+                //if (code == "TX") {
+                //    console.log("ElectionHex Marker " + code + " " + ElectionMode + " " + winnerValue );
+                //}
 
                 if (winnerValue > 0 || winnerValue != "0.0") {
                     ctx.fillText(winnerValue, cx, cy + lineSize); 
@@ -189,3 +162,32 @@ function onHexMarkerStyle(o, e) {
 }
 
 igRegisterScript("onHexMarkerStyle", onHexMarkerStyle, true);
+
+//function onHexShapeMouseDown(o, e) {
+//    console.log("onHexShapeMouseDown " + " ");
+
+//    if (e.item && e.item.setFieldValue) {
+//        //console.log("onShapeMouseMove ShapeSelected");
+
+//        var WinnerParty = e.item.getFieldValue("WinnerParty");
+
+//        var winnerEditable = e.item.getFieldValue("WinnerEditable");
+//        if (winnerEditable == "true") {
+//            if (WinnerParty == "Tossup") {
+//                WinnerParty = "Democrat";
+//            } else if (WinnerParty == "Democrat") {
+//                WinnerParty = "Republican";
+//            } else {
+//                WinnerParty = "Tossup";
+//            }
+//            e.item.setFieldValue("WinnerParty", WinnerParty);
+//        }
+//        //e.chart.notifyClearItems(e.series.shapefileDataSource);
+//        //e.series.outline = 'black';
+//        //e.series.markerType = 'Circle';
+//        //e.series.renderSeries(false);
+//        e.series.styleUpdated();
+//    }
+//}
+
+//igRegisterScript("onHexShapeMouseDown", onHexShapeMouseDown, false);

@@ -11,6 +11,7 @@ namespace Infragistics.Samples
 
         public ResultsByState()
         {
+            StateHeldElections = false;
             WinnerParty = "NoStatehood";
             LooserParty = "NoStatehood";
 
@@ -39,6 +40,7 @@ namespace Infragistics.Samples
          
         public ResultsByState(List<CandidateResult> candidates)
         {
+            StateHeldElections = false;
             WinnerParty   = "NoStatehood";
             LooserParty = "NoStatehood";
 
@@ -50,7 +52,16 @@ namespace Infragistics.Samples
             OtherElectoralVotes = 0;
             OtherPercentVotes = 0;
 
-            if (candidates.Count < 2) return;
+            TotalVotes = 0;
+            TotalElectors = 0;
+
+            if (candidates.Count < 2)
+            {
+                Console.WriteLine("Elections " + candidates[0].State + " candidates < 2 = " + candidates.Count);
+
+                return;
+            }
+
 
             var c1 = candidates[0];
             C1Name = c1.Candidate.Name;
@@ -98,9 +109,8 @@ namespace Infragistics.Samples
                 this.LooserElectors = c1.E;
                 this.LooserPercentage = c1.VotesPerStatePercentage;
             }
-
-            TotalVotes = 0;
-            TotalElectors = 0;
+            
+            StateHeldElections = this.WinnerElectors > 0;
 
             foreach (var c in candidates)
             {

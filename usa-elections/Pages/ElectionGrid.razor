@@ -17,12 +17,18 @@
             <DataGrid Height="100%" Width="100%"
                       AutoGenerateColumns="false"
                       SelectionMode="@GridSelectionMode.SingleRow"
-                      
+                      ColumnShowingAnimationMode="@ColumnShowingAnimationMode.None"
+                      ColumnAddingAnimationMode="@ColumnShowingAnimationMode.None"
+                      ColumnMovingAnimationMode="@ColumnMovingAnimationMode.None"
+                      ColumnHidingAnimationMode="@ColumnHidingAnimationMode.None"
+                      ColumnExchangingAnimationMode="@ColumnExchangingAnimationMode.None"
+                      ColumnResizingAnimationMode="@ColumnResizingAnimationMode.None"
                       DataSource="@Election.ResultsByCandidates" 
                       @ref="@GridRef"
                       SummaryScope="@GridSummaryScope"
                       GroupSummaryDisplayMode="@GridGroupSummaryDisplayMode"
                       GroupHeaderDisplayMode="@GridSectionDisplayMode"
+                      IsColumnOptionsEnabled="false"
                       IsGroupCollapsable="true">
                 
                 <TextColumn Width="@("*>180")" Field="CandidateSort" HeaderText="Candidates" />
@@ -107,9 +113,9 @@
     void OnGridSortChanged(GridSortDescriptionsChangedEventArgs args)
     {
         var sortBy = Grid.SortDescriptions[0];
-        //Console.WriteLine("OnGridSortChanged " + sortBy.Name);
-        //Console.WriteLine("OnGridSortChanged " + sortBy.Field);
-        //Console.WriteLine("OnGridSortChanged " + sortBy.SortDirection);
+        //Logger.WriteLine("OnGridSortChanged " + sortBy.Name);
+        //Logger.WriteLine("OnGridSortChanged " + sortBy.Field);
+        //Logger.WriteLine("OnGridSortChanged " + sortBy.SortDirection);
 
         if (this.Election != null && this.Election.ResultsByCandidates != null)
         {
@@ -129,17 +135,17 @@
 
     void OnCellClicked(GridCellEventArgs args)
     {
-        //Console.WriteLine("OnCellClicked " + args.Type);
+        //Logger.WriteLine("OnCellClicked " + args.Type);
     }
 
     private void OnChanged()
     {
-        Console.WriteLine("ElectionGrid OnChanged");
+        Logger.WriteLine("ElectionGrid OnChanged");
     }
 
     private void OnReferenced()
     {
-        Console.WriteLine("ElectionGrid OnGridRef");
+        Logger.WriteLine("ElectionGrid OnGridRef");
 
         Grid.SortDescriptionsChanged += OnGridSortChanged;
         Grid.CellClicked += OnCellClicked;
@@ -206,33 +212,33 @@
 
     protected override void OnInitialized()
     {
-        Console.WriteLine("ElectionGrid OnInitialized");
+        Logger.WriteLine("ElectionGrid OnInitialized");
         base.OnInitialized();
 
-        //Console.WriteLine("App OnInit " + NavManager.BaseUri);
-        //Console.WriteLine("App OnInit " + NavManager.Uri);
+        //Logger.WriteLine("App OnInit " + NavManager.BaseUri);
+        //Logger.WriteLine("App OnInit " + NavManager.Uri);
 
         DataGridModule.Register(IgniteUIBlazor);
     }
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("ElectionGrid OnInitializedAsync");
+        Logger.WriteLine("ElectionGrid OnInitializedAsync");
         //try
         //{
 
         //    //ElectionService.Http = Http;
         //    //await ElectionService.Load();
 
-        //    //Console.WriteLine("ElectionGrid rendering...");
+        //    //Logger.WriteLine("ElectionGrid rendering...");
 
         //    //this.SelectedElection = ElectionService.Elections[0];
         //    //this.ResultsByStates = this.Elections.ResultsByState;
         //    //this.ResultsByCandidate = this.Elections.ResultsByCandidate;
 
-        //    //Console.WriteLine("Elections rendering... done");
+        //    //Logger.WriteLine("Elections rendering... done");
 
-        //    //Console.WriteLine("SB.Nav toc");
+        //    //Logger.WriteLine("SB.Nav toc");
         //    //System.Diagnostics.Debug.WriteLine("SB.Nav toc.json found: " + elections.Length);
         //}
         //catch (Exception ex)

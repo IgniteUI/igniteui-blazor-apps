@@ -38,7 +38,7 @@
                   HeaderDisplayMode="@TreemapHeaderDisplayMode.Overlay"
                   HeaderBackground="#E0F11F"
                   HeaderHoverBackground="#28E124" 
-                  Outline="black"
+                  Outline="white"
                   StrokeThickness="1"                
                   ParentNodeLeftMargin="1"
                   ParentNodeLeftPadding="0"
@@ -90,7 +90,7 @@
     {
         if (this.Treemap != null && this.Election != null)
         {
-            Console.WriteLine("ElectionTree OnChangedDisplayMode... ");
+            Logger.WriteLine("ElectionTree OnChangedDisplayMode... ");
             //if (DisplayMode == ElectionDisplayMode.Popular)
             //    this.Treemap.ValueMemberPath = "WinnerVotes";
             //else
@@ -103,10 +103,10 @@
 
     private void OnChanged()
     {
-        //Console.WriteLine("ElectionTree updating... ");
+        //Logger.WriteLine("ElectionTree updating... ");
         //if (this.Treemap != null && this.Election != null)
         //{
-        //    Console.WriteLine("ElectionTree updating... " + this.Election.Year);
+        //    Logger.WriteLine("ElectionTree updating... " + this.Election.Year);
 
         //    //await this.ShapeMap.ActualSeries[0].RenderSeriesAsync(false);
         //}
@@ -114,7 +114,7 @@
 
         if (this.Treemap != null && this.Election != null && this.Election.Year != this.CurrentYear)
         {
-            Console.WriteLine("ElectionTree OnChanged... " + this.Election.Year);
+            Logger.WriteLine("ElectionTree OnChanged... " + this.Election.Year);
             this.CurrentYear = this.Election.Year;
             StateHasChanged();
         }
@@ -122,14 +122,14 @@
 
     protected override void OnInitialized()
     {
-        Console.WriteLine("ElectionTree OnInitialized");
+        Logger.WriteLine("ElectionTree OnInitialized");
 
         TreemapModule.Register(IgniteUIBlazor);
     }
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("ElectionTree OnInitializedAsync");
+        Logger.WriteLine("ElectionTree OnInitializedAsync");
 
         await Task.Delay(1);
     }
@@ -138,7 +138,7 @@
     {
         if (firstRender)
         {
-            Console.WriteLine("ElectionTree Rendering...");
+            Logger.WriteLine("ElectionTree Rendering...");
             OnChanged();
         }
         return base.OnAfterRenderAsync(firstRender);

@@ -47,7 +47,7 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Console.WriteLine("ElectionHex OnInitialized");
+        Logger.WriteLine("ElectionHex OnInitialized");
 
         GeographicMapModule.Register(IgniteUIBlazor);
         DataChartInteractivityModule.Register(IgniteUIBlazor);
@@ -56,7 +56,7 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        //Console.WriteLine("ElectionHex OnInitializedAsync");
+        //Logger.WriteLine("ElectionHex OnInitializedAsync");
 
         await Task.Delay(1);
     }
@@ -64,13 +64,14 @@
     private GeographicMap         HexMap;
     private GeographicShapeSeries HexSeries;
     private ShapeDataSource       HexShapes;
+    private Dictionary<string, StateInfo> StatesLookup;
     //private List<HexMarker>       HexMarkers;
 
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            Console.WriteLine("ElectionHex Importing...");
+            Logger.WriteLine("ElectionHex Importing...");
 
             if (this.HexMap != null)
             {
@@ -79,7 +80,7 @@
                 HexSeries.ShapefileDataSource = (
                     new ShapeDataSource() {
                         Name="hexSeries",
-                        ImportCompletedScript = "onHexImportCompleted",
+                        //ImportCompletedScript = "onHexImportCompleted",
                         ShapefileSource = "shapes/usa_states_hex_map.shp",
                         DatabaseSource  = "shapes/usa_states_hex_map.dbf",
                         ImportCompleted = new EventCallback<AsyncCompletedEventArgs>(null,
@@ -93,7 +94,7 @@
 
     protected async Task OnImportCompleted(AsyncCompletedEventArgs args)
     {
-        Console.WriteLine("ElectionHex Importing... done");
+        Logger.WriteLine("ElectionHex Importing... done");
 
         if (this.HexMap != null && HexSeries != null)
         {
@@ -115,12 +116,12 @@
             var LooserVotes      = new string[stateCodes.Length];
             var LooserParty      = new string[stateCodes.Length];
 
-            var ElectionYear    = new string[stateCodes.Length];
+            var ElectionYear     = new string[stateCodes.Length];
             var ElectionMode     = new string[stateCodes.Length];
 
             //HexMarkers = new List<HexMarker>();
 
-            ShapesLookup = new Dictionary<string, StateInfo>();
+            StatesLookup = new Dictionary<string, StateInfo>();
 
             var rand = new Random();
             var parties = new List<string> { "Republican", "Democrat", "Tossup" };
@@ -133,7 +134,8 @@
                 info.Population = int.Parse(statePops[i].ToString());
                 info.Index = i;
 
-                ShapesLookup.Add(info.Code, info);
+                StatesLookup.Add(info.Code, info);
+                //ElectionService.Update(info);
 
                 var p = rand.Next(0, parties.Count);
                 WinnerParty[i] = parties[p];
@@ -151,7 +153,7 @@
                 LooserElectors[i] = rand.Next(0, 2).ToString();
                 LooserVotes[i]    = rand.Next(100000, 700000).ToString();
 
-                //Console.WriteLine("ElectionHex " + stateCodes[i] + " = " + bounds.X + " " +  x );
+                //Logger.WriteLine("ElectionHex " + stateCodes[i] + " = " + bounds.X + " " +  x );
             }
 
             await HexShapes.SetRecordValuesAsync("WinnerParty", WinnerParty);
@@ -170,29 +172,27 @@
             var geoRect = new Rect(-3, -3, 6, 6);
             await this.HexMap.UpdateWorldRectAsync(geoRect);
 
-            await Task.Delay(10);
-            this.HexMap.Zoomable = false;
+            //await Task.Delay(10);
+            //this.HexMap.Zoomable = false;
         }
 
         StateHasChanged();
         await Task.Delay(1);
     }
 
-    private Dictionary<string, StateInfo> ShapesLookup;
 
-    private void OnChanged()
+    private void OnChanged(string prop)
     {
-        Console.WriteLine("ElectionHex OnChanged... ");
+        Logger.WriteLine("ElectionHex OnChanged " + prop);
 
         Task.Delay(1).ContinueWith((t) => OnChangedAsync());
     }
 
     private async Task OnChangedAsync()
     {
-        if (this.Election != null && this.HexMap != null && this.HexShapes != null &&
-            this.Election.Year != this.CurrentYear)
+        if (this.Election != null && this.HexMap != null && this.HexShapes != null)
         {
-            Console.WriteLine("ElectionHex OnChangedAsync... " + this.Election.Year);
+            Logger.WriteLine("ElectionHex OnChangedAsync... " + this.Election.Year);
             this.CurrentYear = this.Election.Year;
 
             var results = Election.ResultsByStates;
@@ -210,9 +210,9 @@
             {
                 ElectionYear[i] = Election.Year.ToString();
 
-                if (ShapesLookup.ContainsKey(results[i].StateSymbol))
+                if (StatesLookup.ContainsKey(results[i].StateSymbol))
                 {
-                    var state = ShapesLookup[results[i].StateSymbol];
+                    var state = StatesLookup[results[i].StateSymbol];
                     //var statWithElections = state.Statehood < 1840;
                     //var statWithElections = state.Statehood < Election.Year;
                     var shapeIndex = state.Index;
@@ -251,7 +251,7 @@
     public Election Election
     {
         get { return _Election; }
-        set { _Election = value; this.OnChanged(); }
+        set { _Election = value; this.OnChanged("Election"); }
     }
 
     private ElectionDisplayMode _DisplayMode = ElectionDisplayMode.Electoral;
@@ -259,20 +259,7 @@
     public ElectionDisplayMode DisplayMode
     {
         get { return _DisplayMode; }
-        set { _DisplayMode = value; this.OnChanged(); }
+        set { _DisplayMode = value; this.OnChanged("DisplayMode=" + value); }
     }
 
-    //private Point GetCenter(Rect bounds)
-    //{
-    //    var x = bounds.Left + (bounds.Width / 2.0);
-    //    var y = bounds.Top + (bounds.Height / 2.0);
-    //    return new Point(x, y);
-    //}
-
-    //public class HexMarker
-    //{
-    //    public double X { get; set; }
-    //    public double Y { get; set; }
-    //    public string Label { get; set; }
-    //}
 }

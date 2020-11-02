@@ -1,14 +1,40 @@
 ﻿var PartyStyles = {
-    Unknown:    { outline: "black", fill: "#6F6E6E" },
-    //Republican: { outline: "black", fill: "#CD433C" },
-    //Democrat:   { outline: "black", fill: "#465F98" },
+    Unknown:    { outline: "white", fill: "#6F6E6E" },
+    Democrat:   { outline: "white", fill: "#465F98" },
+    Republican: { outline: "white", fill: "#CD433C" },
     //Tossup:     { outline: "black", fill: "#6F6E6E" },
 //    Republican:  { outline: "black", fill: "#FF0808" },
 //    Democrat:    { outline: "black", fill: "#008DFF" },
-    Republican:     { outline: "black", fill: "#DE5E58" },
-    Democrat:       { outline: "black", fill: "#5885EC" },
-    Tossup:         { outline: "black", fill: "#959494" },
-    NoStatehood:    { outline: "black", fill: "#CB52FA" },
+    //Republican:     { outline: "black", fill: "#DE5E58" },
+    //Democrat:       { outline: "black", fill: "#5885EC" },
+    Other:       { outline: "white", fill: "#959494" },
+    Tossup:      { outline: "white", fill: "#959494" },
+    NoStatehood: { outline: "white", fill: "#959494" },
+
+    NationalRepublican:      { outline: "white", fill: "#CD433C" },
+    Democratic_Republican_1: { outline: "white", fill: "#7A3E98" },
+    Democratic_Republican_2: { outline: "white", fill: "#465F98" },
+    Democratic_Republican_3: { outline: "white", fill: "#CD433C" },
+    Democratic_Republican_4: { outline: "white", fill: "#FD9B50" },
+
+    Libertarian:          { outline: "white", fill: "#FD9B50" },
+    Green:                { outline: "white", fill: "#69AA67" },
+    Independent:          { outline: "white", fill: "#7A3E98" },
+    Reform:               { outline: "white", fill: "#B4B4B4" }, 
+    StatesRights:         { outline: "white", fill: "#FD9B50" }, // 1948
+    Progressive:          { outline: "white", fill: "#69AA67" }, // 1948
+    Socialist:            { outline: "white", fill: "#99222A" }, // 1932
+    Populist:             { outline: "white", fill: "#FD9B50" }, // 1892
+    Prohibition:          { outline: "white", fill: "#69AA67" }, // 1892
+    Greenback:            { outline: "white", fill: "#69AA67" }, // 1880
+    Southern_Democrat:    { outline: "white", fill: "#465F98" }, // 1860
+    Constitutional_Union: { outline: "white", fill: "#FD9B50" }, // 1860 
+    Whig:                 { outline: "white", fill: "#7A3E98" }, // 1852
+    FreeSoil:             { outline: "white", fill: "#FD9B50" }, // 1852
+    Liberty:              { outline: "white", fill: "#FD9B50" }, // 1844
+    Anti_Masonic:         { outline: "white", fill: "#FD9B50" }, // 1832
+    Federalist_1:         { outline: "white", fill: "#69AA67" }, // 1804
+    Federalist_2:         { outline: "white", fill: "#7A3E98" }, // 1804
 }; 
 
 

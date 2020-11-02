@@ -1,21 +1,42 @@
-@inject NavigationManager NavManager
+@inject NavigationManager NavManager 
 
-@*<Infragistics.Samples.Pages.ElectionResultsView />*@
-@*<Infragistics.Samples.Pages.MapShapesView />*@
+@*@inject HttpClient Http*@
+@*@inject Infragistics.Samples.ElectionService ElectionService*@
+
+<Infragistics.Samples.Pages.MapShapesView />
+ 
+@*<Infragistics.Samples.Pages.ElectionSelector OnClick="OnClicked"/>*@
+
 @*<Infragistics.Samples.Pages.ElectionHex />*@
-<div class="igFill">
+@*<div class="igFill">
     <Infragistics.Samples.Pages.ElectionBubbles />
     <Infragistics.Samples.Pages.ElectionHex />
-</div>
+</div>*@
 
 
 @code {
 
+    protected override void OnInitialized()
+    {
+        Logger.WriteLine("App OnInitialized");
+         
+        //ElectionService.Http = Http;
+        //DataChartInteractivityModule.Register(IgniteUIBlazor);
+        //GeographicMapModule.Register(IgniteUIBlazor);
+     }
+
+    private void OnClicked(int index)
+    {
+        Console.WriteLine("App OnClicked " + index);
+    }
+
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("App OnInitializedAsync");
-        //Console.WriteLine("App " + NavManager.BaseUri);
-        //Console.WriteLine("App " + NavManager.Uri);
+        //await ElectionService.LoadStateLocations();
+
+        Logger.WriteLine("App OnInitializedAsync");
+        //Logger.WriteLine("App " + NavManager.BaseUri);
+        //Logger.WriteLine("App " + NavManager.Uri);
 
         await Task.Delay(1);
     }
