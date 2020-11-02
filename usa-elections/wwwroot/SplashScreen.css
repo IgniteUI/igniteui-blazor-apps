@@ -1,0 +1,175 @@
+﻿
+.app-splash-root
+{
+   background: transparent;
+   display: flex;
+   width: 100%;
+   height: 100%;
+   align-items: center;
+   justify-content: center;
+   z-index: 100000;
+   position: absolute;
+
+   /*opacity: 0.7;*/
+}
+
+.app-splash-fade
+{
+   background: #585397;
+   display: flex;
+   width: 100%;
+   height: 100%;
+   align-items: flex-start;
+   justify-content: left;
+
+   /*opacity: 0.7;*/
+}
+
+.app-splash-loading
+{
+    background: transparent;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    z-index: 100010;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-splash-fadeOut {
+    -webkit-animation: fadeOut 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) forwards;
+       -moz-animation: fadeOut 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) forwards;
+        -ms-animation: fadeOut 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) forwards;
+         -o-animation: fadeOut 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) forwards;
+            animation: fadeOut 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) forwards;
+/*
+    -webkit-animation: fadeOut 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 3s forwards;
+       -moz-animation: fadeOut 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 3s forwards;
+        -ms-animation: fadeOut 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 3s forwards;
+         -o-animation: fadeOut 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 3s forwards;
+            animation: fadeOut 2s cubic-bezier(0.390, 0.575, 0.565, 1.000) 3s forwards; */
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0;  }
+}
+/* Firefox < 16 */
+@-moz-keyframes fadeOut {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0;  }
+}
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadeOut {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0;  }
+}
+/* Internet Explorer */
+@-ms-keyframes fadeOut {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0;  }
+}
+/* Opera < 12.1 */
+@-o-keyframes fadeOut {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0;  }
+}
+
+.app-splash-center {
+    /* background: gray; */
+    vertical-align: middle;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.app-splash-logo {
+    /* background: yellow; */
+    height: 5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.app-splash-logo-plat {
+    color: white;
+    padding-left: 1rem;
+    background: brown;
+    vertical-align: middle;
+    align-items: center;
+    width: 10rem;
+    line-height: 1;
+    font-size: 2rem;
+    height: 2rem;
+    font-family: 'Titillium Web';
+}
+
+.app-splash-logo-image {
+    /* background: yellow; */
+    height: 7rem;
+}
+
+.app-splash-progress {
+    /* background: brown; */
+    vertical-align: middle;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+}
+
+.app-splash-progress-info {
+    color: white;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.app-splash-progress-bar {
+    background: white;
+    height: 0.5rem;
+    width: 0rem;
+    border-radius: 5px;
+    align-self: start;
+
+    -webkit-animation: barLoading 8s cubic-bezier(0.390, 0.575, 0.565, 1.000) forwards;
+            animation: barLoading 8s cubic-bezier(0.390, 0.575, 0.565, 1.000) forwards;
+
+    /* animation: ease-in-out infinite alternate; */
+    /* animation-name: barLoading; */
+    /* animation-duration: 1.2s; */
+}
+
+@keyframes barLoading {
+    0% { width: 0rem; }
+    50% { width: 50%; }
+    100% { width: 100%; }
+}
+/* Firefox < 16 */
+@-moz-keyframes barLoading {
+    0% { width: 0rem; }
+    50% { width: 50%; }
+    100% { width: 100%; }
+}
+/* Internet Explorer */
+@-ms-keyframes barLoading {
+    0% { width: 0rem; }
+    50% { width: 50%; }
+    100% { width: 100%; }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes barLoading {
+    0% { width: 0rem; }
+    50% { width: 50%; }
+    100% { width: 100%; }
+}
+
+

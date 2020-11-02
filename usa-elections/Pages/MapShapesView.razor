@@ -11,12 +11,12 @@
 @inject Infragistics.Samples.ElectionService ElectionService
 
 <div class="igPage igUnselectable" style="background: white">
-    
+     
     <div class="igToolbar" style="padding-left: 1rem;">
         <div class="igToolbar-title">US Presidential Elections Dashboard</div>
         <div class="igToolbar-actions">
-            <img class="igImage igHover" @onclick="onDisplayElectoralVotes" src="images/show_electoral_votes.svg" />
-            <img class="igImage igHover" @onclick="onDisplayPopularVotes"   src="images/show_popular_votes.svg"  />
+            <img class="igImage igHover" @onclick="onDisplayElectoralVotes" src="images/show_electoral_votes.svg"  style="@ElectorsButtonStyle"/>
+            <img class="igImage igHover" @onclick="onDisplayPopularVotes"   src="images/show_popular_votes.svg"    style="@PopularButtonStyle" />
             @*<img class="igImage igHover" @onclick="onDisplayGrid"           src="images/show_data_grid.svg"  />*@
             <img class="igImage igHover" @onclick="onDisplayProductPage"    src="images/show_product_page.svg"  />
         </div>
@@ -29,8 +29,9 @@
 
     <div class="igContent" style="background: white">
 
-    <div class="igVertical" style="width: 9rem; height: calc(100% - 1rem); padding-top: 1rem;">
+    <div class="igVertical" style="width: 13rem; height: calc(100% - 1rem); padding-top: 1rem;">
         <ElectionSelector Changed="OnElectionChanged"/>
+        @*Elections="@AllElections"*@ 
     </div>
         
     @*@if (SelectedElection != null && SelectedElection.ResultsByStates != null)
@@ -79,7 +80,7 @@
 
         @*height: 40%; width: calc(100% - 2.2rem); padding-left: 1.1rem; padding-right: 0.75rem; *@ 
         <div class="igFill igRelative" style="height: calc(100% - 1rem); padding-top: 1rem">
-            <div class="igFill igOverlay" style="@ShapeMapStyle; opacity: @ShapeMapOpacity">
+            <div class="igFill igOverlay" style="@ShapeMapStyle">
                  @* TODO try shape highliging 
                  SeriesMouseEnterScript="onShapeMouseEnter"
                  SeriesMouseLeaveScript="onShapeMouseLeave"
@@ -89,7 +90,7 @@
                 <GeographicMap Height="100%" Width="100%" Zoomable="true"
                            @ref="ShapeMap" 
                            BackgroundContent="@null">
-                    <GeographicShapeSeries Outline="black" Thickness="0.5" 
+                    <GeographicShapeSeries Outline="black" Thickness="1" 
                                            StyleShapeScript="onShapeStyle" />
                     
                     <GeographicSymbolSeries
@@ -117,14 +118,14 @@
                 <ElectionBubbles Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
             </div>*@
             
-            <div class="igFill igOverlay" style="@HexMapStyle; opacity: @HexMapOpacity">
+            <div class="igFill igOverlay" style="@HexMapStyle">
                 <ElectionHex Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
             </div>
 
-            <div class="igFill igOverlay" style="@TreeMapStyle; opacity: @TreeMapOpacity">
+            <div class="igFill igOverlay" style="@TreeMapStyle">
                 <ElectionTree Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
             </div>
-            <div class="igFill igOverlay" style="@ChartViewStyle; opacity: @ChartViewOpacity">
+            <div class="igFill igOverlay" style="@ChartViewStyle">
                 @*<ElectionChart Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>*@
             </div>
         </div>
@@ -140,6 +141,8 @@
     
     
     </div>
+
+    <SplashScreen IsVisible="@SplashVisible"/>
 </div>
 
 @code { 
@@ -169,12 +172,8 @@
         Task.Delay(1).ContinueWith((t) => UpdateMapShapes());
     }
 
-    //private async Task OnUpdateShapeMapAsync()
-    //{
-    //    Logger.WriteLine("ShapeMap OnUpdateAsync ");
-
-    //    await Task.Delay(1);
-    //}
+    public bool SplashVisible { get; set; }
+    //public string SplashStyle { get { return !GridVisible ? "display: none" : "display: block; max-height: 30%; width: 100%;"; } }
 
     public bool GridVisible { get; set; }
     //public string GridStyle { get { return !GridVisible ? "display: none" : "display: block; max-height: 30%; width: calc(100% - 2.2rem); padding-left: 1.1rem; padding-right: 0.75rem;"; } }
@@ -199,8 +198,8 @@
     public ResultsDisplayMode MapMode = ResultsDisplayMode.HexMap;
     public ElectionDisplayMode VotesDisplayMode { get; set; }
 
-    public string ElectorsButtonStyle { get { return VotesDisplayMode == ElectionDisplayMode.Electoral ? "background: #FFFFFF" : "background: #ECECEC"; } }
-    public string PopularButtonStyle { get { return VotesDisplayMode == ElectionDisplayMode.Popular ? "background: #FFFFFF" : "background: #ECECEC"; } }
+    public string ElectorsButtonStyle { get { return VotesDisplayMode == ElectionDisplayMode.Electoral ? "background: #7772B8" : "background: transparent"; } }
+    public string PopularButtonStyle  { get { return VotesDisplayMode == ElectionDisplayMode.Popular ? "background: #7772B8" : "background: transparent"; } }
 
     public bool   ShapeMapVisible { get { return MapMode == ResultsDisplayMode.ShapeMap; } }
     public string ShapeMapStyle { get { return GetViewStyle(ShapeMapVisible); } }
@@ -222,13 +221,13 @@
     public string ChartViewStyle { get { return GetViewStyle(ChartViewVisible); } }
     public string ChartButtonStyle { get { return GetButtonStyle(ChartViewVisible); } }
 
-    private double HexMapOpacity = 1.0;
-    private double ShapeMapOpacity = 1.0;
-    private double ChartViewOpacity = 1.0;
-    private double BubbleMapOpacity = 0.0;
-    private double TreeMapOpacity = 1.0;
-    private double ShapeMapOpacityStep = 0.1;
-    private double BubbleMapOpacityStep = 0.1;
+    //private double HexMapOpacity = 1.0;
+    //private double ShapeMapOpacity = 1.0;
+    //private double ChartViewOpacity = 1.0;
+    //private double BubbleMapOpacity = 0.0;
+    //private double TreeMapOpacity = 1.0;
+    //private double ShapeMapOpacityStep = 0.1;
+    //private double BubbleMapOpacityStep = 0.1;
     //private double TreeMapOpacityStep = 0.1;
 
     private List<Election> AllElections;
@@ -459,6 +458,7 @@
         Logger.WriteLine("App OnInitialized");
         base.OnInitialized();
 
+        SplashVisible = true;
         VotesDisplayMode = ElectionDisplayMode.Electoral;
 
         DataGridModule.Register(IgniteUIBlazor);
@@ -614,14 +614,17 @@
         //var shapeBounds = new Rect(-125 + 100, 25, 55, 20);
         if (this.ShapeMap != null)
         {
+            Console.WriteLine("ShapeMap zooming...");
             await this.ShapeMap.UpdateWorldRectAsync(shapeBounds);
-            Logger.WriteLine("ShapeMap zooming...");
         }
 
         //Logger.WriteLine("Map zooming... Complete");
 
         await UpdateMapShapes();
-
+        
+        SplashVisible = false;
+        
+        Console.WriteLine("ShapeMap StateHasChanged... ");
         StateHasChanged();
 
         await Task.Delay(1);
@@ -678,20 +681,20 @@
                 }
             }
 
+            //await ShapeRecords.SetRecordValuesAsync("WinnerName", winnerCandidate);
+            //await ShapeRecords.SetRecordValuesAsync("WinnerVotes", winnerVotes);
             await ShapeRecords.SetRecordValuesAsync("WinnerParty", winnerParty);
-            await ShapeRecords.SetRecordValuesAsync("WinnerName", winnerCandidate);
-            await ShapeRecords.SetRecordValuesAsync("WinnerElectors", winnerElectors);
-            await ShapeRecords.SetRecordValuesAsync("WinnerVotes", winnerVotes);
+            await ShapeRecords.SetRecordValuesAsync("WinnerElectors", winnerElectors);;
             //await ShapeRecords.SetRecordValuesAsync("WinnerPercentage", winnerPercentage);
 
             await ShapeRecords.SetRecordValuesAsync("ElectionsHeld", stateHeldElections);
             await ShapeRecords.SetRecordValuesAsync("ElectionYear", electionYear);
-            await ShapeRecords.SetRecordValuesAsync("ShapeSelected", shapeSelected);
+            //await ShapeRecords.SetRecordValuesAsync("ShapeSelected", shapeSelected);
             //await Shapes.SetRecordValuesAsync("ShapeReady", shapeReady);
 
             //Logger.WriteLine("Map Shapes updating... Complete ");
 
-            Logger.WriteLine("ShapeMap rendering... ");
+            Console.WriteLine("ShapeMap rendering... ");
             this.ShapeLabels = labels;
 
             if (this.ShapeMap != null)
@@ -700,11 +703,11 @@
                 await this.ShapeMap.ActualSeries[1].RenderSeriesAsync(false);
             }
 
+            Console.WriteLine("ShapeMap rendering... complete");
             //StateHasChanged();
         }
 
         await Task.Delay(1);
-
     }
 
     public enum ResultsDisplayMode

@@ -19,7 +19,7 @@
          
         <GeographicShapeSeries Outline="black" 
                                Brush="black" 
-                               Thickness="0.5"
+                               Thickness="1.0"
                                StyleShapeScript="onHexShapeStyle"
                                MarkerTemplateScript="onHexMarkerStyle"/> 
         
@@ -71,7 +71,7 @@
     {
         if (firstRender)
         {
-            Logger.WriteLine("ElectionHex Importing...");
+            Logger.WriteLine("ElectionHex Shapes Importing...");
 
             if (this.HexMap != null)
             {
@@ -94,8 +94,9 @@
 
     protected async Task OnImportCompleted(AsyncCompletedEventArgs args)
     {
-        Logger.WriteLine("ElectionHex Importing... done");
+        Console.WriteLine("ElectionHex Shapes Importing... done");
 
+        Console.WriteLine("ElectionHex Shapes Initalizing... ");
         if (this.HexMap != null && HexSeries != null)
         {
             this.HexShapes = HexSeries.ShapefileDataSource;
@@ -156,18 +157,14 @@
                 //Logger.WriteLine("ElectionHex " + stateCodes[i] + " = " + bounds.X + " " +  x );
             }
 
-            await HexShapes.SetRecordValuesAsync("WinnerParty", WinnerParty);
-            await HexShapes.SetRecordValuesAsync("WinnerElectors", WinnerElectors);
-            await HexShapes.SetRecordValuesAsync("WinnerVotes", WinnerVotes);
-            await HexShapes.SetRecordValuesAsync("WinnerPercentage", WinnerPercentage);
-
-            //await HexShapes.SetRecordValuesAsync("LooserParty", LooserParty);
-            //await HexShapes.SetRecordValuesAsync("LooserVotes", LooserVotes);
-            //await HexShapes.SetRecordValuesAsync("LooserElectors", LooserElectors);
-
             //await HexShapes.SetRecordValuesAsync("WinnerEditable", WinnerEditable);
-            await HexShapes.SetRecordValuesAsync("ElectionYear", ElectionYear);
-            await HexShapes.SetRecordValuesAsync("ElectionMode", ElectionMode);
+            //await HexShapes.SetRecordValuesAsync("ElectionYear", ElectionYear);
+            //await HexShapes.SetRecordValuesAsync("ElectionMode", ElectionMode);
+
+            //await HexShapes.SetRecordValuesAsync("WinnerParty", WinnerParty);
+            //await HexShapes.SetRecordValuesAsync("WinnerElectors", WinnerElectors);
+            //await HexShapes.SetRecordValuesAsync("WinnerVotes", WinnerVotes);
+            //await HexShapes.SetRecordValuesAsync("WinnerPercentage", WinnerPercentage);
 
             var geoRect = new Rect(-3, -3, 6, 6);
             await this.HexMap.UpdateWorldRectAsync(geoRect);
@@ -177,13 +174,16 @@
         }
 
         StateHasChanged();
+
+        Console.WriteLine("ElectionHex Shapes Initalizing...  done");
+
         await Task.Delay(1);
     }
 
 
     private void OnChanged(string prop)
     {
-        Logger.WriteLine("ElectionHex OnChanged " + prop);
+        //Console.WriteLine("ElectionHex OnChanged " + prop);
 
         Task.Delay(1).ContinueWith((t) => OnChangedAsync());
     }
@@ -229,14 +229,14 @@
                 }
             }
 
-            await HexShapes.SetRecordValuesAsync("WinnerParty", winnerParty);
             //await HexShapes.SetRecordValuesAsync("WinnerName", winnerCandidate);
+            //await HexShapes.SetRecordValuesAsync("WinnerVotes", winnerVotes);
+            await HexShapes.SetRecordValuesAsync("WinnerParty", winnerParty);
             await HexShapes.SetRecordValuesAsync("WinnerElectors", winnerElectors);
-            await HexShapes.SetRecordValuesAsync("WinnerVotes", winnerVotes);
             await HexShapes.SetRecordValuesAsync("WinnerPercentage", winnerPercentage);
-            //await HexShapes.SetRecordValuesAsync("ElectionsHeld", stateHeldElections);
             await HexShapes.SetRecordValuesAsync("ElectionYear", ElectionYear);
             await HexShapes.SetRecordValuesAsync("ElectionMode", ElectionMode);
+            //await HexShapes.SetRecordValuesAsync("ElectionsHeld", stateHeldElections);
 
             StateHasChanged();
         }

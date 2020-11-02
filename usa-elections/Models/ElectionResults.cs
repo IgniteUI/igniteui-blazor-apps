@@ -19,6 +19,7 @@ namespace Infragistics.Samples
         public int Year { get; set; }
         public int Index { get; set; }
 
+        public string Title { get; set; }
         public string HasVotes { get; set; }
         //public Candidate[] Candidates { get; set; }
         public List<Candidate> Candidates { get; set; }
@@ -132,12 +133,13 @@ namespace Infragistics.Samples
                 CandidateLeft = Winner;
                 CandidateRight = Looser;
             }
+            Title = Year + " " + CandidateLeft.LastName + " vs " + CandidateRight.LastName;
 
             CandidateOther = new Candidate();
             CandidateOther.Party = "Other";
             CandidateOther.PartyDisplay = "Other";
             CandidateOther.PartyColor = "#B4B4B4"; 
-            CandidateOther.Name = "Other";
+            CandidateOther.Name = "Other Candidates";
             CandidateOther.LastName = "Other";
             CandidateOther.FirstName = "";
 
@@ -159,6 +161,14 @@ namespace Infragistics.Samples
                     CandidateOther.TotalVotes += candidate.TotalVotes;
                     CandidateOther.TotalVotesMilions += candidate.TotalVotesMilions;
                     CandidateOther.TotalElectors += candidate.TotalElectors;
+
+                    if (candidate.Party == "Tossup")
+                    {
+                        CandidateOther.Party = "Tossup";
+                        CandidateOther.PartyDisplay = "Tossup";
+                        CandidateOther.Name = "Tossup States";
+                        CandidateOther.LastName = "Tossup"; 
+                    }
                 }
             }
             CandidateOther.TotalVotesPercent = CandidateOther.TotalVotes * 100.0 / this.TotalVotes;

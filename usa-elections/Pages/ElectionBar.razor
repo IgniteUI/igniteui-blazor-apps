@@ -118,19 +118,7 @@
 @code {
 
     RenderFragment CreateTooltip(DataContext context)
-    {
-        //Donald Trump #CD433C 304
-        //Bernie Sanders #C6C6C6 7
-        //Jill Stein #69AA67 0
-        //Hilary Clinton #465F98 227
-        //Gary Johnson #FD9B50 0
-        //Evan McMullin #7A3E98 0
-        //Donald Trump #CD433C 304
-        //Bernie Sanders #C6C6C6 7
-        //Jill Stein #69AA67 0
-        //Hilary Clinton #465F98 227
-        //Gary Johnson #FD9B50 0
-
+    { 
         var brush = "";
         var votes = "";
         var electors = ""; 
@@ -142,13 +130,16 @@
             brush = item.PartyColor;
             name = item.Name;
             if (item.Party == "Other")
-                name += " Candidates";
+                name = "Other Candidates";
+            else if (item.Party == "Tossup")
+                name = "Tossup States";
             else
                 name += " (" + item.PartyDisplay + ")";
 
             votes = item.TotalVotesMilions + "M (" + item.TotalVotesPercent + "%)";
             electors = item.TotalElectors + " (" + item.TotalElectorsPercent + "%)";
         }
+
         if (DisplayMode == ElectionDisplayMode.Popular)
         {
             return @<div class="ui-tooltip-content" >

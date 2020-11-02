@@ -268,8 +268,9 @@
     opacity: inherit;
 }
 
+.igHover:active,
 .igHover:hover {
-    background: #736EB6;
+    background: #736EB6 !important;
 }
 
 .igText,

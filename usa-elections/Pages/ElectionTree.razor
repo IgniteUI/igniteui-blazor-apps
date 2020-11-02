@@ -8,22 +8,11 @@
 @inject IIgniteUIBlazor IgniteUIBlazor;
 @inject Infragistics.Samples.ElectionService ElectionService
 
-<div class="igComponent" style="height: calc(100% - 2rem); width: calc(100% - 2rem); padding: 1rem">
+@*class="igComponent" style="height: calc(100% - 2rem); width: calc(100% - 2rem); padding: 1rem"*@
+<div class="igFill" >
      
         @if (Election != null)
         {
-                  //ParentIdMemberPath="Parent"
-            //NodePointerEnter="@onNodePointerEnter"
-            // FillScaleMode="@TreemapFillScaleMode.Value"
-            //      FillScaleMinimumValue="0"
-            //      FillScaleMaximumValue="540"
-            //      FillBrushes="#4e62cf, #8a58d6" 
-            //      IsFillScaleLogarithmic="false"
-              //   IdMemberPath="Name"
-              //   LabelMemberPath="Name"
-              //   ValueMemberPath="Value"
-              //    ParentIdMemberPath="Parent"   
-              //    RootTitle="Candidate"
          <Treemap Height="100%" Width="100%" @ref="TreemapRef"
                   DataSource="@Election.Tree"
                   RootTitle="Candidate"

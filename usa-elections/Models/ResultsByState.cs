@@ -41,7 +41,7 @@ namespace Infragistics.Samples
         public ResultsByState(List<CandidateResult> candidates)
         {
             StateHeldElections = false;
-            WinnerParty   = "NoStatehood";
+            WinnerParty = "NoStatehood";
             LooserParty = "NoStatehood";
 
             C1 = new CandidateResult();
@@ -63,6 +63,10 @@ namespace Infragistics.Samples
             }
 
 
+            candidates = (from item in candidates
+                          orderby item.E descending
+                          select item).ToList();
+            
             var c1 = candidates[0];
             C1Name = c1.Candidate.Name;
             C1PopularVotes = c1.V;

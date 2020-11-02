@@ -133,9 +133,7 @@ namespace Infragistics.Samples
                 {
                     var locationColumns = locationRows[r].Split(',');
                     var offsetColumns = Math.Round(locationColumns.Length / 2.0);
-                    //if (r == 1)
-                    //    Logger.WriteLine("Locations columns=" + locationColumns.Length);
-
+                   
                     var loc = r + ", ";
                     for (int c = 1; c < locationColumns.Length; c++)
                     {
@@ -175,7 +173,9 @@ namespace Infragistics.Samples
             //var elections = await Http.GetFromJsonAsync<Elections[]>("data/elections-2008-2012.json");
             //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2012.json");
             //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2016.json");
-            var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2012-2016.json");
+            //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2020.json");
+            //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-2012-2016.json");
+            var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections-recent.json");
             //var elections = await Http.GetFromJsonAsync<List<Election>>("data/elections.json");
 
             await Parse(elections);

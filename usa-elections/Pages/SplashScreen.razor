@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNetCore.Components 
+@using IgniteUI.Blazor.Controls
+ 
+@inject IIgniteUIBlazor IgniteUIBlazor; 
+
+@*style="height: calc(130px - 1rem); padding-top: 1rem; z-index: 300000;" *@ 
+<div class="app-splash-root" style="@SplashStyle">
+
+    <div class="app-splash-fade">
+        
+        @*<div>SplashScreen</div>*@
+
+         @*ref={this.splashLoadRef}*@
+        <div class="app-splash-loading">
+            <div class="app-splash-center">
+                 
+                <div class="app-splash-progress">
+                    <div class="app-splash-progress-info"  >
+                     US Presidential Elections Dashboard
+                    </div>
+
+                    @*style={splashProgress}
+                        onAnimationStart={this.onProgressStart}
+                        onAnimationEnd={this.onProgressEnd}*@
+                    <div class="app-splash-progress-bar" 
+                         />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*@if (Election != null)
+    {
+        for (int i = Election.StackedCandidates.Count - 1; i >= 0; i--)
+        {
+            var candidate = Election.StackedCandidates[i];
+            if (candidate.TotalElectors > 0 && DisplayMode == ElectionDisplayMode.Electoral)
+            {
+                <div class="igLegend-badge" style="background: @candidate.PartyColor"> </div>
+                <div class="igLegend-label"> @candidate.PartyDisplay (@candidate.TotalElectors)</div>
+            }
+            else if (candidate.TotalVotesPercent > 0 && DisplayMode != ElectionDisplayMode.Electoral)
+            {
+                var value = candidate.TotalVotesPercent + "%";
+                <div class="igLegend-badge" style="background: @candidate.PartyColor"> </div>
+                <div class="igLegend-label"> @candidate.PartyDisplay (@value)</div>
+            }
+           }
+             
+    }*@     
+    
+</div>
+
+@code {     
+
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    public string SplashStyle { get { return !IsVisible ? "display: none" : "display: flex;"; } }
+    
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        IsVisible = true;
+
+        Logger.WriteLine("SplashScreen OnInitialized");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        //Logger.WriteLine("SplashScreen OnInitializedAsync");
+
+        await Task.Delay(1);
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //Logger.WriteLine("SplashScreen Rendering...");
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+}

@@ -13,12 +13,17 @@
               AutoGenerateColumns="false"
               DataSource="@Elections"
               SelectionMode="@GridSelectionMode.SingleCell"
-              HeaderHeight="32" RowHeight="32"
+              HeaderHeight="32" RowHeight="40"
               IsColumnOptionsEnabled="false"
               ColumnMovingMode="@ColumnMovingMode.None"
-              ColumnResizingMode="@ColumnResizingMode.None"  >
+              ColumnResizingMode="@ColumnResizingMode.None" 
+              
+              HeaderFontFamily="Titillium Web"
+              HeaderFontSize="12"
+              HeaderTextColor="#27265F"
+              HeaderBackground="#E7EAF7">
 
-        <TextColumn Field="Year" HeaderText="Elections" 
+        <TextColumn Field="Title" HeaderText="ELECTIONS" 
                     IsEditable="false"
                     HorizontalAlignment="CellContentHorizontalAlignment.Center" />
                  
@@ -59,11 +64,11 @@
         DataGridModule.Register(IgniteUIBlazor);
 
         var allElections = new List<Election>();
-        //allElections.Add(new Election { Year = 2020, Index = 0 } );
+        allElections.Add(new Election { Year = 2020, Index = 0 } );
 
         var i = 1;
         //for (int year = 2016; year > 1792; year -= 4)
-        for (int year = 2016; year > 1940; year -= 4)
+        for (int year = 2016; year >= 1940; year -= 4)
         {
             var e = new Election();
             e.Year = year;
@@ -71,7 +76,12 @@
             i++;
         }
 
-        //allElections.Add(new Election { Year = 1789, Index = i  } );
+        foreach (var e in allElections)
+        {
+            e.Title = e.Year.ToString();
+        }
+
+        allElections.Add(new Election { Year = 1789, Index = i  } );
 
         Console.WriteLine("ElectionSelector allElections " + allElections.Count);
 
