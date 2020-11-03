@@ -11,16 +11,20 @@
         for (int i = Election.StackedCandidates.Count - 1; i >= 0; i--)
         {
             var candidate = Election.StackedCandidates[i];
+            var party = candidate.PartyDisplay;
+            if (Election.Year == 2020 && party != "Tossup")
+                party = "Likely " + party;
+
             if (candidate.TotalElectors > 0 && DisplayMode == ElectionDisplayMode.Electoral)
             {
                 <div class="igLegend-badge" style="background: @candidate.PartyColor"> </div>
-                <div class="igLegend-label"> @candidate.PartyDisplay (@candidate.TotalElectors)</div>
+                <div class="igLegend-label"> @party (@candidate.TotalElectors)</div>
             }
             else if (candidate.TotalVotesPercent > 0 && DisplayMode != ElectionDisplayMode.Electoral)
             {
                 var value = candidate.TotalVotesPercent + "%";
                 <div class="igLegend-badge" style="background: @candidate.PartyColor"> </div>
-                <div class="igLegend-label"> @candidate.PartyDisplay (@value)</div>
+                <div class="igLegend-label"> @party (@value)</div>
             }
             @*<div class="igLegend-label"> @candidate.NameAndParty</div>*@
         }

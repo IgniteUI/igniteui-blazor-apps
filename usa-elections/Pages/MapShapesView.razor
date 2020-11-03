@@ -29,12 +29,12 @@
 
     <div class="igContent" style="background: white">
 
-    <div class="igVertical" style="width: 9rem; height: calc(100% - 1rem); padding-top: 1rem;">
+    <div class="igVertical" style="width: 9.75rem; height: calc(100% - 1rem); padding-top: 1rem;">
         <ElectionSelector Changed="OnElectionChanged"/>
         @*Elections="@AllElections"*@ 
-
+        <div style="font-size: 0.6rem; padding-top: 0.5rem;">Source: Politico and Economist's</div>
         <img @onclick="onDisplayProductPage"
-             style="height: 2rem; width: 100%; padding-top: 1rem; cursor: pointer;" 
+             style="height: 2rem; width: 100%; cursor: pointer;" 
              src="images/ig_engine_horizontal_light.svg" />
               
     </div>
@@ -607,7 +607,7 @@
             await ShapeRecords.SetRecordValuesAsync("StateWithBox", stateWithBox);
         }
 
-        Console.WriteLine("ShapeMap setting lookup... Complete");
+        Console.WriteLine("ShapeMap setting lookup... done");
 
         //Logger.WriteLine("Map Shapes codes: " + stateCodes.Length);
         ////Logger.WriteLine("" + string.Join(", ", stateCodes));
@@ -616,20 +616,20 @@
         //var shapeBounds = new Rect(-125 + 100, 25, 55, 20);
         var offsetX = 3;
         var offsetY = 1.5;
-        var geoRect = new Rect(-16 - offsetX, 32 - offsetY, 40 + (offsetX * 2), 10 + (offsetY * 2)); 
+        var geoRect = new Rect(-16 - offsetX, 32 - offsetY, 40 + (offsetX * 2), 10 + (offsetY * 2));
         if (this.ShapeMap != null)
         {
-            Console.WriteLine("ShapeMap zooming...");
+            //Console.WriteLine("ShapeMap zooming...");
             await this.ShapeMap.UpdateWorldRectAsync(geoRect);
         }
 
-        //Logger.WriteLine("Map zooming... Complete");
+        //Logger.WriteLine("Map zooming... done");
 
         await UpdateMapShapes();
-        
+
         SplashVisible = false;
-        
-        Console.WriteLine("ShapeMap StateHasChanged... ");
+
+        Console.WriteLine("ShapeMap changing... ");
         StateHasChanged();
 
         await Task.Delay(1);
@@ -697,9 +697,9 @@
             //await ShapeRecords.SetRecordValuesAsync("ShapeSelected", shapeSelected);
             //await Shapes.SetRecordValuesAsync("ShapeReady", shapeReady);
 
-            //Logger.WriteLine("Map Shapes updating... Complete ");
+            //Logger.WriteLine("Map Shapes updating... done ");
 
-            Console.WriteLine("ShapeMap rendering... ");
+            //Console.WriteLine("ShapeMap rendering... ");
             this.ShapeLabels = labels;
 
             if (this.ShapeMap != null)
@@ -708,7 +708,7 @@
                 await this.ShapeMap.ActualSeries[1].RenderSeriesAsync(false);
             }
 
-            Console.WriteLine("ShapeMap rendering... complete");
+            //Console.WriteLine("ShapeMap rendering... complete");
             //StateHasChanged();
         }
 

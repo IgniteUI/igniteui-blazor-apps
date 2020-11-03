@@ -179,7 +179,7 @@ namespace Infragistics.Samples
             //var url = "data/elections.json";
             var elections = await Http.GetFromJsonAsync<List<Election>>(url);
                          
-            Console.WriteLine("Elections parsing... " + elections.Count);
+            Console.WriteLine("Elections loading... " + elections.Count + " elections");
              
             foreach (var election in elections)
             {

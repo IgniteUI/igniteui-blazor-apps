@@ -4,15 +4,12 @@
 @inject IIgniteUIBlazor IgniteUIBlazor; 
 
 @*style="height: calc(130px - 1rem); padding-top: 1rem; z-index: 300000;" *@ 
-<div class="igFill" style="height: calc(100% - 2.5rem);" >
+<div class="igFill" style="height: calc(100% - 2.75rem);" >
 
-    @*@if (Elections != null)
-    {*@
-    @*@ref="@ElectionByStatesGridRef"*@
     <DataGrid Height="100%" Width="100%" @ref="@GridRef"
               AutoGenerateColumns="false"
               DataSource="@Elections"
-              SelectionMode="@GridSelectionMode.SingleCell"
+              SelectionMode="@GridSelectionMode.SingleRow"
               HeaderHeight="32" RowHeight="40"
               IsColumnOptionsEnabled="false"
               ColumnMovingMode="@ColumnMovingMode.None"
@@ -27,8 +24,7 @@
                     IsEditable="false"
                     HorizontalAlignment="CellContentHorizontalAlignment.Center" />
                  
-    </DataGrid>
-    @*}*@         
+    </DataGrid> 
 </div>
 
 @code {     
@@ -81,9 +77,9 @@
             e.Title = e.Year.ToString();
         }
 
-        allElections.Add(new Election { Year = 1789, Index = i  } );
+        //allElections.Add(new Election { Year = 1789, Index = i  } );
 
-        Console.WriteLine("ElectionSelector allElections " + allElections.Count);
+        Console.WriteLine("ElectionSelector with " + allElections.Count + " elections");
 
         this.Elections = allElections;
     }
@@ -100,11 +96,10 @@
     {
         if (firstRender)
         {
-            Console.WriteLine("ElectionSelector Rendering...");
             if (GridRef != null)
             {
-                Console.WriteLine("ElectionSelector GridRef ");
-                GridRef.SelectedCellsChanged += OnSelectedCellsChanged;
+                //Console.WriteLine("ElectionSelector GridRef ");
+                //GridRef.SelectedCellsChanged += OnSelectedCellsChanged;
                 GridRef.SelectedItemsChanged += OnSelectedItemsChanged;
             }
             OnChanged();
@@ -115,14 +110,14 @@
     protected void OnSelectedItemsChanged(GridSelectedItemsChangedEventArgs e)
     {
         var election = e.CurrentItems[0] as Election;
-        Console.WriteLine("Selector OnSelectedItemsChanged " + election.Index + " " + election.Year);
+        Console.WriteLine("Selector OnElectionChanged " + election.Year);
         this.Changed.InvokeAsync(election.Year);
     }
 
     protected void OnSelectedCellsChanged(GridSelectedCellsChangedEventArgs e)
     {
         var election = e.CurrentCells[0].RowItem as Election;
-        Console.WriteLine("Selector OnSelectedCellsChanged " + election.Index + " " + election.Year);
+        Console.WriteLine("Selector OnElectionChanged " + election.Year);
 
         this.Changed.InvokeAsync(election.Year);
     }
