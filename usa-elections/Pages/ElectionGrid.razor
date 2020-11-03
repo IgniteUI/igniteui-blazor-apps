@@ -8,12 +8,8 @@
 
 <div class="igFill">
 
-    @*<div class="igComponent">*@
-       
         @if (Election != null && Election.ResultsByCandidates != null)
         {
-            @*<div style="padding: 10px; height: 30px; text-align:center">US Election Results in @Election.Year</div>*@
-            //SelectionBehavior="@GridSelectionBehavior.Toggle"
             <DataGrid Height="100%" Width="100%"
                       AutoGenerateColumns="false"
                       SelectionMode="@GridSelectionMode.SingleRow"
@@ -49,7 +45,8 @@
                 <NumericColumn Width="@("*>90")" Field="VotesPerStatePercentage" HeaderText="Votes %" MaxFractionDigits="2" MinFractionDigits="2"/>
            
             </DataGrid>
-               @*<DataGrid Height="50px" Width="100%"
+               
+            @*<DataGrid Height="50px" Width="100%"
                       DataSource="@ResultsByStates2"
                       AutoGenerateColumns="false">
                 <TextColumn Field="StateSymbol" Width="100" HeaderText="" HorizontalAlignment="CellContentHorizontalAlignment.Center" />
@@ -57,7 +54,6 @@
                 <TextColumn Field="C2Name" Width="260" HeaderText="Donald Trump" HorizontalAlignment="CellContentHorizontalAlignment.Center" />
                 <TextColumn Field="OtherName" Width="180" HeaderText="Other" HorizontalAlignment="CellContentHorizontalAlignment.Center" />
             </DataGrid>
-
             <DataGrid Height="30%" Width="100%"
                       @ref="@ElectionByStatesGridRef"
                       AutoGenerateColumns="false"
@@ -65,10 +61,8 @@
                       SummaryScope="@DataSourceSummaryScope.Root"
                       GroupSummaryDisplayMode="@GridGroupSummaryDisplayMode"
                       GroupHeaderDisplayMode="@GridSectionDisplayMode">
-
                 <TextColumn Width="100" Field="StateSymbol" HeaderText="State" 
                             HorizontalAlignment="CellContentHorizontalAlignment.Center" />
-                
                 <NumericColumn Width="80"  Field="C1ElectoralVotes" HeaderText="EV"  />
                 <NumericColumn Width="100" Field="C1PopularVotes" HeaderText="Votes" ShowGroupingSeparator="true"  />
                 <NumericColumn Width="80"  Field="C1PercentVotes" HeaderText="%"   MaxFractionDigits="1" MinFractionDigits="1"/>
@@ -80,10 +74,8 @@
                 <NumericColumn Width="100" Field="OtherPopularVotes"  HeaderText="Votes" ShowGroupingSeparator="true"   />
                 <NumericColumn Width="80"  Field="OtherPercentVotes" HeaderText="%"   MaxFractionDigits="1" MinFractionDigits="1"/>
             </DataGrid>*@
-
         }
 
-    @*</div>*@
 </div>
 
 @code {
@@ -94,15 +86,11 @@
         get { return election; }
         set { election = value; this.OnChanged(); }
     }
-
-    //private List<Election> AllElections;
-    //private Election SelectedElection;
-
+    
     private DataSourceSectionHeaderDisplayMode GridSectionDisplayMode = DataSourceSectionHeaderDisplayMode.Combined;
     private DataSourceSummaryScope GridSummaryScope = DataSourceSummaryScope.Groups;
     private GroupSummaryDisplayMode GridGroupSummaryDisplayMode = GroupSummaryDisplayMode.Cells;
 
-    // Election By Candidates Grid
     private DataGrid Grid;
     private DataGrid GridRef
     {
@@ -224,27 +212,7 @@
     protected override async Task OnInitializedAsync()
     {
         Logger.WriteLine("ElectionGrid OnInitializedAsync");
-        //try
-        //{
 
-        //    //ElectionService.Http = Http;
-        //    //await ElectionService.Load();
-
-        //    //Logger.WriteLine("ElectionGrid rendering...");
-
-        //    //this.SelectedElection = ElectionService.Elections[0];
-        //    //this.ResultsByStates = this.Elections.ResultsByState;
-        //    //this.ResultsByCandidate = this.Elections.ResultsByCandidate;
-
-        //    //Logger.WriteLine("Elections rendering... done");
-
-        //    //Logger.WriteLine("SB.Nav toc");
-        //    //System.Diagnostics.Debug.WriteLine("SB.Nav toc.json found: " + elections.Length);
-        //}
-        //catch (Exception ex)
-        //{
-        //    System.Diagnostics.Debug.WriteLine("Elections - error: \n" + ex.ToString());
-        //}
         await Task.Delay(1);
     }
 

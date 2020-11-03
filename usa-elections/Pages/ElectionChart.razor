@@ -10,16 +10,8 @@
     {
         var candidate1 = Election.CandidateLeft;
         var candidate2 = Election.CandidateRight;
-        //var candidate1 = Election.Winner;
-        //var candidate2 = Election.Looser;
-        //if (candidate1.Party == "Republican")
-        //{
-        //    candidate1 = Election.Looser;
-        //    candidate2 = Election.Winner;
-        //}
           
             var max = Math.Round(DisplayInterval * 6);
-           @*<ItemLegend @ref="Legend" Height="100px" Width="200px"/>*@
            <DataChart Height="100%" Width="100%"
                       @ref="BarChartRef"
                       TitleTopMargin="10"
@@ -183,8 +175,7 @@
         get { return _DisplayMode; }
         set { _DisplayMode = value; this.OnChanged(); }
     }
-
-  
+      
     public string DisplayValue { get { return DisplayMode == ElectionDisplayMode.Electoral ?
                 "WinnerElectors" : "WinnerVotes"; } }
 
@@ -232,8 +223,7 @@
             StateHasChanged();
         }
     }
-
-
+    
     protected override void OnInitialized()
     {
         base.OnInitialized();

@@ -28,11 +28,7 @@
             }
             @*<div class="igLegend-label"> @candidate.NameAndParty</div>*@
         }
-        @*@foreach (var candidate in @Election.StackedCandidates)
-        {
-            <div class="electionLegend-badge" style="background: @candidate.PartyColor"> </div>
-            <div class="electionLegend-label"> @candidate.Name</div>
-        }*@     
+  
     }         
 </div>
 
@@ -54,13 +50,6 @@
     private void OnChanged()
     {
         //Logger.WriteLine("ElectionLegend updating... ");
-
-        //if (this.Election != null)
-        //{
-        //    Logger.WriteLine("ElectionLegend OnChanged... " + this.Election.Year);
-        //    //this.BarChart.Legend = Legend;
-        //}
-        //StateHasChanged();
 
         if (this.Election != null && this.Election.Year != this.CurrentYear)
         {

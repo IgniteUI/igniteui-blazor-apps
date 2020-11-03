@@ -61,7 +61,6 @@
     private GeographicShapeSeries HexSeries;
     private ShapeDataSource       HexShapes;
     private Dictionary<string, StateInfo> StatesLookup;
-    //private List<HexMarker>       HexMarkers;
 
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -71,7 +70,6 @@
 
             if (this.HexMap != null)
             {
-                //HexSeries.StyleUpdated();
                 HexSeries = (GeographicShapeSeries)this.HexMap.ActualSeries[0];
                 HexSeries.ShapefileDataSource = (
                     new ShapeDataSource() {
@@ -96,8 +94,6 @@
         if (this.HexMap != null && HexSeries != null)
         {
             this.HexShapes = HexSeries.ShapefileDataSource;
-            //var geoRect2 = HexShapes.ComputedWorldRect;
-            //var labelPointX = await this.HexShapes.GetRecordValuesAsync("NamePosX");
 
             var stateCodes = await this.HexShapes.GetRecordValuesAsync("Code");
             var stateNames = await this.HexShapes.GetRecordValuesAsync("Name");
@@ -112,11 +108,8 @@
             var LooserElectors   = new string[stateCodes.Length];
             var LooserVotes      = new string[stateCodes.Length];
             var LooserParty      = new string[stateCodes.Length];
-
             var ElectionYear     = new string[stateCodes.Length];
             var ElectionMode     = new string[stateCodes.Length];
-
-            //HexMarkers = new List<HexMarker>();
 
             StatesLookup = new Dictionary<string, StateInfo>();
 
@@ -134,25 +127,26 @@
                 StatesLookup.Add(info.Code, info);
                 //ElectionService.Update(info);
 
-                var p = rand.Next(0, parties.Count);
-                WinnerParty[i] = parties[p];
-                WinnerElectors[i] = rand.Next(5, 50).ToString();
-                WinnerVotes[i] = (rand.Next(100000, 5000000) + rand.Next(100000, 700000)).ToString();
-                WinnerPercentage[i] = rand.Next(5, 70).ToString();
+                // genering dummy data
+                //var p = rand.Next(0, parties.Count);
+                //WinnerParty[i] = parties[p];
+                //WinnerElectors[i] = rand.Next(5, 50).ToString();
+                //WinnerVotes[i] = (rand.Next(100000, 5000000) + rand.Next(100000, 700000)).ToString();
+                //WinnerPercentage[i] = rand.Next(5, 70).ToString();
 
-                WinnerEditable[i] = "true";
-                //ElectionYear[i] = "2020";
-                ElectionYear[i] = "1880";
-                ElectionMode[i] = ElectionDisplayMode.Popular.ToString();
+                //WinnerEditable[i] = "true";
+                //ElectionYear[i] = "1880";
+                //ElectionMode[i] = ElectionDisplayMode.Popular.ToString();
 
-                p = rand.Next(0, parties.Count);
-                LooserParty[i] = parties[p];
-                LooserElectors[i] = rand.Next(0, 2).ToString();
-                LooserVotes[i]    = rand.Next(100000, 700000).ToString();
+                //p = rand.Next(0, parties.Count);
+                //LooserParty[i] = parties[p];
+                //LooserElectors[i] = rand.Next(0, 2).ToString();
+                //LooserVotes[i]    = rand.Next(100000, 700000).ToString();
 
                 //Logger.WriteLine("ElectionHex " + stateCodes[i] + " = " + bounds.X + " " +  x );
             }
-
+            
+            // setting dummy data
             //await HexShapes.SetRecordValuesAsync("WinnerEditable", WinnerEditable);
             //await HexShapes.SetRecordValuesAsync("ElectionYear", ElectionYear);
             //await HexShapes.SetRecordValuesAsync("ElectionMode", ElectionMode);
@@ -162,13 +156,8 @@
             //await HexShapes.SetRecordValuesAsync("WinnerVotes", WinnerVotes);
             //await HexShapes.SetRecordValuesAsync("WinnerPercentage", WinnerPercentage);
 
-            //var geoRect = new Rect(-3, -3, 6, 6); 
-            //var geoRect = new Rect(-4, -4, 8, 8);
             var geoRect = new Rect(-3.75, -3.5, 7, 7);
             await this.HexMap.UpdateWorldRectAsync(geoRect);
-
-            //await Task.Delay(10);
-            //this.HexMap.Zoomable = false;
         }
 
         StateHasChanged();
@@ -200,7 +189,6 @@
             var winnerVotes = new string[results.Count];
             var winnerPercentage = new string[results.Count];
 
-            //var stateHeldElections = new string[results.Count];
             var ElectionYear = new string[results.Count];
             var ElectionMode = new string[results.Count];
 
@@ -211,11 +199,10 @@
                 if (StatesLookup.ContainsKey(results[i].StateSymbol))
                 {
                     var state = StatesLookup[results[i].StateSymbol];
-                    //var statWithElections = state.Statehood < 1840;
                     //var statWithElections = state.Statehood < Election.Year;
                     var shapeIndex = state.Index;
                     //electionYear[shapeIndex] = "1840"; // state.Statehood.ToString();
-                    ElectionYear[shapeIndex] = this.Election.Year.ToString(); // state.Statehood.ToString();
+                    ElectionYear[shapeIndex] = this.Election.Year.ToString(); 
                     ElectionMode[shapeIndex] = this.DisplayMode.ToString();
 
                     winnerParty[shapeIndex] = results[i].WinnerParty;
@@ -223,7 +210,6 @@
                     winnerElectors[shapeIndex] = results[i].WinnerElectors.ToString();
                     winnerVotes[shapeIndex] = results[i].WinnerVotes.ToString();
                     winnerPercentage[shapeIndex] = results[i].WinnerPercentage.ToString();
-                    //stateHeldElections[shapeIndex] = statWithElections.ToString();
                 }
             }
 
@@ -266,49 +252,6 @@
                 <div>name</div>
                 <div>Popular Votes: votes</div>
             </div>;
-
-        // var brush = "";
-        // var votes = "";
-        // var electors = ""; 
-        // var name = "";
-        //
-        // if (context != null && context.Item != null)
-        // {
-        //     var item = context.Item as Candidate;
-        //     brush = item.PartyColor;
-        //     name = item.Name;
-        //     if (item.Party == "Other")
-        //         name = "Other Candidates";
-        //     else if (item.Party == "Tossup")
-        //         name = "Tossup States";
-        //     else
-        //         name += " (" + item.PartyDisplay + ")";
-        //
-        //     votes = item.TotalVotesMilions + "M (" + item.TotalVotesPercent + "%)";
-        //     electors = item.TotalElectors + " (" + item.TotalElectorsPercent + "%)";
-        // }
-        //
-        // if (DisplayMode == ElectionDisplayMode.Popular)
-        // {
-        //     return @<div class="ui-tooltip-content" >
-        //         <div>@name</div>
-        //         <div>Popular Votes: @votes</div>
-        //     </div>;
-        // }
-        // else
-        // {
-        //     //; color: @brush width: 200px; background: @brush
-        //     return @<div class="ui-tooltip-content" >
-        //         @*<div>@item.Name: @item.TotalElectors (@item.TotalElectorsPercent)</div>*@
-        //         <div>@name</div>
-        //         <div>Electoral Votes: @electors</div> 
-        //         @*<div>@item.Party</div>*@
-        //         @*<div>@brush</div>*@
-        //         @*<div>@item.Name</div>
-        //         <div>Electors: @item.TotalElectors</div>*@
-        //         @*<div>Electors: @item.Stack.TotalElectors</div>*@
-        //     </div>;
-        // }
     }
 
 }

@@ -20,11 +20,6 @@
             @*<img class="igImage igHover" @onclick="onDisplayGrid"           src="images/show_data_grid.svg"  />*@
             <img class="igImage igHover" @onclick="onDisplayProductPage"    src="images/show_product_page.svg"  />
         </div>
-
-        @*<div class="igButton" style="@HexButtonStyle" @onclick="onDisplayHexMap">Hex Map</div>
-        <div class="igButton" style="@BubbleButtonStyle" @onclick="onDisplayBubbleMap">Bubble Map</div>
-        <div class="igButton" style="@TreeMapButtonStyle" @onclick="onDisplayTreeMap">Tree Map</div>*@
-  
     </div>
 
     <div class="igContent" style="background: white">
@@ -39,18 +34,10 @@
               
     </div>
         
-    @*@if (SelectedElection != null && SelectedElection.ResultsByStates != null)
-    {*@
-        @*style="width: calc(100% - 2rem); padding-left: 1rem; padding-right: 1rem;"*@
     <div class="igFill igCenter" style="background: #FFFFFF;"> 
             
         <div class="igFill" style="max-width: 1000px; width: calc(100% - 2rem); justify-content: center; background: #FFFFFF;">
-
-        @*<div class="igHorizotnal" style="width: calc(100% - 2rem); padding-left: 1.1rem; padding-right: 0.75rem; margin-top: 1rem">
-            <div class="igButton" style="@ElectorsButtonStyle" @onclick="onDisplayElectoralVotes">Electoral Votes</div>
-            <div class="igButton" style="@PopularButtonStyle" @onclick="onDisplayPopularVotes">Popular Votes</div> 
-        </div>*@
-                      
+                                  
         <div class="igHorizotnal" style="width: 100%; margin-top: 1rem; justify-content: center;">
             <div class="igButton" style="@ShapeMapButtonStyle" @onclick="onDisplayShapeMap">
                 <img class="igImage" style="margin-right: 1rem; padding-left: 0rem" src="images/dv_usa_map.svg" />
@@ -68,10 +55,7 @@
                 <img class="igImage" style="margin-right: 1rem; padding-left: 0rem" src="images/dv_treemap.svg" />
                 <div>Tree Map</div>
             </div>
-            @*<div class="igButton" style="@HexButtonStyle border-radius: 0rem" @onclick="onDisplayHexMap">Hex Map</div>*@
-            @*<div class="igButton" style="@BubbleButtonStyle border-radius: 0rem" @onclick="onDisplayBubbleMap">Bubble Map</div>*@
-            @*<div class="igButton" style="@TreeMapButtonStyle border-radius: 0rem" @onclick="onDisplayTreeMap">Tree Map</div>*@
-            @*<div class="igButton" style="@ChartButtonStyle border-radius: .25rem 0px 0px .25rem;" @onclick="onDisplayChartView">Chart</div>*@
+             @*<div class="igButton" style="@ChartButtonStyle border-radius: .25rem 0px 0px .25rem;" @onclick="onDisplayChartView">Chart</div>*@
         </div>
 
         <div class="igComponent" style="z-index: 100000; height: auto; padding-top: 0.5rem; align-self: center;">
@@ -83,7 +67,6 @@
               <ElectionLegend Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
         </div>
 
-        @*height: 40%; width: calc(100% - 2.2rem); padding-left: 1.1rem; padding-right: 0.75rem; *@ 
         <div class="igFill igRelative" style="height: calc(100% - 1rem); padding-top: 1rem">
             <div class="igFill igOverlay" style="@ShapeMapStyle">
                  @* TODO try shape highliging 
@@ -118,7 +101,6 @@
                 </GeographicMap>
             </div>
 
-            @*; opacity: @BubbleMapOpacity*@
             @*<div class="igFill igOverlay" style="@BubbleMapStyle">
                 <ElectionBubbles Election="@SelectedElection" DisplayMode="@VotesDisplayMode"/>
             </div>*@
@@ -225,26 +207,10 @@
     public bool   ChartViewVisible { get { return MapMode == ResultsDisplayMode.ChartView; } }
     public string ChartViewStyle { get { return GetViewStyle(ChartViewVisible); } }
     public string ChartButtonStyle { get { return GetButtonStyle(ChartViewVisible); } }
-
-    //private double HexMapOpacity = 1.0;
-    //private double ShapeMapOpacity = 1.0;
-    //private double ChartViewOpacity = 1.0;
-    //private double BubbleMapOpacity = 0.0;
-    //private double TreeMapOpacity = 1.0;
-    //private double ShapeMapOpacityStep = 0.1;
-    //private double BubbleMapOpacityStep = 0.1;
-    //private double TreeMapOpacityStep = 0.1;
-
+    
     private List<Election> AllElections;
     private Election SelectedElection;
-    //private List<CandidateResult> ResultsByCandidate;
-    //private List<ResultsByState> ResultsByStates; 
-
-    //private ElectionDisplayMode VotesDisplayMode = ElectionDisplayMode.Electoral;
-    //private DataSourceSectionHeaderDisplayMode GridSectionDisplayMode = DataSourceSectionHeaderDisplayMode.Combined;
-    //private DataSourceSummaryScope GridSummaryScope = DataSourceSummaryScope.Groups;
-    //private GroupSummaryDisplayMode GridGroupSummaryDisplayMode = GroupSummaryDisplayMode.Cells;
-
+    
     private DataChart ElectionByStatesChart;
     private DataChart ElectionByStatesChartRef
     {
@@ -252,179 +218,53 @@
         set { ElectionByStatesChart = value; this.OnElectionByStatesChartRef(); StateHasChanged(); }
     }
 
-    //private void OnTimerTick()
-    //{
-    //    if (this.isAnimating)
-    //    {
-    //        this.ShapeMapOpacity  += ShapeMapOpacityStep;
-    //        this.BubbleMapOpacity += BubbleMapOpacityStep;
-
-    //        if (this.ShapeMapOpacity < 0.0)
-    //        {
-    //            this.ShapeMapOpacity = 0.0;
-    //            this.isAnimating = false;
-    //        }
-    //        else if (this.ShapeMapOpacity > 1.0)
-    //        {
-    //            this.ShapeMapOpacity = 1.0;
-    //            this.isAnimating = false;
-    //        }
-
-    //        if (this.BubbleMapOpacity < 0.0)
-    //        {
-    //            this.BubbleMapOpacity = 0.0;
-    //            this.isAnimating = false;
-    //        }
-    //        else if (this.BubbleMapOpacity > 1.0)
-    //        {
-    //            this.BubbleMapOpacity = 1.0;
-    //            this.isAnimating = false;
-    //        }
-
-    //        if (this.isAnimating)
-    //        {
-    //            //Logger.WriteLine("OnTimerTick " + ShapeMapOpacity);                  
-    //        }
-    //        else
-    //        {
-    //            Logger.WriteLine("OnTimerTick " + ShapeMapOpacity + " stop");
-    //        }
-
-    //        Task.Delay(200).ContinueWith((t) => OnTimerTick());
-    //        this.StateHasChanged();
-    //    }
-    //}
-
-
-    //private void onShowAnimateShapeMap()
-    //{
-    //    if (!this.isAnimating)
-    //    {
-    //        this.ShapeMapOpacity = 0.0;
-    //        this.ShapeMapOpacityStep = 0.05;
-    //        this.BubbleMapOpacity = 1.0;
-    //        this.BubbleMapOpacityStep = -0.05;
-    //        this.isAnimating = true;
-
-    //        Task.Delay(200).ContinueWith((t) => OnTimerTick());
-    //    }
-    //    else
-    //    {
-    //        this.isAnimating = false;
-    //    }
-    //}
-
-    //private void onShowShapeMap()
-    //{
-    //    this.BubbleMapOpacity = 0.0;
-    //    this.ShapeMapOpacity = 1.0;
-    //    this.TreeMapOpacity = 0.0;
-    //    this.StateHasChanged();
-    //}
-
-    //private void onShowBubbleMap()
-    //{
-    //    this.BubbleMapOpacity = 1.0;
-    //    this.ShapeMapOpacity = 0.0;
-    //    this.TreeMapOpacity = 0.0;
-    //    this.StateHasChanged();
-    //}
-
-    //private void onShowTreeMap()
-    //{
-    //    this.BubbleMapOpacity = 0.0;
-    //    this.ShapeMapOpacity = 0.0;
-    //    this.TreeMapOpacity = 1.0;
-    //    this.StateHasChanged();
-    //}
-
-    //private void onShowHexMap()
-    //{
-    //    this.BubbleMapOpacity = 0.0;
-    //    this.ShapeMapOpacity = 0.0;
-    //    this.TreeMapOpacity = 0.0;
-    //    this.HexMapOpacity = 1.0;
-    //    this.StateHasChanged();
-    //}
-
     private void onDisplayShapeMap()
     {
         if (this.MapMode == ResultsDisplayMode.ShapeMap) return;
 
-        //this.ShapeMapOpacity = 0.0;
         this.MapMode = ResultsDisplayMode.ShapeMap;
-
-        //Task.Delay(5).ContinueWith((t) => onShowShapeMap());
     }
 
     private void onDisplayHexMap()
     {
         if (this.MapMode == ResultsDisplayMode.HexMap) return;
 
-        //this.HexMapOpacity = 0.0;
         this.MapMode = ResultsDisplayMode.HexMap;
-
-        //Task.Delay(5).ContinueWith((t) => onShowHexMap());
     }
 
     private void onDisplayBubbleMap()
     {
         if (this.MapMode == ResultsDisplayMode.BubbleMap) return;
 
-        //this.BubbleMapOpacity = 0.0;
         this.MapMode = ResultsDisplayMode.BubbleMap;
-
-        //Task.Delay(5).ContinueWith((t) => onShowBubbleMap());
     }
 
     private void onDisplayTreeMap()
     {
         if (this.MapMode == ResultsDisplayMode.TreeMap) return;
 
-        //this.TreeMapOpacity = 0.0;
         this.MapMode = ResultsDisplayMode.TreeMap;
-
-        //Task.Delay(5).ContinueWith((t) => onShowTreeMap());
     }
 
     private void onDisplayChartView()
     {
         if (this.MapMode == ResultsDisplayMode.ChartView) return;
 
-        //this.BubbleMapOpacity = 0.0;
         this.MapMode = ResultsDisplayMode.ChartView;
-
-        //Task.Delay(5).ContinueWith((t) => onShowBubbleMap());
     }
 
     private void onDisplayElectoralVotes()
     {
         Logger.WriteLine("onDisplayElectoralVotes " + VotesDisplayMode);
 
-        //if (SelectedElection != null && SelectedElection.ResultsByStates != null)
-        //{
-        //    foreach (var item in SelectedElection.ResultsByStates)
-        //    {
-        //        item.ElectionMode = ElectionDisplayMode.Electoral.ToString();
-        //    }
-        //}
         this.VotesDisplayMode = ElectionDisplayMode.Electoral;
-        //this.StateHasChanged();
     }
 
     private void onDisplayPopularVotes()
     {
         Logger.WriteLine("onDisplayPopularVotes " + VotesDisplayMode);
 
-        //if (SelectedElection != null && SelectedElection.ResultsByStates != null)
-        //{
-        //    foreach (var item in SelectedElection.ResultsByStates)
-        //    {
-        //        item.ElectionMode = ElectionDisplayMode.Popular.ToString();
-        //    }
-        //}
         this.VotesDisplayMode = ElectionDisplayMode.Popular;
-        //this.StateHasChanged();
     }
 
     public void onDisplayGrid()
@@ -435,12 +275,10 @@
     public void onDisplayProductPage() {
         var url = "https://www.infragistics.com/products/ignite-ui-blazor";
         JSRuntime.InvokeAsync<object>("open", url, "_blank");
-        //window.open("https://www.infragistics.com/products/ignite-ui-react/react/components/general-getting-started.html", "_blank")
     }
 
     private void OnElectionByStatesChartRef()
     {
-        //ElectionByStatesChart.SizeChanged
         //ElectionByStatesChart.SizeChanged += ElectionChart;
     }
 
@@ -449,8 +287,7 @@
         //Logger.WriteLine("OnChartSizeChanged " + args.OldRect.Height + " " + args.OldRect.Width);
         //Logger.WriteLine("OnChartSizeChanged " + args.NewRect.Height + " " + args.NewRect.Width);
     }
-
-
+    
     private List<ResultsByState>  ShapeLabels;
     private ShapeDataSource       ShapeRecords;
     private GeographicMap         ShapeMap;
@@ -553,13 +390,6 @@
             var stateWithBox = new string[stateCodes.Length];
             Logger.WriteLine("ShapeMap setting lookup...");
             ShapesLookup = new Dictionary<string, StateInfo>();
-            var _statehoods = "";
-            var _names = "";
-            var _pops = "";
-            var _regNames = "";
-            var _regCode = "";
-            var _area = "";
-            var _fips = "";
 
             for (var i = 0; i < stateCodes.Length; i++)
             {
@@ -569,15 +399,6 @@
                 info.Statehood = int.Parse(statehoods[i].ToString());
                 info.Population = int.Parse(statePops[i].ToString());
                 info.Index = i;
-
-                //_fips += "WHEN \"Code\" = '" + info.Code + "' THEN " + stateFips[i] + " \n";
-                //_area += "WHEN \"Code\" = '" + info.Code + "' THEN " + stateArea[i] + " \n";
-                //_regCode += "WHEN \"Code\" = '" + info.Code + "' THEN '" + stateRCode[i] + "' \n";
-                //_regNames += "WHEN \"Code\" = '" + info.Code + "' THEN '" + stateRegion[i] + "' \n";
-
-                //_pops += "WHEN \"Code\" = '" + info.Code + "' THEN " + info.Population + " \n";
-                //_names += "WHEN \"Code\" = '" + info.Code + "' THEN '" + info.Name + "' \n";
-                //_statehoods += "WHEN \"Code\" = '" + info.Code + "' THEN " + info.Statehood + " \n";
 
                 if (StatesWithBoxes.ContainsKey(info.Code))
                 {
@@ -596,34 +417,19 @@
                 ShapesLookup.Add(info.Code, info);
             }
 
-            //Logger.WriteLine("_area...\n" + _area);
-            //Logger.WriteLine("_regCode...\n" + _regCode);
-            //Logger.WriteLine("_regNames...\n" + _regNames);
-            //Logger.WriteLine("_fips...\n" + _fips);
-            //Logger.WriteLine("_pops...\n" + _pops);
-            //Logger.WriteLine("_names...\n" + _names);
-            //Logger.WriteLine("_statehoods...\n" + _statehoods);
-
             await ShapeRecords.SetRecordValuesAsync("StateWithBox", stateWithBox);
         }
 
         Console.WriteLine("ShapeMap setting lookup... done");
 
-        //Logger.WriteLine("Map Shapes codes: " + stateCodes.Length);
-        ////Logger.WriteLine("" + string.Join(", ", stateCodes));
-
-        //var shapeBounds = new Rect(-130, 20, 65, 30); 
-        //var shapeBounds = new Rect(-125 + 100, 25, 55, 20);
         var offsetX = 3;
         var offsetY = 1.5;
         var geoRect = new Rect(-16 - offsetX, 32 - offsetY, 40 + (offsetX * 2), 10 + (offsetY * 2));
         if (this.ShapeMap != null)
         {
-            //Console.WriteLine("ShapeMap zooming...");
+            //Logger.WriteLine("ShapeMap zooming...");
             await this.ShapeMap.UpdateWorldRectAsync(geoRect);
         }
-
-        //Logger.WriteLine("Map zooming... done");
 
         await UpdateMapShapes();
 
@@ -651,18 +457,14 @@
             var winnerPercentage = new string[results.Count];
 
             var shapeSelected = new string[results.Count];
-            //var shapeReady = new string[results.Count];
-            var stateHeldElections = new string[results.Count];
+            var electionsHeld = new string[results.Count];
             var electionYear = new string[results.Count];
 
             var labels = new List<ResultsByState>();
             for (int i = 0; i < results.Count; i++)
             {
-                //var result = SelectedElection.ResultsByStates[i];
-                //electionYear[i] = "1840"; // SelectedElection.Year.ToString();
                 electionYear[i] = SelectedElection.Year.ToString();
                 shapeSelected[i] = "false";
-                //shapeReady[i] = "true";
                 if (ShapesLookup.ContainsKey(results[i].StateSymbol))
                 {
                     var state = ShapesLookup[results[i].StateSymbol];
@@ -676,7 +478,7 @@
                     winnerElectors[shapeIndex] = results[i].WinnerElectors.ToString();
                     winnerVotes[shapeIndex] = results[i].WinnerVotes.ToString();
                     winnerPercentage[shapeIndex] = results[i].WinnerPercentage.ToString();
-                    stateHeldElections[shapeIndex] = statWithElections.ToString();
+                    electionsHeld[shapeIndex] = statWithElections.ToString();
 
                     results[i].StateCenterX = state.CenterX;
                     results[i].StateCenterY = state.CenterY;
@@ -692,14 +494,12 @@
             await ShapeRecords.SetRecordValuesAsync("WinnerElectors", winnerElectors);;
             //await ShapeRecords.SetRecordValuesAsync("WinnerPercentage", winnerPercentage);
 
-            await ShapeRecords.SetRecordValuesAsync("ElectionsHeld", stateHeldElections);
+            await ShapeRecords.SetRecordValuesAsync("ElectionsHeld", electionsHeld);
             await ShapeRecords.SetRecordValuesAsync("ElectionYear", electionYear);
             //await ShapeRecords.SetRecordValuesAsync("ShapeSelected", shapeSelected);
-            //await Shapes.SetRecordValuesAsync("ShapeReady", shapeReady);
 
-            //Logger.WriteLine("Map Shapes updating... done ");
+            Logger.WriteLine("ShapeMap updating... done");
 
-            //Console.WriteLine("ShapeMap rendering... ");
             this.ShapeLabels = labels;
 
             if (this.ShapeMap != null)
@@ -708,7 +508,7 @@
                 await this.ShapeMap.ActualSeries[1].RenderSeriesAsync(false);
             }
 
-            //Console.WriteLine("ShapeMap rendering... complete");
+            Logger.WriteLine("ShapeMap rendering... done");
             //StateHasChanged();
         }
 

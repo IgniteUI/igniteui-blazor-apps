@@ -3,14 +3,13 @@
  
 @inject IIgniteUIBlazor IgniteUIBlazor; 
 
-@*style="height: calc(130px - 1rem); padding-top: 1rem; z-index: 300000;" *@ 
 <div class="igVertical" >
 
     @if (Election != null)
     {
         var candidate1 = Election.CandidateLeft;
         var candidate2 = Election.CandidateRight;
-        // ar 540 #CD433C, #C6C6C6, #69AA67, #465F98, #FD9B50, #7A3E98
+
         var midPoint = "50% of votes";
         var value1 = "0.0";
         var value2 = "0.0";
@@ -27,8 +26,7 @@
         }
 
         var max = Math.Round(DisplayInterval * 6);
-        //Console.WriteLine("Bar " + max + " " + Election.PartyColorsInString);
-
+       
         var requirment = Math.Ceiling(Election.TotalElectors + 1 / 2.0);
         <div class="igCandidate-bar" >
 
@@ -61,16 +59,11 @@
                       IsHorizontalZoomEnabled="true"
                       IsVerticalZoomEnabled="true" >
 
-                @*DataSource="@Election.Candidates"  Overlap="1" *@
                 <CategoryYAxis Name="yAxis" Label="Name" DataSource="@Election.CandidateOverlap"
                                Gap="0.0" Overlap="1" 
                                LabelVisibility="@Visibility.Collapsed"
                                TickLength="0"/>
 
-                @*<NumericXAxis  *@
-               
-                              @*LabelExtent="60" 
-                              Title="@DisplayTitle"  *@
                 <NumericXAxis Name="xAxis"    
                               MinimumValue="0" 
                               MaximumValue="@max" 
@@ -149,16 +142,9 @@
         }
         else
         {
-            //; color: @brush width: 200px; background: @brush
             return @<div class="ui-tooltip-content" >
-                @*<div>@item.Name: @item.TotalElectors (@item.TotalElectorsPercent)</div>*@
                 <div>@name</div>
                 <div>Electoral Votes: @electors</div> 
-                @*<div>@item.Party</div>*@
-                @*<div>@brush</div>*@
-                @*<div>@item.Name</div>
-                <div>Electors: @item.TotalElectors</div>*@
-                @*<div>Electors: @item.Stack.TotalElectors</div>*@
             </div>;
         }
     }
@@ -216,8 +202,7 @@
         //if (DisplayMode == ElectionDisplayMode.Electoral)
         //{
         //    var candidates = new List<Candidate>();
-
-
+        
         //    candidates = (from item in Election.StackedCandidates
         //                  orderby item.Stack.TotalElectors descending,
         //                  item.Name descending select item).ToList();
@@ -239,14 +224,8 @@
     {
         //Logger.WriteLine("ElectionBar updating... ");
 
-        //if (this.BarChart != null && this.Election != null)
-        //{
-        //    //this.BarChart.Legend = Legend;
-        //}
-
         if (this.BarChart != null && this.Election != null && this.Election.Year != this.CurrentYear)
         {
-
             StateHasChanged();
         }
     }

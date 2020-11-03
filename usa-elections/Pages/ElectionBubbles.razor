@@ -10,8 +10,6 @@
 
 <div class="igContainer" style="height: 100%">
      
-        @*@if (ResultsByStates != null)
-        {*@
      <GeographicMap Height="100%" Width="100%" Zoomable="false"
                     @ref="BubbleMapRef" 
                     BackgroundContent="@null">
@@ -24,7 +22,6 @@
             </GeographicSymbolSeries> 
 
      </GeographicMap>
-     @*}*@
               
 </div>
 
@@ -125,9 +122,8 @@
     {
         Logger.WriteLine("ElectionBubbles OnInitializedAsync");
 
-        // TODO remove:
-        ElectionService.Http = Http;
-        await ElectionService.LoadStateLocations();
+        //ElectionService.Http = Http;
+        //await ElectionService.LoadStateLocations();
 
         var rand = new Random();
         var parties = new List<string> { "Republican", "Democrat", "Tossup" };
@@ -205,21 +201,13 @@
         }
     }
 
-    //private bool isMapZoomed = false;
     public async Task ZoomAsync()
     {
         Logger.WriteLine("ElectionBubbles ZoomAsync");
         if (BubbleMap != null)
         {
-            //await Task.Delay(10);
-
             var bubbleBounds = new Rect(-6, -6, 10, 10);
-
-            //this.BubbleMap.ZoomToGeographic(bubbleBounds);
             await this.BubbleMap.UpdateWorldRectAsync(bubbleBounds);
-            //isMapZoomed = true;
-            //await Task.Delay(10);
-            //this.BubbleMap.Zoomable = false;
         }
 
         await Task.Delay(1);
