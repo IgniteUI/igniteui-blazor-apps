@@ -31,6 +31,13 @@
   <ItemGroup>
     <Content Remove="Pages\ElectionGuage.razor" />
     <Content Remove="Pages\MapBubblesView.razor" />
+    <Content Remove="wwwroot\data\ElectionResults.xml" />
+    <Content Remove="wwwroot\data\elections 2012.txt" />
+    <Content Remove="wwwroot\data\elections 2016.txt" />
+    <Content Remove="wwwroot\data\elections 2020.txt" />
+    <Content Remove="wwwroot\data\elections org.json" />
+    <Content Remove="wwwroot\data\elections tmp.txt" />
+    <Content Remove="wwwroot\data\Timeline.xml" />
   </ItemGroup>
 
   <ItemGroup>
