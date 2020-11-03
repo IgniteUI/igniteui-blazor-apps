@@ -200,7 +200,7 @@
         return isVisible ? "z-index: 10" : "z-index: -10";
     }
 
-    public ResultsDisplayMode MapMode = ResultsDisplayMode.HexMap;
+    public ResultsDisplayMode MapMode = ResultsDisplayMode.ShapeMap;
     public ElectionDisplayMode VotesDisplayMode { get; set; }
 
     public string ElectorsButtonStyle { get { return VotesDisplayMode == ElectionDisplayMode.Electoral ? "background: #7772B8" : "background: transparent"; } }
@@ -614,8 +614,8 @@
 
         //var shapeBounds = new Rect(-130, 20, 65, 30); 
         //var shapeBounds = new Rect(-125 + 100, 25, 55, 20);
-        var offsetX = 4;
-        var offsetY = 2;
+        var offsetX = 3;
+        var offsetY = 1.5;
         var geoRect = new Rect(-16 - offsetX, 32 - offsetY, 40 + (offsetX * 2), 10 + (offsetY * 2)); 
         if (this.ShapeMap != null)
         {
