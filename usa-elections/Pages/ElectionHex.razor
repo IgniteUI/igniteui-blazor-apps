@@ -10,9 +10,8 @@
     <GeographicMap Height="100%" Width="100%" Zoomable="false"
                    @ref="HexMap"
                    BackgroundContent="@null"
-                   SeriesMouseEnter="OnSeriesMouseEnter">
+                   SeriesMouseEnterScript="onMapMouseEnter">
                    @*SeriesMouseLeftButtonDownScript="onHexShapeMouseDown"*@
-         
         <GeographicShapeSeries Outline="black" 
                                Brush="black" 
                                Thickness="1.0"
@@ -20,26 +19,12 @@
                                MarkerTemplateScript="onHexMarkerStyle"
                                ShowDefaultTooltip="false"/> 
                                @*TooltipTemplate="@CreateTooltip"*@
-        
-                
     </GeographicMap>
+
 </div>
 
 @code {
-
-    void OnSeriesMouseEnter(ChartMouseEventArgs e)
-    {
-        //var item = e.Item as System.Collections.Generic.Dictionary<string, object>;
-        //var keys = string.Join(", ", item.Keys.ToList()); // hapeType, fieldsNames, fieldsTypes, points, fieldValues, bounds
-        //var bounds = item["bounds"];
-        //Console.WriteLine("ElectionHex OnSeriesMouseEnter " + "\n" + keys);
-
-        // e.GetPosition does not return any value!
-        //var position = e.GetPosition(this.HexMap);
-        //var position = e.GetPosition(this.HexSeries);
-        //Console.WriteLine("ElectionHex OnSeriesMouseEnter " + position.X + " " + position.Y);
-    }
-
+    
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -100,14 +85,20 @@
             var statehoods = await this.HexShapes.GetRecordValuesAsync("Statehood");
             var statePops  = await this.HexShapes.GetRecordValuesAsync("Population");
 
-            var WinnerParty      = new string[stateCodes.Length];
-            var WinnerEditable   = new string[stateCodes.Length];
-            var WinnerElectors   = new string[stateCodes.Length];
-            var WinnerVotes      = new string[stateCodes.Length];
-            var WinnerPercentage = new string[stateCodes.Length];
-            var LooserElectors   = new string[stateCodes.Length];
-            var LooserVotes      = new string[stateCodes.Length];
-            var LooserParty      = new string[stateCodes.Length];
+            var winnerParty      = new string[stateCodes.Length];
+            var winnerEditable   = new string[stateCodes.Length];
+            var winnerElectors   = new string[stateCodes.Length];
+            var winnerVotes      = new string[stateCodes.Length];
+            var winnerPercentage = new string[stateCodes.Length];
+            var winnerCandidate  = new string[stateCodes.Length];
+
+            var looserParty      = new string[stateCodes.Length];
+            var looserEditable   = new string[stateCodes.Length];
+            var looserElectors   = new string[stateCodes.Length];
+            var looserVotes      = new string[stateCodes.Length];
+            var looserPercentage = new string[stateCodes.Length];
+            var looserCandidate  = new string[stateCodes.Length];
+
             var ElectionYear     = new string[stateCodes.Length];
             var ElectionMode     = new string[stateCodes.Length];
 
@@ -128,33 +119,43 @@
                 //ElectionService.Update(info);
 
                 // genering dummy data
-                //var p = rand.Next(0, parties.Count);
-                //WinnerParty[i] = parties[p];
-                //WinnerElectors[i] = rand.Next(5, 50).ToString();
-                //WinnerVotes[i] = (rand.Next(100000, 5000000) + rand.Next(100000, 700000)).ToString();
-                //WinnerPercentage[i] = rand.Next(5, 70).ToString();
+                var p = rand.Next(0, parties.Count);
+                winnerCandidate[i] = "Winner";
+                winnerParty[i] = parties[p];
+                winnerElectors[i] = rand.Next(5, 50).ToString();
+                winnerVotes[i] = (rand.Next(100000, 5000000) + rand.Next(100000, 700000)).ToString();
+                winnerPercentage[i] = rand.Next(5, 70).ToString();
 
-                //WinnerEditable[i] = "true";
-                //ElectionYear[i] = "1880";
-                //ElectionMode[i] = ElectionDisplayMode.Popular.ToString();
+                winnerEditable[i] = "true";
+                ElectionYear[i] = "1880";
+                ElectionMode[i] = ElectionDisplayMode.Popular.ToString();
 
-                //p = rand.Next(0, parties.Count);
-                //LooserParty[i] = parties[p];
-                //LooserElectors[i] = rand.Next(0, 2).ToString();
-                //LooserVotes[i]    = rand.Next(100000, 700000).ToString();
+                p = rand.Next(0, parties.Count);
+                looserCandidate[i] = "Looser";
+                looserParty[i] = "Republican"; // parties[p];
+                looserElectors[i] = rand.Next(0, 2).ToString();
+                looserVotes[i] = rand.Next(100000, 700000).ToString();
+                looserPercentage[i] = rand.Next(5, 70).ToString();
 
                 //Logger.WriteLine("ElectionHex " + stateCodes[i] + " = " + bounds.X + " " +  x );
             }
-            
-            // setting dummy data
-            //await HexShapes.SetRecordValuesAsync("WinnerEditable", WinnerEditable);
-            //await HexShapes.SetRecordValuesAsync("ElectionYear", ElectionYear);
-            //await HexShapes.SetRecordValuesAsync("ElectionMode", ElectionMode);
 
-            //await HexShapes.SetRecordValuesAsync("WinnerParty", WinnerParty);
-            //await HexShapes.SetRecordValuesAsync("WinnerElectors", WinnerElectors);
-            //await HexShapes.SetRecordValuesAsync("WinnerVotes", WinnerVotes);
-            //await HexShapes.SetRecordValuesAsync("WinnerPercentage", WinnerPercentage);
+            // setting dummy data
+            await HexShapes.SetRecordValuesAsync("WinnerEditable", winnerEditable);
+            await HexShapes.SetRecordValuesAsync("ElectionYear", ElectionYear);
+            await HexShapes.SetRecordValuesAsync("ElectionMode", ElectionMode);
+
+            await HexShapes.SetRecordValuesAsync("WinnerName",       winnerCandidate);
+            await HexShapes.SetRecordValuesAsync("WinnerParty",      winnerParty);
+            await HexShapes.SetRecordValuesAsync("WinnerElectors",   winnerElectors);
+            await HexShapes.SetRecordValuesAsync("WinnerVotes",      winnerVotes);
+            await HexShapes.SetRecordValuesAsync("WinnerPercentage", winnerPercentage);
+
+            await HexShapes.SetRecordValuesAsync("LooserName",       looserCandidate);
+            await HexShapes.SetRecordValuesAsync("LooserVotes",      looserVotes);
+            await HexShapes.SetRecordValuesAsync("LooserParty",      looserParty);
+            await HexShapes.SetRecordValuesAsync("LooserElectors",   looserElectors);
+            await HexShapes.SetRecordValuesAsync("LooserPercentage", looserPercentage);
 
             var geoRect = new Rect(-3.75, -3.5, 7, 7);
             await this.HexMap.UpdateWorldRectAsync(geoRect);
@@ -166,7 +167,6 @@
 
         await Task.Delay(1);
     }
-
 
     private void OnChanged(string prop)
     {
@@ -183,11 +183,17 @@
             this.CurrentYear = this.Election.Year;
 
             var results = Election.ResultsByStates;
-            var winnerParty = new string[results.Count];
-            var winnerCandidate = new string[results.Count];
-            var winnerElectors = new string[results.Count];
             var winnerVotes = new string[results.Count];
+            var winnerParty = new string[results.Count];
+            var winnerElectors = new string[results.Count];
+            var winnerCandidate = new string[results.Count];
             var winnerPercentage = new string[results.Count];
+
+            var looserParty = new string[results.Count];
+            var looserVotes = new string[results.Count];
+            var looserElectors = new string[results.Count];
+            var looserCandidate = new string[results.Count];
+            var looserPercentage = new string[results.Count];
 
             var ElectionYear = new string[results.Count];
             var ElectionMode = new string[results.Count];
@@ -202,22 +208,35 @@
                     //var statWithElections = state.Statehood < Election.Year;
                     var shapeIndex = state.Index;
                     //electionYear[shapeIndex] = "1840"; // state.Statehood.ToString();
-                    ElectionYear[shapeIndex] = this.Election.Year.ToString(); 
+                    ElectionYear[shapeIndex] = this.Election.Year.ToString();
                     ElectionMode[shapeIndex] = this.DisplayMode.ToString();
 
-                    winnerParty[shapeIndex] = results[i].WinnerParty;
+                    winnerParty[shapeIndex]     = results[i].WinnerParty;
+                    winnerVotes[shapeIndex]     = results[i].WinnerVotes.ToString();
                     winnerCandidate[shapeIndex] = results[i].WinnerName;
-                    winnerElectors[shapeIndex] = results[i].WinnerElectors.ToString();
-                    winnerVotes[shapeIndex] = results[i].WinnerVotes.ToString();
-                    winnerPercentage[shapeIndex] = results[i].WinnerPercentage.ToString();
+                    winnerElectors[shapeIndex]  = results[i].WinnerElectors.ToString();
+                    winnerPercentage[shapeIndex]= results[i].WinnerPercentage.ToString();
+
+                    looserParty[shapeIndex]     = results[i].LooserParty;
+                    looserVotes[shapeIndex]     = results[i].LooserVotes.ToString();
+                    looserCandidate[shapeIndex] = results[i].LooserName;
+                    looserElectors[shapeIndex]  = results[i].LooserElectors.ToString();
+                    looserPercentage[shapeIndex]= results[i].LooserPercentage.ToString();
                 }
             }
 
-            //await HexShapes.SetRecordValuesAsync("WinnerName", winnerCandidate);
-            //await HexShapes.SetRecordValuesAsync("WinnerVotes", winnerVotes);
-            await HexShapes.SetRecordValuesAsync("WinnerParty", winnerParty);
-            await HexShapes.SetRecordValuesAsync("WinnerElectors", winnerElectors);
+            await HexShapes.SetRecordValuesAsync("WinnerName",       winnerCandidate);
+            await HexShapes.SetRecordValuesAsync("WinnerVotes",      winnerVotes);
+            await HexShapes.SetRecordValuesAsync("WinnerParty",      winnerParty);
+            await HexShapes.SetRecordValuesAsync("WinnerElectors",   winnerElectors);
             await HexShapes.SetRecordValuesAsync("WinnerPercentage", winnerPercentage);
+
+            await HexShapes.SetRecordValuesAsync("LooserName",       looserCandidate);
+            await HexShapes.SetRecordValuesAsync("LooserVotes",      looserVotes);
+            await HexShapes.SetRecordValuesAsync("LooserParty",      looserParty);
+            await HexShapes.SetRecordValuesAsync("LooserElectors",   looserElectors);
+            await HexShapes.SetRecordValuesAsync("LooserPercentage", looserPercentage);
+
             await HexShapes.SetRecordValuesAsync("ElectionYear", ElectionYear);
             await HexShapes.SetRecordValuesAsync("ElectionMode", ElectionMode);
             //await HexShapes.SetRecordValuesAsync("ElectionsHeld", stateHeldElections);

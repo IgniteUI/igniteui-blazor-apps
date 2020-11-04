@@ -70,15 +70,15 @@ function onHexMarkerStyle(o, e) {
 
     return {
         measure: function (measureInfo) {
-            //var code = "DC";
+            //var stateCode = "DC";
             //var data = measureInfo.data;
             //if (data != null && data.item != null) {
-            //    //code = data.item.StateSymbol.toString();
-            //    code = data.item.getFieldValue("Code").toString(); 
+            //    //stateCode = data.item.StateSymbol.toString();
+            //    stateCode = data.item.getFieldValue("Code").toString(); 
             //}
             //var context = measureInfo.context;
             //var height = context.measureText("M").height;
-            //var width = context.measureText(code).width;
+            //var width = context.measureText(stateCode).width;
             //measureInfo.width = width;
             //measureInfo.height = height;
             measureInfo.width  = desiredSize;
@@ -119,17 +119,15 @@ function onHexMarkerStyle(o, e) {
                 ctx.textAlign = "center";
 
                 var item = renderInfo.data.item;
-                var code = item.getFieldValue("Code").toString();
+                var stateCode = item.getFieldValue("Code").toString();
                 ctx.fillStyle = "white";
-                ctx.fillText(code, cx, cy - lineSize);
+                ctx.fillText(stateCode, cx, cy - lineSize);
 
                 var ElectionYear = item.getFieldValue("ElectionYear");
                 var ElectionMode = item.getFieldValue("ElectionMode");
-                var Statehood = item.getFieldValue("Statehood");
+                var Statehood    = item.getFieldValue("Statehood");
 
-                var winnerValue = 0;
-                var looserValue = 0;
-              
+                var winnerValue = 0;              
                 var heldElection = Statehood < ElectionYear
 
                 if (heldElection) {
@@ -137,19 +135,16 @@ function onHexMarkerStyle(o, e) {
                      //winnerValue = abbreviate(item.getFieldValue("WinnerVotes"));
                         winnerValue = item.getFieldValue("WinnerPercentage");
                         winnerValue = (Math.round(winnerValue)) + "%";  //* 10) / 10
-                        looserValue = 0; //abbreviate(data.item.LooserVotes);
                     } else if (ElectionMode == "Percent") {
                         winnerValue = item.getFieldValue("WinnerPercentage");
                         winnerValue = (Math.round(winnerValue)) + "%";
-                        looserValue = 0; //data.item.LooserPercentage;
                     } else {
                         winnerValue = item.getFieldValue("WinnerElectors");
-                        looserValue = 0; //data.item.LooserElectors;
                     }
                 }
 
-                //if (code == "TX") {
-                //    console.log("ElectionHex Marker " + code + " " + ElectionMode + " " + winnerValue );
+                //if (stateCode == "TX") {
+                //    console.log("ElectionHex Marker " + stateCode + " " + ElectionMode + " " + winnerValue );
                 //}
 
                 if (winnerValue > 0 || winnerValue != "0.0") {
@@ -162,6 +157,95 @@ function onHexMarkerStyle(o, e) {
 }
 
 igRegisterScript("onHexMarkerStyle", onHexMarkerStyle, true);
+
+function onMapMouseEnter(o, e) {
+    //console.log("Map onMapMouseEnter ");
+
+    if (e.series.tooltipTemplate == null ||
+        e.series.tooltipTemplate == undefined) {
+        e.series.tooltipTemplate = createTooltip;
+        console.log("Map onMapMouseEnter createTooltip ");
+    }
+}
+
+igRegisterScript("onMapMouseEnter", onMapMouseEnter, false);
+
+function createTooltip(context) {
+         
+    if (!context) return null;
+
+    var item = context.item; 
+    if (!item) return null;
+
+    if (!item.getFieldValue) return null;
+
+    var ElectionYear = item.getFieldValue("ElectionYear");
+    var ElectionMode = item.getFieldValue("ElectionMode");
+    var Statehood = item.getFieldValue("Statehood");
+    var heldElection = Statehood < ElectionYear
+
+    //console.log("Map createTooltip '" + ElectionMode + "'");
+
+    var winnerValue = 0;
+    var votes = "";
+    var percent = "";
+
+    var stateCode = item.getFieldValue("Code").toString();
+    var stateName = item.getFieldValue("Name").toString();
+    var stateElement = document.createElement("div");
+    stateElement.innerHTML = stateName + " (" + stateCode + ")";
+
+    var tooltip = document.createElement("div");
+    tooltip.className = "ui-tooltip-content";
+    tooltip.appendChild(stateElement);
+
+    var winnerParty = item.getFieldValue("WinnerParty").toString();
+    if (winnerParty == "Tossup") {
+        winnerValue = Math.round(item.getFieldValue("WinnerElectors")) + " Electors";
+        var winnerLine = document.createElement("div");
+        winnerLine.innerHTML = "Tossup: " + winnerValue;
+        //winnerLine.style.color = "black";
+
+        tooltip.appendChild(winnerLine);
+    }
+    else if (heldElection) {
+        if (ElectionMode == "Popular") {
+            votes   = abbreviate(item.getFieldValue("WinnerVotes"));
+            percent = Math.round(item.getFieldValue("WinnerPercentage")) + "%";
+            winnerValue = votes + " (" + percent + ")";
+            votes   = abbreviate(item.getFieldValue("LooserVotes"));
+            percent = Math.round(item.getFieldValue("LooserPercentage")) + "%";
+            looserValue = votes + " (" + percent + ")"; 
+
+        } else { // if (ElectionMode == "Percent") {
+            winnerValue = Math.round(item.getFieldValue("WinnerElectors")) + " Electors";
+            looserValue = Math.round(item.getFieldValue("LooserElectors")) + " Electors";  
+        }
+
+        var winnerName = item.getFieldValue("WinnerName").toString();
+        var winnerColor = GetColor(winnerParty)
+        var winnerLine = document.createElement("div");
+        winnerLine.innerHTML = winnerParty + ": " + winnerValue;
+        winnerLine.style.color = winnerColor;
+            
+        var looserName  = item.getFieldValue("LooserName").toString();
+        var looserParty = item.getFieldValue("LooserParty").toString();
+        var looserColor = GetColor(looserParty)
+        var looserLine = document.createElement("div");
+        looserLine.innerHTML = looserParty + ": " + looserValue;
+        looserLine.style.color = looserColor;
+
+        if (winnerParty == "Democrat") {
+            tooltip.appendChild(winnerLine);
+            tooltip.appendChild(looserLine);
+        } else {
+            tooltip.appendChild(looserLine);
+            tooltip.appendChild(winnerLine);
+        }
+    }
+     
+    return tooltip;
+}
 
 //function onHexShapeMouseDown(o, e) {
 //    console.log("onHexShapeMouseDown " + " ");

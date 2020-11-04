@@ -61,6 +61,17 @@
 }; 
 //GetBounds = (element, parm) => { return element.getBoundingClientRect(); };
 
+function GetColor(partyName) {
+    var defaultColor = PartyStyles.NoStatehood.fill;
+
+    if (partyName == undefined) return defaultColor;
+
+    var style = PartyStyles[partyName];
+    if (style == undefined) return defaultColor; 
+
+    return style.fill; 
+}
+
 function GetBounds(element, parm) {
     return element.getBoundingClientRect(); 
 }

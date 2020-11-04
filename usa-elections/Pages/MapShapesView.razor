@@ -77,7 +77,8 @@
                 @*<div class="igFill" style="background: rgba(0, 0, 255, 0.25); text-align: left;">ShapeMap</div>*@
                 <GeographicMap Height="100%" Width="100%" Zoomable="false"
                            @ref="ShapeMap" 
-                           BackgroundContent="@null">
+                           BackgroundContent="@null"
+                           SeriesMouseEnterScript="onMapMouseEnter">
                     <GeographicShapeSeries Outline="black" Thickness="1" 
                                            StyleShapeScript="onShapeStyle" />
                     
@@ -89,14 +90,7 @@
                         MarkerTemplateScript="onShapeMarker"
                         TransitionInDuration="0" 
                         TransitionDuration="0"
-                        ShowDefaultTooltip="true">
-                         @*<TooltipTemplate>
-                                 <div style="width: 200px; height: 70px; background: white">
-                                     <div style="color: red">series.Title</div>
-                                     <div style="color: red">item.StateCenterY</div>
-                                     <div style="color: red">context</div>
-                                 </div>
-                        </TooltipTemplate>*@
+                        ShowDefaultTooltip="false" > 
                     </GeographicSymbolSeries>
                 </GeographicMap>
             </div>
@@ -207,10 +201,10 @@
     public bool   ChartViewVisible { get { return MapMode == ResultsDisplayMode.ChartView; } }
     public string ChartViewStyle { get { return GetViewStyle(ChartViewVisible); } }
     public string ChartButtonStyle { get { return GetButtonStyle(ChartViewVisible); } }
-    
+
     private List<Election> AllElections;
     private Election SelectedElection;
-    
+
     private DataChart ElectionByStatesChart;
     private DataChart ElectionByStatesChartRef
     {
@@ -258,6 +252,7 @@
         Logger.WriteLine("onDisplayElectoralVotes " + VotesDisplayMode);
 
         this.VotesDisplayMode = ElectionDisplayMode.Electoral;
+        OnUpdateShapeMap();
     }
 
     private void onDisplayPopularVotes()
@@ -265,6 +260,7 @@
         Logger.WriteLine("onDisplayPopularVotes " + VotesDisplayMode);
 
         this.VotesDisplayMode = ElectionDisplayMode.Popular;
+        OnUpdateShapeMap();
     }
 
     public void onDisplayGrid()
@@ -287,7 +283,7 @@
         //Logger.WriteLine("OnChartSizeChanged " + args.OldRect.Height + " " + args.OldRect.Width);
         //Logger.WriteLine("OnChartSizeChanged " + args.NewRect.Height + " " + args.NewRect.Width);
     }
-    
+
     private List<ResultsByState>  ShapeLabels;
     private ShapeDataSource       ShapeRecords;
     private GeographicMap         ShapeMap;
@@ -450,15 +446,22 @@
             Logger.WriteLine("ShapeMap updating... Election " + this.SelectedElection.Year);
 
             var results = SelectedElection.ResultsByStates;
-            var winnerParty = new string[results.Count];
-            var winnerCandidate = new string[results.Count];
-            var winnerElectors = new string[results.Count];
             var winnerVotes = new string[results.Count];
+            var winnerParty = new string[results.Count];
+            var winnerElectors = new string[results.Count];
+            var winnerCandidate = new string[results.Count];
             var winnerPercentage = new string[results.Count];
 
+            var looserParty = new string[results.Count];
+            var looserVotes = new string[results.Count];
+            var looserElectors = new string[results.Count];
+            var looserCandidate = new string[results.Count];
+            var looserPercentage = new string[results.Count];
+
             var shapeSelected = new string[results.Count];
-            var electionsHeld = new string[results.Count];
+            //var electionsHeld = new string[results.Count];
             var electionYear = new string[results.Count];
+            var electionMode = new string[results.Count];
 
             var labels = new List<ResultsByState>();
             for (int i = 0; i < results.Count; i++)
@@ -468,17 +471,30 @@
                 if (ShapesLookup.ContainsKey(results[i].StateSymbol))
                 {
                     var state = ShapesLookup[results[i].StateSymbol];
-                    var statWithElections = state.Statehood < 1840;
+                    //var statWithElections = state.Statehood < 1840;
                     var shapeIndex = state.Index;
                     //electionYear[shapeIndex] = "1840"; // state.Statehood.ToString();
-                    electionYear[shapeIndex] = state.Statehood.ToString();
+                    electionYear[shapeIndex] = this.SelectedElection.Year.ToString(); // state.Statehood.ToString();
+                    electionMode[shapeIndex] = this.VotesDisplayMode.ToString();
+                    //electionsHeld[shapeIndex] = statWithElections.ToString();
 
-                    winnerParty[shapeIndex] = results[i].WinnerParty;
+                    //winnerParty[shapeIndex]     = results[i].WinnerParty;
+                    //winnerCandidate[shapeIndex] = results[i].WinnerName;
+                    //winnerElectors[shapeIndex] = results[i].WinnerElectors.ToString();
+                    //winnerVotes[shapeIndex] = results[i].WinnerVotes.ToString();
+                    //winnerPercentage[shapeIndex] = results[i].WinnerPercentage.ToString();
+
+                    winnerParty[shapeIndex]     = results[i].WinnerParty;
+                    winnerVotes[shapeIndex]     = results[i].WinnerVotes.ToString();
                     winnerCandidate[shapeIndex] = results[i].WinnerName;
-                    winnerElectors[shapeIndex] = results[i].WinnerElectors.ToString();
-                    winnerVotes[shapeIndex] = results[i].WinnerVotes.ToString();
-                    winnerPercentage[shapeIndex] = results[i].WinnerPercentage.ToString();
-                    electionsHeld[shapeIndex] = statWithElections.ToString();
+                    winnerElectors[shapeIndex]  = results[i].WinnerElectors.ToString();
+                    winnerPercentage[shapeIndex]= results[i].WinnerPercentage.ToString();
+
+                    looserParty[shapeIndex]     = results[i].LooserParty;
+                    looserVotes[shapeIndex]     = results[i].LooserVotes.ToString();
+                    looserCandidate[shapeIndex] = results[i].LooserName;
+                    looserElectors[shapeIndex]  = results[i].LooserElectors.ToString();
+                    looserPercentage[shapeIndex]= results[i].LooserPercentage.ToString();
 
                     results[i].StateCenterX = state.CenterX;
                     results[i].StateCenterY = state.CenterY;
@@ -488,14 +504,21 @@
                 }
             }
 
-            //await ShapeRecords.SetRecordValuesAsync("WinnerName", winnerCandidate);
-            //await ShapeRecords.SetRecordValuesAsync("WinnerVotes", winnerVotes);
-            await ShapeRecords.SetRecordValuesAsync("WinnerParty", winnerParty);
-            await ShapeRecords.SetRecordValuesAsync("WinnerElectors", winnerElectors);;
-            //await ShapeRecords.SetRecordValuesAsync("WinnerPercentage", winnerPercentage);
+            await ShapeRecords.SetRecordValuesAsync("WinnerName",       winnerCandidate);
+            await ShapeRecords.SetRecordValuesAsync("WinnerVotes",      winnerVotes);
+            await ShapeRecords.SetRecordValuesAsync("WinnerParty",      winnerParty);
+            await ShapeRecords.SetRecordValuesAsync("WinnerElectors",   winnerElectors);
+            await ShapeRecords.SetRecordValuesAsync("WinnerPercentage", winnerPercentage);
 
-            await ShapeRecords.SetRecordValuesAsync("ElectionsHeld", electionsHeld);
-            await ShapeRecords.SetRecordValuesAsync("ElectionYear", electionYear);
+            await ShapeRecords.SetRecordValuesAsync("LooserName",       looserCandidate);
+            await ShapeRecords.SetRecordValuesAsync("LooserVotes",      looserVotes);
+            await ShapeRecords.SetRecordValuesAsync("LooserParty",      looserParty);
+            await ShapeRecords.SetRecordValuesAsync("LooserElectors",   looserElectors);
+            await ShapeRecords.SetRecordValuesAsync("LooserPercentage", looserPercentage);
+
+            //await ShapeRecords.SetRecordValuesAsync("ElectionsHeld", electionsHeld);
+            await ShapeRecords.SetRecordValuesAsync("ElectionYear",  electionYear);
+            await ShapeRecords.SetRecordValuesAsync("ElectionMode", electionMode);
             //await ShapeRecords.SetRecordValuesAsync("ShapeSelected", shapeSelected);
 
             Logger.WriteLine("ShapeMap updating... done");
