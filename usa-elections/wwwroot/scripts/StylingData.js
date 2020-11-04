@@ -1,7 +1,9 @@
 ﻿var PartyStyles = {
     Unknown:    { outline: "white", fill: "#6F6E6E" },
-    Democrat:   { outline: "white", fill: "#465F98" },
-    Republican: { outline: "white", fill: "#CD433C" },
+    Democrat:           { outline: "white", fill: "#465F98" },
+    Republican:         { outline: "white", fill: "#CD433C" },
+    Democrat_Leaning:   { outline: "white", fill: "#7D9BE1" },
+    Republican_Leaning: { outline: "white", fill: "#D6726D" },
     //Tossup:     { outline: "black", fill: "#6F6E6E" },
 //    Republican:  { outline: "black", fill: "#FF0808" },
 //    Democrat:    { outline: "black", fill: "#008DFF" },

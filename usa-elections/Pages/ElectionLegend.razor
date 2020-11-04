@@ -12,8 +12,8 @@
         {
             var candidate = Election.StackedCandidates[i];
             var party = candidate.PartyDisplay;
-            if (Election.Year == 2020 && party != "Tossup")
-                party = "Likely " + party;
+            //if (Election.Year == 2020 && party != "Tossup")
+            //    party = "Likely " + party;
 
             if (candidate.TotalElectors > 0 && DisplayMode == ElectionDisplayMode.Electoral)
             {

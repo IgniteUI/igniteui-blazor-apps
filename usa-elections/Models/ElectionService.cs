@@ -55,9 +55,9 @@ namespace Infragistics.Samples
             //PartyColors.Add("Republican-Leaning",   "#F47575");
             PartyColors.Add("Tossup",               "#959494");
             PartyColors.Add("Democrat",             "#465F98");
-            PartyColors.Add("Democrat-Leaning",     "#5CAADE");
+            PartyColors.Add("Democrat_Leaning",     "#5CAADE");
             PartyColors.Add("Republican",           "#CD433C");
-            PartyColors.Add("Republican-Leaning",   "#F47575");
+            PartyColors.Add("Republican_Leaning",   "#F47575");
             //PartyColors.Add("Democrat",             "#5885EC");
             //PartyColors.Add("Democrat-Leaning",     "#4BADFC");
             //PartyColors.Add("Republican",           "#DE5E58");
