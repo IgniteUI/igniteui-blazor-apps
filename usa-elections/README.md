@@ -1,14 +1,27 @@
+
+## Introduction
+
+This repository provides source for Blazor (Client/WASM) application shows results of recent US Presidential Elections using [IgniteUI for Blazor](https://www.infragistics.com/products/ignite-ui-blazor) components.
+
+
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <body>
-        <!-- https://static.infragistics.com/xplatform/images/browsers -->
-        <a target="_blank" href="https://infragistics.com/blazor-client/samples/grids/data-grid-binding-local-data" rel="noopener noreferrer">
-            <img height="40px" style="border-radius: 0.5rem; max-width: 100%;" alt="Run Blazor Sample" src="https://github.com/IgniteUI/igniteui-blazor-examples/blob/master/templates/sample/images/blazor-run-sample.png"/>
+        <a target="_blank" href="https://infragistics.com/blazor-apps/usa-elections" rel="noopener noreferrer">
+            <img height="40px" style="border-radius: 0.25rem; max-width: 100%;" alt="Run Blazor Sample" src="https://static.infragistics.com/xplatform/images/browsers/blazor-run-sample.png"/>
         </a>
-        <!-- <a target="_blank" href="https://infragistics.com/Blazorsite/components/data-grid.html" rel="noopener noreferrer">
-            <img height="40px" style="border-radius: 0.5rem" alt="View Blazor Docs" src="https://github.com/IgniteUI/igniteui-blazor-examples/blob/master/templates/sample/images/blazor-view-docs.png"/>
-        </a> -->
     </body>
 </html>
+
+## Preview
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <body>
+        <img height="400px" style="border-radius: 0rem; max-width: 100%;" alt="Preview" src="wwwroot/previews/shape-map.png"/>
+        <img height="400px" style="border-radius: 0rem; max-width: 100%;" alt="Preview" src="wwwroot/previews/hex-map.png"/>
+        <img height="400px" style="border-radius: 0rem; max-width: 100%;" alt="Preview" src="wwwroot/previews/tree-map.png"/>
+    </body>
+</html>
+
 
 ## Setup
 
