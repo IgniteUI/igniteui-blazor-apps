@@ -180,7 +180,7 @@ function createTooltip(context) {
     if (!item.getFieldValue) return null;
 
     var ElectionYear = item.getFieldValue("ElectionYear");
-    var ElectionMode = item.getFieldValue("ElectionMode");
+    //var ElectionMode = item.getFieldValue("ElectionMode");
     var Statehood = item.getFieldValue("Statehood");
     var heldElection = Statehood < ElectionYear
 
@@ -209,31 +209,62 @@ function createTooltip(context) {
         tooltip.appendChild(winnerLine);
     }
     else if (heldElection) {
-        if (ElectionMode == "Popular") {
-            votes   = abbreviate(item.getFieldValue("WinnerVotes"));
-            percent = Math.round(item.getFieldValue("WinnerPercentage")) + "%";
-            winnerValue = votes + " (" + percent + ")";
-            votes   = abbreviate(item.getFieldValue("LooserVotes"));
-            percent = Math.round(item.getFieldValue("LooserPercentage")) + "%";
-            looserValue = votes + " (" + percent + ")"; 
+        //if (ElectionMode == "Popular") {
+        var winnerElectors = Math.round(item.getFieldValue("WinnerElectors")) + " Electors";
+        var looserElectors = Math.round(item.getFieldValue("LooserElectors")) + " Electors";  
 
-        } else { // if (ElectionMode == "Percent") {
-            winnerValue = Math.round(item.getFieldValue("WinnerElectors")) + " Electors";
-            looserValue = Math.round(item.getFieldValue("LooserElectors")) + " Electors";  
-        }
+        votes   = abbreviate(item.getFieldValue("WinnerVotes"));
+        percent = Math.round(item.getFieldValue("WinnerPercentage")) + "%";
+        winnerValue = votes + " (" + percent + ") "; // + winnerElectors;
+        votes   = abbreviate(item.getFieldValue("LooserVotes"));
+        percent = Math.round(item.getFieldValue("LooserPercentage")) + "%";
+        looserValue = votes + " (" + percent + ") "; // + looserElectors;
 
-        var winnerName = item.getFieldValue("WinnerName").toString();
+        //} else { // if (ElectionMode == "Percent") {
+        //    winnerValue = Math.round(item.getFieldValue("WinnerElectors")) + " Electors";
+        //    looserValue = Math.round(item.getFieldValue("LooserElectors")) + " Electors";  
+        //}
+
+        //var winnerName = item.getFieldValue("WinnerName").toString();
         var winnerColor = GetColor(winnerParty)
+       
+        var winnerLineInfo = document.createElement("div");
+        winnerLineInfo.innerHTML = winnerParty + ":";
+        winnerLineInfo.style.width = "4rem";
+        var winnerLineV = document.createElement("div");
+        winnerLineV.innerHTML = winnerValue;
+        var winnerLineE = document.createElement("div");
+        winnerLineE.style.textAlign = "right";
+        winnerLineE.style.width = "4rem";
+        winnerLineE.innerHTML = winnerElectors; 
+
         var winnerLine = document.createElement("div");
-        winnerLine.innerHTML = winnerParty + ": " + winnerValue;
         winnerLine.style.color = winnerColor;
+        winnerLine.className = "igTooltipRow";
+        winnerLine.appendChild(winnerLineInfo);
+        winnerLine.appendChild(winnerLineV);
+        winnerLine.appendChild(winnerLineE);
             
-        var looserName  = item.getFieldValue("LooserName").toString();
+        //var looserName  = item.getFieldValue("LooserName").toString();
         var looserParty = item.getFieldValue("LooserParty").toString();
         var looserColor = GetColor(looserParty)
+
+        var looserLineInfo = document.createElement("div");
+        looserLineInfo.innerHTML = looserParty + ":";
+        looserLineInfo.style.width = "4rem";
+        var looserLineV = document.createElement("div");
+        looserLineV.innerHTML = looserValue;
+        var looserLineE = document.createElement("div");
+        looserLineE.style.textAlign = "right";
+        looserLineE.style.width = "4rem";
+        looserLineE.innerHTML = looserElectors; 
+
         var looserLine = document.createElement("div");
-        looserLine.innerHTML = looserParty + ": " + looserValue;
         looserLine.style.color = looserColor;
+        looserLine.className = "igTooltipRow";
+        looserLine.appendChild(looserLineInfo);
+        looserLine.appendChild(looserLineV);
+        looserLine.appendChild(looserLineE);
 
         if (winnerParty == "Democrat") {
             tooltip.appendChild(winnerLine);

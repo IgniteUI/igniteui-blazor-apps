@@ -27,7 +27,12 @@
     /*z-index: 1000000;*/
 }
 
-.igTooltipBox {
+.igTooltipRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.igTreemapTooltip {
     font-family: 'Titillium Web', Verdana, Tahoma, Arial, sans-serif;
     font-size: 0.75rem; 
     display: flex;

@@ -80,10 +80,10 @@ function GetBounds(element, parm) {
 
 function abbreviate(num) {
     if (num < 1e3) return n;
-    if (num >= 1e3 && num < 1e5) return +(num / 1e3).toFixed(1) + "K";
-    if (num >= 1e5 && num < 1e9) return +(num / 1e6).toFixed(1) + "M";
-    if (num >= 1e9 && num < 1e12) return +(num / 1e9).toFixed(1) + "B";
-    if (num >= 1e12) return +(num / 1e12).toFixed(1) + "T";
+    if (num >= 1e3 && num < 1e5) return +(num / 1000.0).toFixed(1) + "K";
+    if (num >= 1e5 && num < 1e9) return +(num / 1000000.0).toFixed(1) + "M";
+    if (num >= 1e9 && num < 1e12) return +(num / 100000000.0).toFixed(1) + "B";
+    if (num >= 1e12) return +(num / 100000000000.0).toFixed(1) + "T";
 
     //var str = num;
     //if (num >= 1000) {
