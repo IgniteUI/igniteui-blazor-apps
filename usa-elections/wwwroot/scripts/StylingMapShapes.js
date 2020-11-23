@@ -41,6 +41,8 @@ function onShapeStyle(o, e) {
             //    console.log("onShapeStyleScript " + Name + " " + WinnerParty + " Statehood=" + (ElectionYear > Statehood));
             //}
             e.shapeFill = style.fill;
+            //e.shapeFill = "linear-gradient(to right, pink 0%, blue 49%, blue 51%, pink 100%)";
+            //e.shapeFill = "linear-gradient(to right, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 49%, rgba(0,0,245,1) 51%, rgba(0,0,245,1) 100%)";
             e.shapeStroke = style.outline;
         } else {
             //if (Code == "NJ" || Code == "FL") {
