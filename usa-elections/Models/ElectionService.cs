@@ -170,13 +170,7 @@ namespace Infragistics.Samples
             this.IsLoading = true;
 
             Logger.WriteLine("Elections loading... ");
-            //var url = "data/elections-2008-2012.json";
-            //var url = "data/elections-2012-2016.json"
-            //var url = "data/elections-2012.json";
-            //var url = "data/elections-2016.json";
-            //var url = "data/elections-2020.json";
             var url = "data/elections-recent.json";
-            //var url = "data/elections.json";
             var elections = await Http.GetFromJsonAsync<List<Election>>(url);
                          
             Console.WriteLine("Elections loading... " + elections.Count + " elections");
