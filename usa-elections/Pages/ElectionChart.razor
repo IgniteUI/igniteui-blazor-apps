@@ -128,7 +128,7 @@
 
 @code {
 
-    RenderFragment CreateTooltip(DataContext context)
+    RenderFragment CreateTooltip(IgbDataContext context)
     {
         var brush = "";
         var votes = "";
@@ -188,8 +188,8 @@
     public double DisplayMax { get { return DisplayMode == ElectionDisplayMode.Electoral ?
                 Election.TotalElectors : Election.TotalVotes; } }
 
-    private DataChart BarChart;
-    public DataChart BarChartRef
+    private IgbDataChart BarChart;
+    public IgbDataChart BarChartRef
     {
         get { return BarChart; }
         set { BarChart = value; this.OnChanged(); }
@@ -229,18 +229,18 @@
         base.OnInitialized();
         Logger.WriteLine("ElectionChart OnInitialized");
 
-        DataChartCoreModule.Register(IgniteUIBlazor);
-        DataChartCategoryModule.Register(IgniteUIBlazor);
-        DataChartInteractivityModule.Register(IgniteUIBlazor);
-        DataChartVerticalCategoryModule.Register(IgniteUIBlazor);
-        NumberAbbreviatorModule.Register(IgniteUIBlazor);
-        ItemToolTipLayerModule.Register(IgniteUIBlazor);
-        CategoryToolTipLayerModule.Register(IgniteUIBlazor);
+        IgbDataChartCoreModule.Register(IgniteUIBlazor);
+        IgbDataChartCategoryModule.Register(IgniteUIBlazor);
+        IgbDataChartInteractivityModule.Register(IgniteUIBlazor);
+        IgbDataChartVerticalCategoryModule.Register(IgniteUIBlazor);
+        IgbNumberAbbreviatorModule.Register(IgniteUIBlazor);
+        IgbItemToolTipLayerModule.Register(IgniteUIBlazor);
+        IgbCategoryToolTipLayerModule.Register(IgniteUIBlazor);
          
-        DataChartScatterModule.Register(IgniteUIBlazor);
+        IgbDataChartScatterModule.Register(IgniteUIBlazor);
 
-        LegendModule.Register(IgniteUIBlazor);
-        ItemLegendModule.Register(IgniteUIBlazor);
+        IgbLegendModule.Register(IgniteUIBlazor);
+        IgbItemLegendModule.Register(IgniteUIBlazor);
     }
 
     protected override async Task OnInitializedAsync()

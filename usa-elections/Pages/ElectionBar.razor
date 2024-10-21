@@ -110,7 +110,7 @@
 
 @code {
 
-    RenderFragment CreateTooltip(DataContext context)
+    RenderFragment CreateTooltip(IgbDataContext context)
     { 
         var brush = "";
         var votes = "";
@@ -171,8 +171,8 @@
 
     public List<Candidate> DisplayCandidates { get; set; }
 
-    private DataChart BarChart;
-    public DataChart BarChartRef
+    private IgbDataChart BarChart;
+    public IgbDataChart BarChartRef
     {
         get { return BarChart; }
         set { BarChart = value; this.OnChanged(); }
@@ -236,16 +236,16 @@
         base.OnInitialized();
         Logger.WriteLine("ElectionBar OnInitialized");
 
-        DataChartCoreModule.Register(IgniteUIBlazor); //DataChartCategoryCoreModule.Register(IgniteUIBlazor);
-        DataChartCategoryModule.Register(IgniteUIBlazor);
-        DataChartInteractivityModule.Register(IgniteUIBlazor);
-        DataChartVerticalCategoryModule.Register(IgniteUIBlazor);
-        NumberAbbreviatorModule.Register(IgniteUIBlazor);
-        ItemToolTipLayerModule.Register(IgniteUIBlazor);
-        CategoryToolTipLayerModule.Register(IgniteUIBlazor);
+        IgbDataChartCoreModule.Register(IgniteUIBlazor); //DataChartCategoryCoreModule.Register(IgniteUIBlazor);
+        IgbDataChartCategoryModule.Register(IgniteUIBlazor);
+        IgbDataChartInteractivityModule.Register(IgniteUIBlazor);
+        IgbDataChartVerticalCategoryModule.Register(IgniteUIBlazor);
+        IgbNumberAbbreviatorModule.Register(IgniteUIBlazor);
+        IgbItemToolTipLayerModule.Register(IgniteUIBlazor);
+        IgbCategoryToolTipLayerModule.Register(IgniteUIBlazor);
 
-        LegendModule.Register(IgniteUIBlazor);
-        ItemLegendModule.Register(IgniteUIBlazor);
+        IgbLegendModule.Register(IgniteUIBlazor);
+        IgbItemLegendModule.Register(IgniteUIBlazor);
     }
 
     protected override async Task OnInitializedAsync()

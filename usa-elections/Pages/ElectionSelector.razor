@@ -8,7 +8,6 @@
     <DataGrid Height="100%" Width="100%" @ref="@GridRef"
               AutoGenerateColumns="false"
               DataSource="@Elections"
-              SelectionMode="@GridSelectionMode.SingleRow"
               HeaderHeight="32" RowHeight="40"
               IsColumnOptionsEnabled="false"
               ColumnMovingMode="@ColumnMovingMode.None"
@@ -28,7 +27,7 @@
 
 @code {     
 
-    private DataGrid GridRef;
+    private IgbDataGrid GridRef;
 
     private List<Election> elections;
     [Parameter]
@@ -56,7 +55,7 @@
         base.OnInitialized();
         Logger.WriteLine("ElectionSelector OnInitialized");
 
-        DataGridModule.Register(IgniteUIBlazor);
+        IgbDataGridModule.Register(IgniteUIBlazor);
 
         var allElections = new List<Election>();
         //allElections.Add(new Election { Year = 2022, Index = -1 } );
@@ -107,14 +106,14 @@
         return base.OnAfterRenderAsync(firstRender);
     }
 
-    protected void OnSelectedItemsChanged(GridSelectedItemsChangedEventArgs e)
+    protected void OnSelectedItemsChanged(IgbGridSelectedItemsChangedEventArgs e)
     {
         var election = e.CurrentItems[0] as Election;
         Console.WriteLine("Selector OnElectionChanged " + election.Year);
         this.Changed.InvokeAsync(election.Year);
     }
 
-    protected void OnSelectedCellsChanged(GridSelectedCellsChangedEventArgs e)
+    protected void OnSelectedCellsChanged(IgbGridSelectedCellsChangedEventArgs e)
     {
         var election = e.CurrentCells[0].RowItem as Election;
         Console.WriteLine("Selector OnElectionChanged " + election.Year);

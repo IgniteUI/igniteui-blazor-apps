@@ -30,8 +30,8 @@
         base.OnInitialized();
         Logger.WriteLine("ElectionHex OnInitialized");
 
-        GeographicMapModule.Register(IgniteUIBlazor);
-        DataChartInteractivityModule.Register(IgniteUIBlazor);
+        IgbGeographicMapModule.Register(IgniteUIBlazor);
+        IgbDataChartInteractivityModule.Register(IgniteUIBlazor);
     }
 
     protected override async Task OnInitializedAsync()
@@ -42,9 +42,9 @@
         await Task.Delay(1);
     }
 
-    private GeographicMap         HexMap;
-    private GeographicShapeSeries HexSeries;
-    private ShapeDataSource       HexShapes;
+    private IgbGeographicMap HexMap;
+    private IgbGeographicShapeSeries HexSeries;
+    private IgbShapeDataSource HexShapes;
     private Dictionary<string, StateInfo> StatesLookup;
 
     protected override Task OnAfterRenderAsync(bool firstRender)
@@ -55,15 +55,15 @@
 
             if (this.HexMap != null)
             {
-                HexSeries = (GeographicShapeSeries)this.HexMap.ActualSeries[0];
+                HexSeries = (IgbGeographicShapeSeries)this.HexMap.ActualSeries[0];
                 HexSeries.ShapefileDataSource = (
-                    new ShapeDataSource() {
+                    new IgbShapeDataSource() {
                         Name="hexSeries",
                         //ImportCompletedScript = "onHexImportCompleted",
                         ShapefileSource = "shapes/usa_states_hex_map.shp",
                         DatabaseSource  = "shapes/usa_states_hex_map.dbf",
-                        ImportCompleted = new EventCallback<AsyncCompletedEventArgs>(null,
-                            (Func<AsyncCompletedEventArgs, Task>)OnImportCompleted)
+                            ImportCompleted = new EventCallback<IgbAsyncCompletedEventArgs>(null,
+                                (Func<IgbAsyncCompletedEventArgs, Task>)OnImportCompleted)
                     }
                 );
             }
@@ -71,7 +71,7 @@
         return base.OnAfterRenderAsync(firstRender);
     }
 
-    protected async Task OnImportCompleted(AsyncCompletedEventArgs args)
+    protected async Task OnImportCompleted(IgbAsyncCompletedEventArgs args)
     {
         Console.WriteLine("ElectionHex Shapes Importing... done");
 
@@ -265,7 +265,7 @@
         set { _DisplayMode = value; this.OnChanged("DisplayMode=" + value); }
     }
 
-    RenderFragment CreateTooltip(DataContext context)
+    RenderFragment CreateTooltip(IgbDataContext context)
     {
         return @<div class="ui-tooltip-content" >
                 <div>name</div>
