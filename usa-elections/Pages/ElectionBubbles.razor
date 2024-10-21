@@ -45,9 +45,9 @@
 
 
     private bool IsMapReady = false;
-    private GeographicSymbolSeries BubbleSeries;
-    private GeographicMap BubbleMap;
-    public GeographicMap BubbleMapRef
+    private IgbGeographicSymbolSeries BubbleSeries;
+    private IgbGeographicMap BubbleMap;
+    public IgbGeographicMap BubbleMapRef
     {
         get { return BubbleMap; }
         set { BubbleMap = value; this.OnChanged("BubbleMap"); }
@@ -112,8 +112,8 @@
     {
         Logger.WriteLine("ElectionBubbles OnInitialized");
 
-        DataChartInteractivityModule.Register(IgniteUIBlazor);
-        GeographicMapModule.Register(IgniteUIBlazor);
+        IgbDataChartInteractivityModule.Register(IgniteUIBlazor);
+        IgbGeographicMapModule.Register(IgniteUIBlazor);
     }
 
     public static Dictionary<string, StateLocation> StateLocations { get; set; }
@@ -183,7 +183,7 @@
             this.IsMapReady = true;
             if (this.BubbleMap != null)
             {
-                this.BubbleSeries = (GeographicSymbolSeries)this.BubbleMap.ActualSeries[0];
+                this.BubbleSeries = (IgbGeographicSymbolSeries)this.BubbleMap.ActualSeries[0];
             }
 
             OnChanged("RenderAsync");

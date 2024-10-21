@@ -12,7 +12,6 @@
         {
             <DataGrid Height="100%" Width="100%"
                       AutoGenerateColumns="false"
-                      SelectionMode="@GridSelectionMode.SingleRow"
                       ColumnShowingAnimationMode="@ColumnShowingAnimationMode.None"
                       ColumnAddingAnimationMode="@ColumnShowingAnimationMode.None"
                       ColumnMovingAnimationMode="@ColumnMovingAnimationMode.None"
@@ -91,14 +90,14 @@
     private DataSourceSummaryScope GridSummaryScope = DataSourceSummaryScope.Groups;
     private GroupSummaryDisplayMode GridGroupSummaryDisplayMode = GroupSummaryDisplayMode.Cells;
 
-    private DataGrid Grid;
-    private DataGrid GridRef
+    private IgbDataGrid Grid;
+    private IgbDataGrid GridRef
     {
         get { return Grid; }
         set { Grid = value; this.OnReferenced(); StateHasChanged(); }
     }
 
-    void OnGridSortChanged(GridSortDescriptionsChangedEventArgs args)
+    void OnGridSortChanged(IgbGridSortDescriptionsChangedEventArgs args)
     {
         var sortBy = Grid.SortDescriptions[0];
         //Logger.WriteLine("OnGridSortChanged " + sortBy.Name);
@@ -121,7 +120,7 @@
         }
     }
 
-    void OnCellClicked(GridCellEventArgs args)
+    void OnCellClicked(IgbDataGridCellEventArgs args)
     {
         //Logger.WriteLine("OnCellClicked " + args.Type);
     }
@@ -138,7 +137,7 @@
         Grid.SortDescriptionsChanged += OnGridSortChanged;
         Grid.CellClicked += OnCellClicked;
 
-        var ColumnGroup = new ColumnGroupDescription()
+        var ColumnGroup = new IgbColumnGroupDescription()
         {
             //Field = "State", DisplayName = "State"
             //Field = "CandidateName", DisplayName = "Candidate"
@@ -148,29 +147,31 @@
         this.Grid.IsGroupRowSticky = true;
         this.Grid.IsGroupExpandedDefault = false;
 
-        var SumVotes = new ColumnSummaryDescription()
+        var SumVotes = new IgbColumnSummaryDescription()
         {
-            Field = "V", DisplayName = "V", Operand = SummaryOperand.Sum
+            Field = "V", DisplayName = "V", Operand = DataSourceSummaryOperand.Sum
         };
-        var SumElectors = new ColumnSummaryDescription()
+        var SumElectors = new IgbColumnSummaryDescription()
         {
-            Field = "E", DisplayName = "E", Operand = SummaryOperand.Sum
+                Field = "E",
+                DisplayName = "E",
+                Operand = DataSourceSummaryOperand.Sum
         };
         //var SumPercentage = new ColumnSummaryDescription()
         //{
         //    Field = "TotalPercentage", DisplayName = "%", Operand = SummaryOperand.Sum
         //};
-        var SumVotesPerStatePercentage = new ColumnSummaryDescription()
+        var SumVotesPerStatePercentage = new IgbColumnSummaryDescription()
         {
             Field = "VotesPerStatePercentage",
-            Operand = SummaryOperand.Custom,
+            Operand = DataSourceSummaryOperand.Custom,
             ProvideCalculatorScript = "onCalculateVotesTotalPercentage"
         };
 
-        var CountStates = new ColumnSummaryDescription()
+        var CountStates = new IgbColumnSummaryDescription()
         {
             Field = "State",
-            Operand = SummaryOperand.Custom,
+            Operand = DataSourceSummaryOperand.Custom,
             ProvideCalculatorScript = "onCalculateState"
         };
         //var CountStates = new ColumnSummaryDescription()
@@ -178,10 +179,10 @@
         //    Field = "State", DisplayName = "State", Operand = SummaryOperand.Count
         //};
         
-        var SumParty = new ColumnSummaryDescription()
+        var SumParty = new IgbColumnSummaryDescription()
         {
             Field = "CandidateParty",
-            Operand = SummaryOperand.Custom,
+            Operand = DataSourceSummaryOperand.Custom,
             ProvideCalculatorScript = "onCalculateParty"
         };
         this.Grid.SummaryDescriptions.Add(CountStates);
@@ -206,7 +207,7 @@
         //Logger.WriteLine("App OnInit " + NavManager.BaseUri);
         //Logger.WriteLine("App OnInit " + NavManager.Uri);
 
-        DataGridModule.Register(IgniteUIBlazor);
+        IgbDataGridModule.Register(IgniteUIBlazor);
     }
 
     protected override async Task OnInitializedAsync()

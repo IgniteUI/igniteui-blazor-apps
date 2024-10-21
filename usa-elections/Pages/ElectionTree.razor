@@ -64,7 +64,7 @@
     public bool   TooltipVisible { get; set; }
     public string TooltipDisplay { get { return TooltipVisible ? "display: flex" : "display: none"; } }
 
-    void OnNodePointerOver(TreemapNodePointerEventArgs e)
+    void OnNodePointerOver(IgbTreemapNodePointerEventArgs e)
     {
         var position = e.Position;
         var x = e.Position.X;
@@ -101,14 +101,14 @@
         //Console.WriteLine("OnNodePointerOver " + item.StateSymbol + " " + TooltipPostion);
     }
 
-    void OnNodePointerEnter(TreemapNodePointerEventArgs e)
+    void OnNodePointerEnter(IgbTreemapNodePointerEventArgs e)
     {
         //if (e.IsOverHeader) return;
         //var item = e.Item as ResultsByState;
         //Console.WriteLine("OnNodePointerEnter " + item.StateSymbol + " " + e.Position.X);
     }
 
-    void OnNodePointerLeave(TreemapNodePointerEventArgs e)
+    void OnNodePointerLeave(IgbTreemapNodePointerEventArgs e)
     {
         TooltipVisible = false;
         StateHasChanged();
@@ -117,8 +117,8 @@
         //Console.WriteLine("OnNodePointerLeave " + item.StateSymbol + " " + e.Position.X);
     }
 
-    private Treemap Treemap;
-    public Treemap TreemapRef
+    private IgbTreemap Treemap;
+    public IgbTreemap TreemapRef
     {
         get { return Treemap; }
         set { Treemap = value; this.OnTreemap(); }
@@ -185,7 +185,7 @@
         TooltipVisible = false;
         Logger.WriteLine("ElectionTree OnInitialized");
 
-        TreemapModule.Register(IgniteUIBlazor);
+        IgbTreemapModule.Register(IgniteUIBlazor);
     }
 
     protected override async Task OnInitializedAsync()

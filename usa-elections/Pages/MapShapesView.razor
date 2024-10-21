@@ -205,8 +205,8 @@
     private List<Election> AllElections;
     private Election SelectedElection;
 
-    private DataChart ElectionByStatesChart;
-    private DataChart ElectionByStatesChartRef
+    private IgbDataChart ElectionByStatesChart;
+    private IgbDataChart ElectionByStatesChartRef
     {
         get { return ElectionByStatesChart; }
         set { ElectionByStatesChart = value; this.OnElectionByStatesChartRef(); StateHasChanged(); }
@@ -278,16 +278,16 @@
         //ElectionByStatesChart.SizeChanged += ElectionChart;
     }
 
-    void OnChartSizeChanged(RectChangedEventArgs args)
+    void OnChartSizeChanged(IgbRectChangedEventArgs args)
     {
         //Logger.WriteLine("OnChartSizeChanged " + args.OldRect.Height + " " + args.OldRect.Width);
         //Logger.WriteLine("OnChartSizeChanged " + args.NewRect.Height + " " + args.NewRect.Width);
     }
 
     private List<ResultsByState>  ShapeLabels;
-    private ShapeDataSource       ShapeRecords;
-    private GeographicMap         ShapeMap;
-    private GeographicShapeSeries ShapeSeries;
+    private IgbShapeDataSource ShapeRecords;
+    private IgbGeographicMap         ShapeMap;
+    private IgbGeographicShapeSeries ShapeSeries;
 
     protected override void OnInitialized()
     {
@@ -297,16 +297,16 @@
         SplashVisible = true;
         VotesDisplayMode = ElectionDisplayMode.Electoral;
 
-        DataGridModule.Register(IgniteUIBlazor);
+        IgbDataGridModule.Register(IgniteUIBlazor);
 
-        GeographicMapModule.Register(IgniteUIBlazor);
+        IgbGeographicMapModule.Register(IgniteUIBlazor);
 
-        LegendModule.Register(IgniteUIBlazor);
-        DataChartCoreModule.Register(IgniteUIBlazor);
-        DataChartScatterModule.Register(IgniteUIBlazor);
-        DataChartScatterCoreModule.Register(IgniteUIBlazor);
-        DataChartInteractivityModule.Register(IgniteUIBlazor);
-        NumberAbbreviatorModule.Register(IgniteUIBlazor);
+        IgbLegendModule.Register(IgniteUIBlazor);
+        IgbDataChartCoreModule.Register(IgniteUIBlazor);
+        IgbDataChartScatterModule.Register(IgniteUIBlazor);
+        IgbDataChartScatterCoreModule.Register(IgniteUIBlazor);
+        IgbDataChartInteractivityModule.Register(IgniteUIBlazor);
+        IgbNumberAbbreviatorModule.Register(IgniteUIBlazor);
 
         StatesWithBoxes = new Dictionary<string, Point>();
         StatesWithSmallArea = new List<string> { "VT", "NH", "MA", "RI", "CT", "NJ", "DE", "DC", "MD"};
@@ -335,16 +335,16 @@
 
             if (this.ShapeMap != null)
             {
-                ShapeSeries = (GeographicShapeSeries)this.ShapeMap.ActualSeries[0];
+                ShapeSeries = (IgbGeographicShapeSeries)this.ShapeMap.ActualSeries[0];
                 ShapeSeries.ShapefileDataSource = (
-                    new ShapeDataSource() {
+                    new IgbShapeDataSource() {
                         Name="choroShapes",
                         //ShapefileSource = "shapes/usa_states_ak_below.shp",
                         //DatabaseSource  = "shapes/usa_states_ak_below.dbf",
                         ShapefileSource = "shapes/usa_states_centered.shp",
                         DatabaseSource  = "shapes/usa_states_centered.dbf",
-                        ImportCompleted = new EventCallback<AsyncCompletedEventArgs>(null,
-                            (Func<AsyncCompletedEventArgs, Task>)OnImportCompleted)
+                            ImportCompleted = new EventCallback<IgbAsyncCompletedEventArgs>(null,
+                                (Func<IgbAsyncCompletedEventArgs, Task>)OnImportCompleted)
                     }
                 );
             }
@@ -352,7 +352,7 @@
         return base.OnAfterRenderAsync(firstRender);
     }
 
-    protected async Task OnImportCompleted(AsyncCompletedEventArgs args)
+    protected async Task OnImportCompleted(IgbAsyncCompletedEventArgs args)
     {
         ElectionService.Http = Http;
         await ElectionService.Load();
